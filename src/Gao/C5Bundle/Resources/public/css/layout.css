@@ -1,0 +1,126 @@
+/*!
+// Import Files
+// --------------------------------------------------*/
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,300,400,600,700);
+
+/*!
+ ***********************************
+ * LAYOUT CSS
+ ***********************************
+ */
+ 
+body{color:#333;font-size:13px;line-height:20px;background:#fff;-webkit-font-smoothing:antialiased;-moz-font-smoothing:antialiased;-ms-font-smoothing:antialiased;-o-font-smoothing:antialiased;font-smoothing:antialiased;}
+h1, h2, h3, h4, h5, h6{font-family:"Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:normal;}
+a{color:#333;}
+a:hover{color:#f36523;text-decoration:none;}
+ 
+#UIhead{}
+#UIhead .primary{height:80px;background-color:#fff;/*background-color:rgba(255,255,255,.75);*/}
+#UIhead .primary .container{padding-top:8px;padding-bottom:7px;}
+#UIhead .primary .col-xs-12{height:65px;}
+#UIhead .navbar-brand{width:250px;height:65px;padding:0;line-height:65px;background:url(/bundles/gaoc5/images/causeflix_logo.png) no-repeat 50% 50%;text-indent:-9999em;}
+#UIhead .navMain{background-color:#f36523;}
+#UIhead .navMain .navbar-nav li{font-weight:700;text-transform:uppercase;}
+#UIhead .navMain .navbar-nav a{color:#fff;}
+#UIhead .navMain .navbar-nav .active > a, #UIhead .navMain .navbar-nav a:hover, #UIhead .navMain .navbar-nav a:focus,
+#UIhead .navMain .nav .open>a, #UIhead .navMain .nav .open>a:hover, #UIhead .navMain .nav .open>a:focus{background-color:#dc4600;}
+#UIhead .navMain .navbar-nav li li{color:#333;font-weight:400;text-transform:none;}
+#UIhead .navMain .navbar-nav li li a{color:#333;}
+#UIhead .navMain .navbar-nav li li a:hover, #UIhead .navMain .navbar-nav li li a:focus{/*color:#fff;*/background-color:#f2f2f2;}
+#UIhead .navMain .navbar-nav li.divider{}
+#UIhead .navMain .navbar-nav li.dropdown-header{color:#999;font-size:14px;}
+#UIhead .navMain .navbar-nav .caret{margin-top:-3px;}
+
+#UIcont {padding-top: 150px;padding-bottom: 50px;}
+
+.userInfo .user{line-height:16px;text-align:right;}
+.userInfo .user strong{padding-left:18px;color:#808080;font-size:14px;font-weight:700;background:url(/bundles/gaoc5/images/icon_user.png) no-repeat 0 0;}
+.userInfo .nav-pills{display:inline-block;width:100%;}
+.userInfo .nav-pills>li{position:relative;margin:0 0 0 21px;font-size:12px;line-height:14px;}
+.userInfo .nav-pills>li:first-child{margin-left:0;}
+.userInfo .nav-pills>li:before{content:"";position:absolute;top:6px;left:-11px;width:1px;height:10px;background:#a2a2a2;}
+.userInfo .nav-pills>li:first-child:before{display:none;}
+.userInfo .nav-pills>li>a{padding:4px 0;}
+.userInfo .nav-pills>li.active>a,.userInfo .nav-pills>li>a:hover{color:#f36523;background:transparent none;}
+
+
+#UIfoot .primary{padding:30px 0 5px;background-color:#f36523;}
+#UIfoot .primary .container{min-height:195px;background:url(/bundles/gaoc5/images/causeflix_logo_foot.png) no-repeat 100% 100%;}
+#UIfoot .titlebar{margin-bottom:10px;}
+#UIfoot .title{background-image:url(/bundles/gaoc5/images/icon_cloud.png);}
+#UIfoot .cfNav li{display:inline-block;width:100%;}
+#UIfoot .cfNav a{display:inline-block;padding-left:15px;color:#fff;background:url(/bundles/gaoc5/images/bul_nav_foot.png) no-repeat 0 10px;}
+#UIfoot .cfNav a:hover, #UIfoot .cfNav a:focus{color:#ffbfa0;}
+#UIfoot .copyright{padding:10px 0;color:#fff;font-size:12px;text-align:center;background-color:#603912;}
+#UIfoot .copyright a{color:#fff;}
+
+
+.causeflix-block{padding:50px 0;}
+.block-white{background-color:#fff;}
+.block-gray{background-color:;}
+.block-gray-light{background-color:;}
+.block-gray-lighter{background-color:#eee;}
+.block-gray-lightest{background-color:#f0f0f0;}
+.block-brown{background-color:#603912;}
+.block-orange{background-color:#f36523;}
+
+.causeflix-head{min-height:350px;background-image:url(/bundles/gaoc5/images/bg_causeflix_head.png);background-repeat:no-repeat;background-position:50% 50%;}
+.causeflix-head .pageTitle{padding:15px 25px;color:#fff;background:rgba(0,0,0,.5);border-radius:10px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.causeflix-head .pageTitle h1{font-size:36px;line-height:36px;}
+.causeflix-head .pageTitle h1 span{font-size:24px;}
+.causeflix-head .pageTitle h1 .isblock{display:block;}
+.causeflix-head .imgWrap{margin-top:20px;}
+
+.pageCont{padding:30px 0;}
+
+
+.searchBar{padding:8px 0px;white-space:nowrap;}
+.searchBar .enter{position:relative;}
+.searchBar .form-control{padding-right:34px;color:#;}
+.searchBar .form-control:focus, .searchBar .btn:focus, .searchBar .btn:active:focus, .searchBar .btn.active:focus{border-color:transparent;box-shadow:none;-webkit-box-shadow:none;-moz-box-shadow:none;-ms-box-shadow:none;-o-box-shadow:none;outline:none;}
+.searchBar .form-control::-moz-placeholder{color:#;}
+.searchBar .form-control:-ms-input-placeholder{color:#;}
+.searchBar .form-control::-webkit-input-placeholder{color:#;}
+.searchBar .btn{position:absolute;top:0;right:0;width:34px;background:url(/bundles/gaoc5/images/icon_search.png) no-repeat 50% 50%;text-indent:-9999em;outline:none;}
+
+
+img{max-width:100%;}
+
+/*!
+ ***********************************
+ * Media Queries
+ ***********************************
+ */
+@media (min-width: 1200px){
+
+}
+
+@media (min-width: 992px){
+	.searchBar{float:right;margin-left:10px;}
+}
+@media (max-width: 991px){
+	.searchBar{display:inline-block;width:100%;}
+	.searchBar .form-control{display:block;width:100%;}
+}
+@media (min-width: 768px){
+	#UIhead .primary .btnList{margin-top:16px;}
+	#UIhead .primary .userInfo{margin-top:14px;}
+	.navbar-nav.navbar-right:last-child{margin-right:0;}
+	#UIfoot .primary .container{padding-bottom:45px;}
+}
+
+@media (max-width: 767px){
+	#UIhead .primary .userInfo{position:relative;top:-50px;right:60px;}
+	#UIhead .primary .btnList{position:relative;top:-50px;right:60px;}
+	#UIhead .navMain .col-xs-12{padding-left:0;padding-right:0;}
+	#UIhead .navMain .navbar-nav{margin-top:0;margin-bottom:0;text-align:center;}
+	#UIfoot .cfNav{margin-bottom:30px;}
+	#UIfoot .col-md-3:last-child .cfNav{margin-bottom:0;}
+}
+
+@media (max-width: 480px){
+	#UIhead .primary{height:120px;}
+	#UIhead .navbar-brand{width:192px;height:50px;margin-top:8px;background-size:192px 50px;}
+	#UIhead .primary .btnList{display:;right:auto;top:auto;}
+	#UIfoot .col-xs-6{width:100%;}
+}

@@ -1,0 +1,48 @@
+/*!
+ ***********************************
+ * CAUSEFLIX THEME CSS
+ ***********************************
+ */
+.navbar-header .navbar-toggle{margin:16px 0;border:1px solid #f36523;}
+.navbar-header .navbar-toggle .icon-bar{background-color:#f36523;}
+
+.btnWrap{margin-top:20px;}
+.btn{transition:all .5s ease;-webkit-transition:all .5s ease;-moz-transition:all .5s ease;-ms-transition:all .5s ease;-o-transition:all .5s ease;}
+.btn-orange{color:#fff;background-color:#f36523;}
+.btn-orange:hover, .btn-orange:focus {color:#fff;background-color:#dc4600;}
+
+.form-control{background-color:#f2f2f2;border-color:transparent;box-shadow:none;}
+.form-control:focus{/*border-color:#f36523;-webkit-box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(243, 101, 35, .6);box-shadow:inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(243, 101, 35, .6);*/}
+textarea.form-control{resize:vertical;}
+.form-control::-moz-placeholder{}
+.form-control:-ms-input-placeholder{}
+.form-control::-webkit-input-placeholder{}
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{background-color:#f9f9f9;}
+
+/*
+// Reset CSS
+// --------------------------------------------------*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video{margin:0;padding:0;border:0;vertical-align:baseline;}
+table{width:100%;border-spacing:0;border-collapse:collapse}
+ol,ul{list-style:none}
+blockquote, q{quotes:none;}
+blockquote:before, blockquote:after, q:before, q:after{content: '';content:none;}
+caption,th{text-align:left}
+h1,h2,h3,h4,h5,h6{}
+q:before,q:after{content:''}
+abbr,acronym{border:0}
+
+.clearfix:before, .clearfix:after{height:0;content:"";display:table;visibility:hidden;line-height:0}
+.clearfix:after{clear:both;}

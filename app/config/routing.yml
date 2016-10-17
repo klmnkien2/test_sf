@@ -1,0 +1,17 @@
+login:
+  path: /login
+  defaults: { _controller: GaoC5Bundle:Security:login }
+
+login_check:
+  path: /login_check
+
+logout:
+  pattern: /logout
+
+gao_c5:
+    resource: "@GaoC5Bundle/Resources/config/routing.yml"
+    prefix:   /c5
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation

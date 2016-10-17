@@ -1,0 +1,80 @@
+{% extends 'GaoC5Bundle::layout.html.twig' %}
+
+{% block contents_main %}
+    <div class="clearfix boxHead">
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Quản lý PD</h1>
+        <div class="desc">Quản lý thông tin PD của người dùng</div>
+    </div>
+
+    <div class="clearfix boxEnter">
+        <div class="alert alert-info">
+            <strong>Info!</strong> Indicates a neutral informative change or action.
+        </div>
+        <form class="form" role="form">
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6 col-sm-3">
+                        <label for="">PIN</label>
+                        <input type="text" class="form-control" id="" placeholder="Mã Pin">
+                    </div>
+                    <div class="col-md-6 col-sm-3">
+                        <label for="">Thời điểm yêu cầu</label>
+                        <input type="datetime-local" class="form-control" id="" placeholder="Datetime-local">
+                    </div>
+                </div>
+            </div>
+            <div class="btnWrap"><button type="submit" class="btn btn-orange">Submit</button></div>
+        </form>
+    </div>
+
+    <div class="clearfix boxBody">
+        <h4>Danh sách người nhận tiền</h4><br>
+        <div class="clearfix tblWrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Số tài khoản</th>
+                        <th scope="col">Số tiền</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Ngày cập nhật</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                        <td>data</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="col" colspan="6">Tổng số tiền phải chuyển: XXX</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+
+{% endblock contents_main %}

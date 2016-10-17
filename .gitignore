@@ -1,0 +1,8 @@
+/bin/*
+/vendor/*
+/.settings/*
+/.buildpath
+/.project
+/app/cache/*
+/app/logs/*
+/web/*

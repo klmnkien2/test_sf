@@ -1,0 +1,17 @@
+- [composer create-project symfony/framework-standard-edition c5 "2.3.*"]
+- Add need bundle require ex: composer require friendsofsymfony/user-bundle "~2.0@dev"
+- [composer install]
+
+- [php app/console generate:bundle]
+Bundle namespace: Gao/C5Bundle
+Bundle name [GaoC5Bundle]:
+Target directory [C:\Users\Do Viet Kien\My Data\nonapv\c5/src]:
+Configuration format (yml, xml, php, or annotation): yml
+Do you want to generate the whole directory structure [no]? yes
+Do you confirm generation [yes]?
+Generating the bundle code: OK
+Checking that the bundle is autoloaded: OK
+Confirm automatic update of your Kernel [yes]?
+Enabling the bundle inside the Kernel: OK
+Confirm automatic update of the Routing [yes]?
+Importing the bundle routing resource: OK

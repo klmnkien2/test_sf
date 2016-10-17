@@ -1,0 +1,26 @@
+{% extends 'GaoC5Bundle::layout.html.twig' %}
+
+{% block contents_main %}
+    <div class="clearfix boxHead">
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Tranh chấp</h1>
+        <div class="desc">Tạo bằng chứng đã thực hiện giao dịch, ...</div>
+    </div>
+
+    <div class="clearfix boxEnter">
+        <div class="alert alert-info">
+            <strong>Info!</strong> Indicates a neutral informative change or action.
+        </div>
+        <form class="form" role="form">
+            <div class="form-group">
+                <label for="">Giải trình</label>
+                <textarea class="form-control" id="" cols="" rows="3" placeholder="Message"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="">Văn bản đính kèm</label>
+                <input type="file" class="form-control" id="" placeholder="File">
+            </div>
+            <div class="btnWrap"><button type="submit" class="btn btn-orange">Submit</button></div>
+        </form>
+    </div>
+
+{% endblock contents_main %}

@@ -1,0 +1,42 @@
+security:
+    encoders:
+      Gao\C5Bundle\Entity\Users:
+        id: sha256salted_encoder
+    role_hierarchy:
+      ROLE_ADMIN: [ROLE_USER]
+    providers:
+      chain_provider:
+        chain:
+          providers: [in_memory, our_db_provider]
+      in_memory:
+        memory:
+          users:
+            user: {password: 123, roles: ROLE_USER}
+      our_db_provider:
+        entity:
+          class: Gao\C5Bundle\Entity\Users
+
+    firewalls:
+      main:
+        pattern: /.*
+        provider: chain_provider
+        form_login:
+          login_path: /login
+          check_path: /login_check
+          default_target_path: /c5
+          csrf_provider: form.csrf_provider
+        logout:
+          path: /logout
+          target: /login
+        security: true
+        anonymous: true
+
+
+    access_control:
+      - { path: /login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /c5/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /bundles/gaoc5/js/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /bundles/gaoc5/css/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /bundles/gaoc5/images/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /bundles/gaoc5/fonts/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /.*, roles: ROLE_USER }

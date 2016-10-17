@@ -1,0 +1,21 @@
+gao_c5_homepage:
+    path:     /
+    defaults: { _controller: GaoC5Bundle:Default:index }
+gao_c5_pd:
+    path:     /pd
+    defaults: { _controller: GaoC5Bundle:Default:pd }
+gao_c5_gd:
+    path:     /gd
+    defaults: { _controller: GaoC5Bundle:Default:gd }
+gao_c5_history:
+    path:     /his
+    defaults: { _controller: GaoC5Bundle:Default:history }
+gao_c5_account:
+    path:     /acc
+    defaults: { _controller: GaoC5Bundle:Default:account }
+gao_c5_dispute:
+    path:     /dis
+    defaults: { _controller: GaoC5Bundle:Default:dispute }
+gao_c5_test:
+    path:     /test
+    defaults: { _controller: GaoC5Bundle:Default:test }

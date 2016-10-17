@@ -1,0 +1,135 @@
+Gao\C5Bundle\Entity\Users:
+    type: entity
+    table: users
+    repositoryClass: Gao\C5Bundle\Entity\UsersRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        refId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: ref_id
+        creatorId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: creator_id
+        fullName:
+            type: string
+            nullable: false
+            length: 255
+            fixed: false
+            column: full_name
+        vcbAccNumber:
+            type: string
+            nullable: false
+            length: 50
+            fixed: true
+            column: vcb_acc_number
+        phone:
+            type: string
+            nullable: false
+            length: 20
+            fixed: true
+        email:
+            type: string
+            nullable: false
+            length: 255
+            fixed: true
+        username:
+            type: string
+            nullable: false
+            length: 50
+            fixed: true
+        password:
+            type: string
+            nullable: false
+            length: 1000
+            fixed: false
+        salt:
+            type: string
+            nullable: false
+            length: 100
+            fixed: true
+        hash:
+            type: string
+            nullable: false
+            length: 1000
+            fixed: false
+        emailVerified:
+            type: boolean
+            nullable: false
+            column: email_verified
+        firstPdDone:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: first_pd_done
+        pdGdState:
+            type: string
+            nullable: false
+            length: 20
+            fixed: true
+            comment: '''Pending'',''PD_Requested'',''PD_Matched'',''PD_Done'',''GD_Requested'',''GD_Matched'',''GD_Done'''
+            column: pd_gd_state
+        lastStateUpdate:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+            column: last_state_update
+        pdCount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pd_count
+        pdTotal:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pd_total
+        gdCount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: gd_count
+        gdTotal:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: gd_total
+        outstandingPd:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: outstanding_pd
+        outstandingGd:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: outstanding_gd
+        blocked:
+            type: boolean
+            nullable: false
+        currentInterestRate:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: current_interest_rate
+        cLevel:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: c_level
+        outstandingRefAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: outstanding_ref_amount
+    lifecycleCallbacks: {  }
