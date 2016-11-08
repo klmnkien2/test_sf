@@ -1,3 +1,9 @@
 services:
     sha256salted_encoder:
         class: Gao\C5Bundle\Service\Sha256Salted
+
+    #Biz defined
+    pd_biz:
+        class: Gao\C5Bundle\Biz\PdBiz
+        arguments: [@service_container]
+    #Service defined

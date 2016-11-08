@@ -20,13 +20,15 @@ class DefaultController extends Controller
 
     public function pdAction()
     {
-        $usr = $this->get('security.context')->getToken()->getUser();
-        return $this->render(
-            'GaoC5Bundle:Default:pd.html.twig',
-            array(
-                'error' => 1,
-            )
-        );
+        try {
+            $usr = $this->get('security.context')->getToken()->getUser();
+            //Call biz logic
+            $params = $this->get('pd_biz')->main($usr);
+
+            return $this->render('GaoC5Bundle:Default:pd.html.twig', $params);
+        } catch (\Exception $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
     }
 
     public function gdAction()

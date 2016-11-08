@@ -1,0 +1,27 @@
+parameters:
+    pd_gd_state:
+        Pending: Pending
+        PD_Requested: PD_Requested
+        PD_Matched: PD_Matched
+        PD_Done: PD_Done
+        GD_Requested: GD_Requested
+        GD_Matched: GD_Matched
+        GD_Done: GD_Done
+    pd_status:
+        waiting: 0
+        sending: 1
+        done: 2
+    gd_status:
+        waiting: 0
+        receiving: 1
+        done: 2
+    transaction_status:
+        pending: 0
+        approved: 1
+    bank_log_status:
+        normal: 0
+        blocked: 1
+    dispute_status:
+        waiting: 0
+        approved: 1
+        unapproved: 2
