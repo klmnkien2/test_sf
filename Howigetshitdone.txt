@@ -15,3 +15,50 @@ Confirm automatic update of your Kernel [yes]?
 Enabling the bundle inside the Kernel: OK
 Confirm automatic update of the Routing [yes]?
 Importing the bundle routing resource: OK
+
+======================= Vhost config ==========================
+<VirtualHost c5.com:80>
+    ServerAdmin webmaster@c5.com
+    DocumentRoot "C:/Users/Do Viet Kien/My Data/nonapv/c5/web"
+    ServerName c5.com
+    ErrorLog "logs/c5.com-error.log"
+    CustomLog "logs/c5.com-access.log" common
+	<Directory "C:/Users/Do Viet Kien/My Data/nonapv/c5/web">
+		DirectoryIndex app.php
+ 
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            RewriteCond %{REQUEST_URI}::$1 ^(/.+)/(.*)::\2$
+            RewriteRule ^(.*) - [E=BASE:%1]
+ 
+            RewriteCond %{ENV:REDIRECT_STATUS} ^$
+            RewriteRule ^app\.php(/(.*)|$) %{ENV:BASE}/$2 [R=301,L]
+ 
+            RewriteCond %{REQUEST_FILENAME} -f
+            RewriteRule .? - [L]
+ 
+            # Development mode.
+            RewriteRule ^(.*)$ /app_dev.php [QSA,L]
+            # RewriteRule ^(.*)$ /app.php [QSA,L]
+ 
+            # Rewrite all other queries to the front controller.
+            RewriteRule .? %{ENV:BASE}/app_dev.php [L]
+            # RewriteRule .? %{ENV:BASE}/app.php [L]
+        </IfModule>
+ 
+        <IfModule !mod_rewrite.c>
+            <IfModule mod_alias.c>
+                # When mod_rewrite is not available, we instruct a temporary redirect of
+                # the start page to the front controller explicitly so that the website
+                # and the generated links can still be used.
+                RedirectMatch 302 ^/$ /app.php/
+                # RedirectTemp cannot be used instead
+            </IfModule>
+        </IfModule>
+
+		Order deny,allow
+		Allow from all
+		Require all granted
+		Options Indexes FollowSymLinks Includes ExecCGI
+	</Directory>
+</VirtualHost>

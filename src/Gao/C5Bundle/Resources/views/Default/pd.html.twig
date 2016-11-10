@@ -7,19 +7,19 @@
     </div>
 
     <div class="clearfix boxEnter">
-        <div class="alert alert-info">
-            <strong>Info!</strong> Indicates a neutral informative change or action.
+        <div class="alert alert-{{ mode == 'error' ? 'danger' : 'info' }}">
+            {{ message }}
         </div>
-        <form class="form" role="form">
+        <form class="form" role="form" action="">
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-6 col-sm-3">
                         <label for="">PIN</label>
-                        <input type="text" class="form-control" id="" placeholder="Mã Pin">
+                        <input type="text" class="form-control" id="" name="pin_number" placeholder="Mã Pin">
                     </div>
                     <div class="col-md-6 col-sm-3">
                         <label for="">Thời điểm yêu cầu</label>
-                        <input type="datetime-local" class="form-control" id="" placeholder="Datetime-local">
+                        <input type="text" class="form-control" id="" name="pin_created" placeholder="">
                     </div>
                 </div>
             </div>

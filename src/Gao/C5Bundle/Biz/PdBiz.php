@@ -38,7 +38,7 @@ class PdBiz
     public function main($usr)
     {
         $mode = 'error';
-        $message = NULL;
+        $message = null;
 
         $firstPdDone = $usr->getFirstPdDone();
         $pdGdState = $usr->getPdGdState();
@@ -73,9 +73,13 @@ class PdBiz
             }
         }
 
+        // current pd
+        $current_pd_list = $this->container->get('transaction_service')->getCurrentPdByUser($usr->getId());
+
         return array(
             'mode' => $mode,
-            'message' => $message
+            'message' => $message,
+            'current_pd_list' => $current_pd_list
         );
     }
 

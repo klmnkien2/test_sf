@@ -7,3 +7,6 @@ services:
         class: Gao\C5Bundle\Biz\PdBiz
         arguments: [@service_container]
     #Service defined
+    transaction_service:
+        class: Gao\C5Bundle\Service\TransactionService
+        arguments: [@doctrine.orm.entity_manager, @service_container]
