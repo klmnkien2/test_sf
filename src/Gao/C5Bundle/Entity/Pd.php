@@ -31,7 +31,7 @@ class Pd
     /**
      * @var integer
      *
-     * @ORM\Column(name="pd_amount", type="integer", nullable=false)
+     * @ORM\Column(name="pd_amount", type="integer", nullable=true)
      */
     private $pdAmount;
 

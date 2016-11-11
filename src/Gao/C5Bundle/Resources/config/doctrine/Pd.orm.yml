@@ -17,7 +17,7 @@ Gao\C5Bundle\Entity\Pd:
             column: user_id
         pdAmount:
             type: integer
-            nullable: false
+            nullable: true
             unsigned: false
             column: pd_amount
         appliedInterestRate:
@@ -41,6 +41,7 @@ Gao\C5Bundle\Entity\Pd:
             type: boolean
             nullable: false
             comment: 'status: 0 waiting, 1 sending, 2 done'
+            default: '0'
         created:
             type: datetime
             nullable: false

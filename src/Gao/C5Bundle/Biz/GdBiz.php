@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Gao\C5Bundle\Biz\BizException;
 
 /**
- * Class: PdBiz.
+ * Class: GdBiz.
  */
-class PdBiz
+class GdBiz
 {
     /**
      * Service Container Interface.
@@ -62,39 +62,39 @@ class PdBiz
         $pdGdState = $usr->getPdGdState();
 
         if (empty($firstPdDone) || !$firstPdDone) {
-            $mode = 'pin';
+            $mode = 'error';
             $message = 'Tai khoan chua tung thuc hien PD. Hay thuc hien PD dau tien.';
             // need update pd_gd_state
         } else {
             $allState = $this->container->getParameter('pd_gd_state');
             if (empty($pdGdState) || $pdGdState == $allState['Pending']) {
                 $mode = 'error';
-                $message = 'Tai khoan chua den thoi gian thuc hien PD. Vui long cho';
+                $message = 'Tai khoan chua den thoi gian thuc hien GD. Vui long cho';
             } else if ($pdGdState == $allState['PD_Requested']) {
-                $mode = 'tran';
-                $message = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
+                $mode = 'error';
+                $message = 'Dang thuc hien giao dich PD. Vui long chuyen sang menu Quan ly PD';
             } else if ($pdGdState == $allState['PD_Matched']) {
-                $mode = 'tran';
-                $message = 'Vui long doi hoan tat cac giao dich duoi day.';
+                $mode = 'error';
+                $message = 'Dang thuc hien giao dich PD. Vui long chuyen sang menu Quan ly PD';
             } else if ($pdGdState == $allState['PD_Done']) {
-                $mode = 'error';
-                $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
-            } else if ($pdGdState == $allState['GD_Requested']) {
-                $mode = 'error';
-                $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
-            } else if ($pdGdState == $allState['GD_Matched']) {
-                $mode = 'error';
-                $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
-            } else if ($pdGdState == $allState['GD_Done']) {
                 $mode = 'pin';
-                $message = 'Tai khoan den luot PD. Vui long nhap ma pin de hoan tat.';
+                $message = 'Ban da co the yeu cau GD. Vui long dien ma pin';
+            } else if ($pdGdState == $allState['GD_Requested']) {
+                $mode = 'tran';
+                $message = 'Da xac nhan ma PIN. Vui long cho he thong sap xep giao dich GD cho ban.';
+            } else if ($pdGdState == $allState['GD_Matched']) {
+                $mode = 'tran';
+                $message = 'Da trong qua trinh nhan tien. Vui long Click vao nut \'Da nhan\' tuong ung voi ban ghi ban da nhan tien.';
+            } else if ($pdGdState == $allState['GD_Done']) {
+                $mode = 'error';
+                $message = 'Tai khoan den luot PD. Vui long chuyen sang menu Quan ly PD.';
             }
         }
 
         // current pd
-        $current_pd = $this->container->get('transaction_service')->getCurrentPdByUser($usr->getId());
-        if (!empty($current_pd)) {
-            $transactionList = $this->container->get('transaction_service')->getTransactionByPd($current_pd->getId());
+        $current_gd = $this->container->get('transaction_service')->getCurrentGdByUser($usr->getId());
+        if (!empty($current_gd)) {
+            $transactionList = $this->container->get('transaction_service')->getTransactionByGd($current_gd->getId());
         } else {
             $transactionList = null;
         }
@@ -102,19 +102,19 @@ class PdBiz
         return array(
             'mode' => $mode,
             'message' => $message,
-            'current_pd' => $current_pd,
+            'current_gd' => $current_gd,
             'transactionList' => $transactionList
         );
     }
 
     private function formProcessPin($usr, $data, &$params) {
         $data['user_id'] = $usr->getId();
-        $check = $this->container->get('transaction_service')->checkPinForPd($data);// update pin, tao pd pendding, update user pd_gd_state
+        $check = $this->container->get('transaction_service')->checkPinForPd($data);// update pin, tao gd pendding, update user pd_gd_state
 
         $session = $this->container->get('request')->getSession();
         if (!$check['error']) {
             $params['mode'] = 'tran';
-            $params['current_pd'] = $check['pd'];
+            $params['current_gd'] = $check['gd'];
             $params['message'] = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
             $session->getFlashBag()->add('success', $check['message']);
         } else {

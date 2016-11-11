@@ -7,27 +7,43 @@
     </div>
 
     <div class="clearfix boxEnter">
-        <div class="alert alert-info">
-            <strong>Info!</strong> Indicates a neutral informative change or action.
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-info">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('unsuccess') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        <div class="alert alert-{{ mode == 'error' ? 'danger' : 'info' }}">
+            {{ message }}
         </div>
-        <form class="form" role="form">
+        {% if mode != 'error' %}
+        <form class="form" role="form" action="" method="post">
             <div class="form-group">
                 <div class="row">
                     <div class="col-md-6 col-sm-3">
                         <label for="">PIN</label>
-                        <input type="text" class="form-control" id="" placeholder="Mã Pin">
+                        <input type="text" class="form-control" id="" name="pin_number" placeholder="Mã Pin" 
+                        {% if mode == 'tran' and current_pd %} disabled value="{{ current_pd.pinNumber }}" {% endif %} />
                     </div>
                     <div class="col-md-6 col-sm-3">
                         <label for="">Thời điểm yêu cầu</label>
-                        <input type="datetime-local" class="form-control" id="" placeholder="Datetime-local">
+                        <input type="text" class="form-control" disabled 
+                        {% if mode == 'tran' and current_pd %} value="{{ current_pd.created |date('d/m/Y H:i:s') }}" {% else %} value="Chua tao PIN" {% endif %} />
                     </div>
                 </div>
             </div>
-            <div class="btnWrap"><button type="submit" class="btn btn-orange">Submit</button></div>
+            <div class="btnWrap"><button type="submit" name="submit" class="btn btn-orange">Submit</button></div>
         </form>
+        {% endif %}
     </div>
 
+    {% if mode == 'tran' %}
     <div class="clearfix boxBody">
+        {% if transactionList and transactionList is not empty %}
         <h4>Danh sách người chuyển tiền</h4><br>
         <div class="clearfix tblWrap">
             <table class="tbl">
@@ -87,7 +103,10 @@
                 </tfoot>
             </table>
         </div>
-
+        {% else %}
+        <strong>Khong co ban ghi nao.</strong>
+        {% endif %}
     </div>
+    {% endif %}
 
 {% endblock contents_main %}

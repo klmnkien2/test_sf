@@ -24,7 +24,7 @@ class Pin
     /**
      * @var integer
      *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     * @ORM\Column(name="user_id", type="integer", nullable=true)
      */
     private $userId;
 

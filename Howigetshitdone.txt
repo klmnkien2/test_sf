@@ -62,3 +62,19 @@ Importing the bundle routing resource: OK
 		Options Indexes FollowSymLinks Includes ExecCGI
 	</Directory>
 </VirtualHost>
+
+
+=================== Some symfony2 command ===================
+Setup resources link
+php app/console assetic:dump --env=prod --no-debug
+php app/console assets:install --symlink
+
+Generate entity:
+php app/console doctrine:mapping:import --force NextArchiveBundle yml
+php app/console doctrine:mapping:convert annotation src --force
+php app/console doctrine:generate:entities NextArchiveBundle --no-backup
+
+php bin/console doctrine:generate:entities AppBundle/Entity/User
+
+Update to database
+php bin/console doctrine:schema:update --force

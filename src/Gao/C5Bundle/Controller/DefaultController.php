@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Gao\C5Bundle\Biz\BizException;
 
 class DefaultController extends Controller
 {
@@ -35,13 +36,15 @@ class DefaultController extends Controller
 
     public function gdAction()
     {
-        $usr = $this->get('security.context')->getToken()->getUser();
-        return $this->render(
-            'GaoC5Bundle:Default:gd.html.twig',
-            array(
-                'error' => 1,
-            )
-        );
+        try {
+            $usr = $this->get('security.context')->getToken()->getUser();
+            //Call biz logic
+            $params = $this->get('gd_biz')->main($usr);
+
+            return $this->render('GaoC5Bundle:Default:gd.html.twig', $params);
+        } catch (\Exception $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
     }
 
     public function historyAction()
@@ -80,18 +83,12 @@ class DefaultController extends Controller
     public function testAction()
     {
         // Add a new User
-        $user = new \Gao\C5Bundle\Entity\Users();
-        $user->setUsername('test');
-        $user->setSalt(uniqid(mt_rand())); // Unique salt for user
+        $this->container->get('automation_service')->createUserForTest('test1', '123');
+        $this->container->get('automation_service')->createUserForTest('test2', '123');
+        $this->container->get('automation_service')->createUserForTest('test3', '123');
 
-        // Set encrypted password
-        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-        $password = $encoder->encodePassword('123', $user->getSalt());
-        $user->setPassword($password);
-        var_dump($user);
-        $em = $this->getDoctrine()->getEntityManager();
-        $em->persist($user);
-        $em->flush();
+        // Create pin
+        $this->container->get('automation_service')->createPin();
 
         return new JsonResponse(array('status' => 'DONE'));
     }

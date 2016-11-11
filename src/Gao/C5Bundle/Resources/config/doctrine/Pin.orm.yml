@@ -12,7 +12,7 @@ Gao\C5Bundle\Entity\Pin:
     fields:
         userId:
             type: integer
-            nullable: false
+            nullable: true
             unsigned: false
             column: user_id
         pinNumber:
