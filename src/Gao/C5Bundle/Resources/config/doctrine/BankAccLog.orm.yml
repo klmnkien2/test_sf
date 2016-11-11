@@ -1,0 +1,58 @@
+Gao\C5Bundle\Entity\BankAccLog:
+    type: entity
+    table: bank_acc_log
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        vcbAccNumber:
+            type: string
+            nullable: false
+            length: 50
+            fixed: false
+            column: vcb_acc_number
+        countGd:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: count_gd
+        countPd:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: count_pd
+        totalGdAmount:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: total_gd_amount
+        totalPdAmount:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: total_pd_amount
+        totalSentAmount:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: total_sent_amount
+        totalReceiveAmount:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: total_receive_amount
+        created:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+        status:
+            type: boolean
+            nullable: false
+            comment: '0 normal, 1 blocked'
+            default: '0'
+    lifecycleCallbacks: {  }

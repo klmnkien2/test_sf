@@ -1,0 +1,37 @@
+Gao\C5Bundle\Entity\Pin:
+    type: entity
+    table: pin
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: user_id
+        pinNumber:
+            type: string
+            nullable: false
+            length: 20
+            fixed: false
+            column: pin_number
+        used:
+            type: boolean
+            nullable: false
+        pdId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: pd_id
+        gdId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: gd_id
+    lifecycleCallbacks: {  }

@@ -1,0 +1,48 @@
+Gao\C5Bundle\Entity\Pd:
+    type: entity
+    table: pd
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: user_id
+        pdAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pd_amount
+        appliedInterestRate:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: 'percentage %'
+            column: applied_interest_rate
+        pinId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pin_id
+        pinNumber:
+            type: string
+            nullable: false
+            length: 20
+            fixed: false
+            column: pin_number
+        status:
+            type: boolean
+            nullable: false
+            comment: 'status: 0 waiting, 1 sending, 2 done'
+        created:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+    lifecycleCallbacks: {  }

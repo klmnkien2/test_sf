@@ -1,0 +1,46 @@
+Gao\C5Bundle\Entity\Dispute:
+    type: entity
+    table: dispute
+    indexes:
+        message:
+            columns:
+                - message
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: user_id
+        pdId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: pd_id
+        gdId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: gd_id
+        status:
+            type: boolean
+            nullable: false
+            comment: '0-waiting 1-approved 2-unapproved'
+            default: '0'
+        created:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+        message:
+            type: text
+            nullable: false
+            length: 65535
+            fixed: false
+    lifecycleCallbacks: {  }

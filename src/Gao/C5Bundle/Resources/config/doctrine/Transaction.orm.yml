@@ -1,0 +1,63 @@
+Gao\C5Bundle\Entity\Transaction:
+    type: entity
+    table: transaction
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        pdId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: pd_id
+        gdId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: gd_id
+        pdUserId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: pd_user_id
+        gdUserId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: gd_user_id
+        gdAccNumber:
+            type: string
+            nullable: true
+            length: 50
+            fixed: false
+            column: gd_acc_number
+        pdAccNumber:
+            type: string
+            nullable: true
+            length: 50
+            fixed: false
+            column: pd_acc_number
+        amount:
+            type: integer
+            nullable: true
+            unsigned: false
+        created:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+        approvedDate:
+            type: datetime
+            nullable: true
+            default: '0000-00-00 00:00:00'
+            column: approved_date
+        status:
+            type: integer
+            nullable: false
+            unsigned: false
+            comment: '0 pending, 1 approved'
+    lifecycleCallbacks: {  }

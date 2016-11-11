@@ -1,0 +1,57 @@
+Gao\C5Bundle\Entity\Gd:
+    type: entity
+    table: gd
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        userId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: user_id
+        pdId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pd_id
+        gdAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: gd_amount
+        pdAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pd_amount
+        refAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: ref_amount
+        pinId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pin_id
+        pinNumber:
+            type: string
+            nullable: false
+            length: 20
+            fixed: false
+            column: pin_number
+        status:
+            type: boolean
+            nullable: false
+            comment: '0 waiting, 1 receiving, 2 done'
+        created:
+            type: datetime
+            nullable: false
+            default: CURRENT_TIMESTAMP
+    lifecycleCallbacks: {  }
