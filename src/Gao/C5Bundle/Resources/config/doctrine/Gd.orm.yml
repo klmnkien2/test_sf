@@ -22,17 +22,17 @@ Gao\C5Bundle\Entity\Gd:
             column: pd_id
         gdAmount:
             type: integer
-            nullable: false
+            nullable: true
             unsigned: false
             column: gd_amount
         pdAmount:
             type: integer
-            nullable: false
+            nullable: true
             unsigned: false
             column: pd_amount
         refAmount:
             type: integer
-            nullable: false
+            nullable: true
             unsigned: false
             column: ref_amount
         pinId:

@@ -189,13 +189,13 @@ class TransactionService
      */
     public function getTransactionByGd($id)
     {
-        $params = array('pdId' => $id);
+        $params = array('gdId' => $id);
         try {
             $qr = $this->em->getRepository('GaoC5Bundle:Transaction')
             ->createQueryBuilder('e');
     
     
-            $list = $qr->where('e.pdId = :pdId')
+            $list = $qr->where('e.gdId = :gdId')
             ->setParameters($params)
             ->getQuery()
             ->getResult();

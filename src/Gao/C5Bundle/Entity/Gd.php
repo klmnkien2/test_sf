@@ -38,21 +38,21 @@ class Gd
     /**
      * @var integer
      *
-     * @ORM\Column(name="gd_amount", type="integer", nullable=false)
+     * @ORM\Column(name="gd_amount", type="integer", nullable=true)
      */
     private $gdAmount;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="pd_amount", type="integer", nullable=false)
+     * @ORM\Column(name="pd_amount", type="integer", nullable=true)
      */
     private $pdAmount;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="ref_amount", type="integer", nullable=false)
+     * @ORM\Column(name="ref_amount", type="integer", nullable=true)
      */
     private $refAmount;
 
