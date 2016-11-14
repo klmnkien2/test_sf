@@ -109,7 +109,7 @@ class GdBiz
 
     private function formProcessPin($usr, $data, &$params) {
         $data['user_id'] = $usr->getId();
-        $check = $this->container->get('transaction_service')->checkPinForPd($data);// update pin, tao gd pendding, update user pd_gd_state
+        $check = $this->container->get('transaction_service')->checkPinForGd($data);// update pin, tao gd pendding, update user pd_gd_state
 
         $session = $this->container->get('request')->getSession();
         if (!$check['error']) {

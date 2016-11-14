@@ -58,11 +58,10 @@ Gao\C5Bundle\Entity\Users:
             nullable: false
             length: 100
             fixed: true
-        hash:
-            type: string
-            nullable: false
-            length: 1000
-            fixed: false
+        lastLogin:
+            type: datetime
+            nullable: true
+            column: last_login
         emailVerified:
             type: boolean
             nullable: false

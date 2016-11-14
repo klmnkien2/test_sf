@@ -83,12 +83,15 @@ class DefaultController extends Controller
     public function testAction()
     {
         // Add a new User
-        $this->container->get('automation_service')->createUserForTest('test1', '123');
-        $this->container->get('automation_service')->createUserForTest('test2', '123');
-        $this->container->get('automation_service')->createUserForTest('test3', '123');
+        //$this->container->get('automation_service')->createUserForTest('test1', '123');
+        //$this->container->get('automation_service')->createUserForTest('test2', '123');
+        //$this->container->get('automation_service')->createUserForTest('test3', '123');
 
         // Create pin
-        $this->container->get('automation_service')->createPin();
+        //$this->container->get('automation_service')->createPin();
+
+        // Create transaction
+        $this->container->get('automation_service')->createTransaction(1,4, '12345', 1, 5, '90000', 5000);
 
         return new JsonResponse(array('status' => 'DONE'));
     }

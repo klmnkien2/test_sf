@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Gao\C5Bundle\Biz\BizException;
 use Gao\C5Bundle\Entity\Pin;
 use Gao\C5Bundle\Entity\Pd;
+use Gao\C5Bundle\Entity\Gd;
 
 /**
  * TransactionService class.
@@ -76,20 +77,19 @@ class TransactionService
      */
     public function getTransactionByPd($id)
     {
-        $params = array('pdId' => $id);
+        $params = array('pd_id' => $id);
         try {
-            $qr = $this->em->getRepository('GaoC5Bundle:Transaction')
-            ->createQueryBuilder('e');
+            $query = "SELECT t.id, t.amount, t.status, t.gd_acc_number, approved_date, created, gd_id, gd_user_id, u.username, u.full_name
+                    FROM transaction t
+                    LEFT JOIN users u ON u.id = t.gd_user_id
+                    WHERE t.pd_id = :pd_id;";
+            $conn = $this->em->getConnection()->prepare($query);
+            $conn->execute($params);
+            $list = $conn->fetchAll();
 
-    
-            $list = $qr->where('e.pdId = :pdId')
-            ->setParameters($params)
-            ->getQuery()
-            ->getResult();
-    
             return $list;
             //None record found exception
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Exception $e) {
             throw new BizException('No record found...');
             //return false
         }
@@ -189,20 +189,19 @@ class TransactionService
      */
     public function getTransactionByGd($id)
     {
-        $params = array('gdId' => $id);
+        $params = array('gd_id' => $id);
         try {
-            $qr = $this->em->getRepository('GaoC5Bundle:Transaction')
-            ->createQueryBuilder('e');
-    
-    
-            $list = $qr->where('e.gdId = :gdId')
-            ->setParameters($params)
-            ->getQuery()
-            ->getResult();
-    
+            $query = "SELECT t.id, t.amount, t.status, t.pd_acc_number, approved_date, created, pd_id, pd_user_id, u.username, u.full_name
+                    FROM transaction t
+                    LEFT JOIN users u ON u.id = t.pd_user_id
+                    WHERE t.gd_id = :gd_id;";
+            $conn = $this->em->getConnection()->prepare($query);
+            $conn->execute($params);
+            $list = $conn->fetchAll();
+
             return $list;
             //None record found exception
-        } catch (\Doctrine\ORM\NoResultException $e) {
+        } catch (\Exception $e) {
             throw new BizException('No record found...');
             //return false
         }
@@ -210,7 +209,7 @@ class TransactionService
     
     public function checkPinForGd($data) {
         // $em instanceof EntityManager
-        $response = ['error' => '', 'message' => '', 'pd' => null];
+        $response = ['error' => '', 'message' => '', 'gd' => null];
         $this->em->getConnection()->beginTransaction(); // suspend auto-commit
         try {
             $pin = $this->em->getRepository('GaoC5Bundle:Pin')->findBy(array('pinNumber' => $data['pin_number'], 'used' => 0));
@@ -219,34 +218,38 @@ class TransactionService
             } else {
                 $pin = $pin[0];
             }
-    
+
             // create new Pd
-            $pd = new Pd;
-            $pd->setUserId($data['user_id']);
-            $pd->setPinId($pin->getId());
-            $pd->setPinNumber($pin->getPinNumber());
-            $pd->setAppliedInterestRate(35);
-            $pd->setStatus($this->container->getParameter('pd_status')['waiting']);
-            $this->em->persist($pd);
+            $gd = new Gd;
+            $gd->setUserId($data['user_id']);
+            $gd->setPinId($pin->getId());
+            $gd->setPinNumber($pin->getPinNumber());
+
+            //May be need set PD, ref infomation
+            $gd->setPdId(-1); // for test only
+            $gd->setPdAmount(5000); // pd_amount
+            $gd->setRefAmount(0); // ref_amount
+
+            $gd->setStatus($this->container->getParameter('gd_status')['waiting']);
+            $this->em->persist($gd);
             $this->em->flush();
-    
+
             //update pin
             $pin->setUserId($data['user_id']);
-            $pin->setPdId($pd->getId());
+            $pin->setGdId($gd->getId());
             $pin->setUsed(1);
             $this->em->persist($pin);
             $this->em->flush();
-    
+
             // update pd_gd_state of user
             $udpateUser = $this->em->getRepository('GaoC5Bundle:Users')->find($data['user_id']);
-            $udpateUser->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Requested']);
-            $udpateUser->setFirstPdDone(1);
+            $udpateUser->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Requested']);
             $this->em->persist($udpateUser);
             $this->em->flush();
-    
+
             $response['message'] = 'Ma PIN dung. Vui long cho de thuc hien tiep';
-            $response['pd'] = $pd;
-    
+            $response['gd'] = $gd;
+
             //After all work commit it
             $this->em->getConnection()->commit();
         } catch (\Exception $ex) {
@@ -260,7 +263,7 @@ class TransactionService
                 $response['error'] = 'Co loi xay ra. Vui long lien he de duoc tu van';
             }
         }
-    
+
         return $response;
     }
 

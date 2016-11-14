@@ -87,11 +87,11 @@ class Users implements AdvancedUserInterface, \Serializable
     private $salt;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="hash", type="string", length=1000, nullable=false)
+     * @ORM\Column(name="last_login", type="datetime", nullable=true)
      */
-    private $hash;
+    private $lastLogin;
 
     /**
      * @var boolean
@@ -411,26 +411,26 @@ class Users implements AdvancedUserInterface, \Serializable
     }
 
     /**
-     * Set hash
+     * Set lastLogin
      *
-     * @param string $hash
+     * @param \DateTime $lastLogin
      * @return Users
      */
-    public function setHash($hash)
+    public function setLastLogin($lastLogin)
     {
-        $this->hash = $hash;
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }
 
     /**
-     * Get hash
+     * Get lastLogin
      *
-     * @return string 
+     * @return \DateTime 
      */
     public function getHash()
     {
-        return $this->hash;
+        return $this->lastLogin;
     }
 
     /**

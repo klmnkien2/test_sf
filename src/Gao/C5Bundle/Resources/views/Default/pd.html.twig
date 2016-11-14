@@ -1,5 +1,5 @@
 {% extends 'GaoC5Bundle::layout.html.twig' %}
-
+{% set menu_selected = 'pd' %}
 {% block contents_main %}
     <div class="clearfix boxHead">
         <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Quản lý PD</h1>
@@ -54,38 +54,31 @@
                         <th scope="col">Số tài khoản</th>
                         <th scope="col">Số tiền</th>
                         <th scope="col">Trạng thái</th>
-                        <th scope="col">Ngày cập nhật</th>
+                        <th scope="col">Ngày phản hồi</th>
+                        <th scope="col">Phản hồi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                    </tr>
-                    <tr>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                    </tr>
+                    {% set total_amount = 0 %}
+                    {% for transaction in transactionList %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ transaction.full_name | default('N/A') }}</td>
+                            <td>{{ transaction.gd_acc_number | default('N/A') }}</td>
+                            <td>{{ transaction.amount }} VND</td>
+                            <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
+                            <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
+                            <td>
+                                <button type="button" class="btn btn-success">Đã gửi tiền</button>
+                                <button type="button" class="btn btn-danger">Không gửi tiền</button>
+                            </td>
+                        </tr>
+                        {% set total_amount = total_amount +  transaction.amount%}
+                    {% endfor %}
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th scope="col" colspan="6">Tổng số tiền phải chuyển: XXX</th>
+                        <th scope="col" colspan="7">Tổng số tiền phải chuyển: {{ total_amount }} VND</th>
                     </tr>
                 </tfoot>
             </table>

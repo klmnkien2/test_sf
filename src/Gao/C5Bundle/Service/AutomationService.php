@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Gao\C5Bundle\Biz\BizException;
 use Gao\C5Bundle\Entity\Pin;
 use Gao\C5Bundle\Entity\Users;
+use Gao\C5Bundle\Entity\Transaction;
 
 /**
  * AutomationService class.
@@ -75,5 +76,22 @@ class AutomationService
         $this->em->flush();
 
         var_dump($user);
+    }
+
+    public function createTransaction($pd_id, $pd_user_id, $pd_acc_number, $gd_id, $gd_user_id, $gd_acc_number, $amount) {
+        $tran = new Transaction;
+        $tran->setPdId($pd_id);
+        $tran->setPdUserId($pd_user_id);
+        $tran->setPdAccNumber($pd_acc_number);
+        $tran->setGdId($gd_id);
+        $tran->setGdUserId($gd_user_id);
+        $tran->setGdAccNumber($gd_acc_number);
+        $tran->setAmount($amount);
+        $tran->setStatus(0);
+
+        $this->em->persist($tran);
+        $this->em->flush();
+
+        // Update trang thai user cho 2 thang pd va gd
     }
 }
