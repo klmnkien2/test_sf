@@ -16,3 +16,15 @@ services:
     automation_service:
         class: Gao\C5Bundle\Service\AutomationService
         arguments: [@doctrine.orm.entity_manager, @service_container]
+
+    # Paging module.
+    paging_paginate_extension:
+        class: Gao\C5Bundle\Service\Paging\PaginateExtension
+        arguments: [%paging.defaults.template%]
+        tags:
+            - { name: twig.extension }
+    paging_paginator:
+        class: Gao\C5Bundle\Service\Paging\Paginator
+        calls:
+            - [setItemsLimitPerPage, [%paging.defaults.items_limit_per_page%]]
+            - [setPagesLimitInRange, [%paging.defaults.pages_limit_in_range%]]

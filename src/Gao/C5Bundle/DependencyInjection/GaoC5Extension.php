@@ -22,6 +22,11 @@ class GaoC5Extension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        // Paging module.
+        $container->setParameter('paging.defaults.items_limit_per_page', $config['paging']['defaults']['items_limit_per_page']);
+        $container->setParameter('paging.defaults.pages_limit_in_range', $config['paging']['defaults']['pages_limit_in_range']);
+        $container->setParameter('paging.defaults.template', $config['paging']['defaults']['template']);
+        
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('config.yml');
     }

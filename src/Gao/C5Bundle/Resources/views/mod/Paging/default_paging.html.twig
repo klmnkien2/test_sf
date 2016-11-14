@@ -1,0 +1,51 @@
+<ul class="paging">
+  {% if pagination.previousPageNumber %}
+    <li class="prevPage">
+      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.previousPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ pagination.textPrevious }}</a>
+    </li>
+  {% endif %}
+
+  {% if pagination.firstPageNumber and pagination.firstPageNumber != pagination.currentPageNumber and pagination.firstPageNumber != pagination.firstPageNumberInRange %}
+    <li>
+      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.firstPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ pagination.firstPageNumber }}</a>
+    </li>
+  {% endif %}
+
+  {% if pagination.firstPageNumberInRange > (pagination.firstPageNumber + 1) %}
+    <li>
+      <span>...</span>
+    </li>
+  {% endif %}
+
+  {% for page in pagination.pagesInRange %}
+    {# if pagination.currentPageNumber != 4 or loop.last == false #}
+    {% if page == pagination.currentPageNumber %}
+      <li class="selected">
+        <span>{{ page }}</span>
+      </li>
+    {% else %}
+      <li>
+        <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ page }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ page }}</a>
+      </li>
+    {% endif %}
+    {# endif #}
+  {% endfor %}
+
+  {% if pagination.lastPageNumberInRange < (pagination.lastPageNumber - 1) %}
+    <li>
+      <span>...</span>
+    </li>
+  {% endif %}
+
+  {% if pagination.lastPageNumber and pagination.lastPageNumber != pagination.currentPageNumber and pagination.lastPageNumber != pagination.lastPageNumberInRange %}
+    <li>
+      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.lastPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ pagination.lastPageNumber }}</a>
+    </li>
+  {% endif %}
+
+  {% if pagination.nextPageNumber %}
+    <li class="nextPage">
+      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.nextPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ pagination.textNext }}</a>
+    </li>
+  {% endif %}
+</ul>

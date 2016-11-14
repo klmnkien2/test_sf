@@ -1,0 +1,6 @@
+<span>Sort by:</span>
+<select name="sort" id="prg-sorting-cond">
+  {% for key, sort_item in sort_items.list %}
+    <option value="{{ key }}" {% if sort_items.selected == key %} selected {% endif %}>{{ sort_item.name|default('') }}</option>
+  {% endfor %}
+</select>
