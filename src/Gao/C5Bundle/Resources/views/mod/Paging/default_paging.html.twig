@@ -1,7 +1,7 @@
-<ul class="paging">
+<ul class="clearfix paging">
   {% if pagination.previousPageNumber %}
-    <li class="prevPage">
-      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.previousPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ pagination.textPrevious }}</a>
+    <li class="pPrev">
+      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.previousPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">Trang trước</a>
     </li>
   {% endif %}
 
@@ -21,7 +21,7 @@
     {# if pagination.currentPageNumber != 4 or loop.last == false #}
     {% if page == pagination.currentPageNumber %}
       <li class="selected">
-        <span>{{ page }}</span>
+        <strong>{{ page }}</strong>
       </li>
     {% else %}
       <li>
@@ -44,8 +44,8 @@
   {% endif %}
 
   {% if pagination.nextPageNumber %}
-    <li class="nextPage">
-      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.nextPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">{{ pagination.textNext }}</a>
+    <li class="pNext">
+      <a class="prg-link-post" href="?{{ pagination.pageParameterName }}={{ pagination.nextPageNumber }}{{ sort ? ('&sort=' ~ sort) }}{{ fragment ? ('#' ~ fragment) }}">Trang sau</a>
     </li>
   {% endif %}
 </ul>

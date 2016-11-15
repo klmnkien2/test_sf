@@ -179,11 +179,11 @@ class TransactionService
             return null;
         }
     }
-    
+
     /**
-     * get transaction pd
+     * get transaction gd
      *
-     * @param int $id The id of pd
+     * @param int $id The id of gd
      *
      * @return array $transactionList Is an array of Transaction
      */
@@ -206,7 +206,7 @@ class TransactionService
             //return false
         }
     }
-    
+
     public function checkPinForGd($data) {
         // $em instanceof EntityManager
         $response = ['error' => '', 'message' => '', 'gd' => null];
@@ -267,4 +267,93 @@ class TransactionService
         return $response;
     }
 
+    /**
+     * ========================
+     * BLOCK FOR GD TRANSACTION
+     * ========================
+     */
+
+    /**
+     * get transaction from user
+     *
+     * @param int $id The id of user
+     *
+     * @return array $transactionList Is an array of Transaction
+     */
+    public function getTransactionByUser($id, $page, $itemsLimitPerPage, $sort)
+    {
+        try {
+            $query = <<<EOT
+SELECT 
+    t.id, t.amount, t.status, t.approved_date, t.created,
+    t.pd_id, t.pd_user_id, t.pd_acc_number,
+    NULL AS gd_id, NULL AS gd_user_id, NULL AS gd_acc_number,
+    u.username, u.full_name
+FROM
+    transaction t
+LEFT JOIN
+    users u ON u.id = t.pd_user_id
+WHERE 
+    t.gd_user_id = ?
+UNION
+SELECT 
+    t.id, t.amount, t.status, t.approved_date, t.created,
+    NULL AS pd_id, NULL AS pd_user_id, NULL AS pd_acc_number,
+    t.gd_id, t.gd_user_id, t.gd_acc_number,
+    u.username, u.full_name
+FROM 
+    transaction t
+LEFT JOIN 
+    users u ON u.id = t.gd_user_id
+WHERE 
+    t.pd_user_id = ?
+LIMIT ?, ?
+EOT;
+            $stmt = $this->em->getConnection()->prepare($query);
+            $stmt->bindValue(1, $id, \PDO::PARAM_INT);
+            $stmt->bindValue(2, $id, \PDO::PARAM_INT);
+            $stmt->bindValue(3, ($page-1) * $itemsLimitPerPage, \PDO::PARAM_INT);
+            $stmt->bindValue(4, $itemsLimitPerPage, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            $list = $stmt->fetchAll();
+
+            return $list;
+            //None record found exception
+        } catch (\Exception $e) {
+            throw $e;//new BizException('No record found...');
+            //return false
+        }
+    }
+
+    /**
+     * count transaction from user
+     *
+     * @param int $id The id of user
+     *
+     * @return array $transactionList Is an array of Transaction
+     */
+    public function countTransactionByUser($id)
+    {
+        $params = array('user_id' => $id);
+        try {
+            $query = <<<EOT
+SELECT
+    count(t.id) AS total
+FROM
+    transaction t
+WHERE
+    t.gd_user_id = :user_id OR t.pd_user_id = :user_id
+EOT;
+            $conn = $this->em->getConnection()->prepare($query);
+            $conn->execute($params);
+            $result = $conn->fetchAll();
+
+            return $result[0]['total'];
+            //None record found exception
+        } catch (\Exception $e) {
+            throw new BizException('can not count transaction ...');
+            //return false
+        }
+    }
 }

@@ -96,26 +96,6 @@ class Pagination
     private $lastItemNumberInNextPage;
 
     /**
-     * Total text.
-     */
-    private $textTotal = '件中';
-
-    /**
-     * FromToDisplay text.
-     */
-    private $textFromToDisplay = '件を表示';
-
-    /**
-     * Previous text.
-     */
-    private $textPrevious = '前へ';
-
-    /**
-     * Next text.
-     */
-    private $textNext = '次ヘ';
-
-    /**
      * The page parameter in url query.
      */
     private $pageParameterName = 'page';
@@ -540,54 +520,6 @@ class Pagination
     public function setLastItemNumberInNextPage($lastItemNumberInNextPage)
     {
         $this->lastItemNumberInNextPage = $lastItemNumberInNextPage;
-        return $this;
-    }
-
-    /**
-     * Set the total text.
-     * 
-     * @param string $textTotal The total text.
-     * @return Pagination The Pagination object.
-     */
-    public function setTextTotal($textTotal)
-    {
-        $this->textTotal = $textTotal;
-        return $this;
-    }
-
-    /**
-     * Set the from to display text.
-     * 
-     * @param string $textFromToDisplay The from to display text.
-     * @return Pagination The Pagination object.
-     */
-    public function setTextFromToDisplay($textFromToDisplay)
-    {
-        $this->textFromToDisplay = $textFromToDisplay;
-        return $this;
-    }
-
-    /**
-     * Set the previous text.
-     * 
-     * @param string $textPrevious The previous text.
-     * @return Pagination The Pagination object.
-     */
-    public function setTextPrevious($textPrevious)
-    {
-        $this->textPrevious = $textPrevious;
-        return $this;
-    }
-
-    /**
-     * Set the next text.
-     * 
-     * @param string $textNext The next text.
-     * @return Pagination The Pagination object.
-     */
-    public function setTextNext($textNext)
-    {
-        $this->textNext = $textNext;
         return $this;
     }
 

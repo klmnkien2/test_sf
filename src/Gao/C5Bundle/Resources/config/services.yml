@@ -9,6 +9,9 @@ services:
     gd_biz:
         class: Gao\C5Bundle\Biz\GdBiz
         arguments: [@service_container]
+    history_biz:
+        class: Gao\C5Bundle\Biz\HistoryBiz
+        arguments: [@service_container]
     #Service defined
     transaction_service:
         class: Gao\C5Bundle\Service\TransactionService

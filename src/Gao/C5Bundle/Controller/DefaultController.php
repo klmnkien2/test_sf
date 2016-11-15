@@ -49,35 +49,48 @@ class DefaultController extends Controller
 
     public function historyAction()
     {
-        $usr = $this->get('security.context')->getToken()->getUser();
-        return $this->render(
-            'GaoC5Bundle:Default:history.html.twig',
-            array(
-                'error' => 1,
-            )
-        );
+        try {
+            // Get request object.
+            $request = $this->getRequest();
+
+            // Get query parameter.
+            $page = $request->query->get('page', 1);
+            $sort = $request->query->get('sort', 'non');
+
+            $usr = $this->get('security.context')->getToken()->getUser();
+            //Call biz logic
+            $params = $this->get('history_biz')->main($usr, $page, 1, $sort);
+
+            return $this->render('GaoC5Bundle:Default:history.html.twig', $params);
+        } catch (\Exception $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
     }
 
     public function accountAction()
     {
-        $usr = $this->get('security.context')->getToken()->getUser();
-        return $this->render(
-            'GaoC5Bundle:Default:account.html.twig',
-            array(
-                'error' => 1,
-            )
-        );
+        try {
+            $usr = $this->get('security.context')->getToken()->getUser();
+            //Call biz logic
+            $params = $this->get('account_biz')->main($usr);
+
+            return $this->render('GaoC5Bundle:Default:account.html.twig', $params);
+        } catch (\Exception $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
     }
 
     public function disputeAction()
     {
-        $usr = $this->get('security.context')->getToken()->getUser();
-        return $this->render(
-            'GaoC5Bundle:Default:dispute.html.twig',
-            array(
-                'error' => 1,
-            )
-        );
+        try {
+            $usr = $this->get('security.context')->getToken()->getUser();
+            //Call biz logic
+            $params = $this->get('dispute_biz')->main($usr);
+
+            return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
+        } catch (\Exception $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
     }
 
     public function testAction()

@@ -7,73 +7,37 @@
     </div>
 
     <div class="clearfix boxBody">
-        <h4>Lịch sử, tổng số xxx giao dịch, đang hiển thị yyy giao dịch, từ yyy1 đến yyy10</h4><br>
+
         <div class="clearfix tblWrap">
             <table class="tbl">
                 <thead>
                     <tr>
                         <th scope="col">STT</th>
-                        <th scope="col">PD/GD</th>
-                        <th scope="col">Mã PIN</th>
-                        <th scope="col">Tổng số tiền</th>
+                        <th scope="col">Tên</th>
+                        <th scope="col">Số tài khoản</th>
+                        <th scope="col">Số tiền</th>
                         <th scope="col">Trạng thái</th>
-                        <th scope="col">Ngày cập nhật</th>
-                        <th scope="col"></th>
+                        <th scope="col">Ngày phản hồi</th>
+                        <th scope="col">Loại giao dịch</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>
-                            <a href="" class="btn btn-primary">Xem chi tiết</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>
-                            <a href="" class="btn btn-primary">Xem chi tiết</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>data</td>
-                        <td>
-                            <a href="" class="btn btn-primary">Xem chi tiết</a>
-                        </td>
-                    </tr>
+                    {% for transaction in pagination.getItemsInCurrentPage %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ transaction.full_name | default('N/A') }}</td>
+                            <td>{{ transaction.pd_acc_number | default('N/A') }}</td>
+                            <td>{{ transaction.amount }} VND</td>
+                            <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
+                            <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
+                            <td>{{ transaction.pd_id ? 'GD' : 'PD' }}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
-        <ul class="clearfix paging">
-			<li class="pFirst"><a href="#none">&laquo;</a></li>
-			<li class="pPrev"><a href="#none">&lsaquo;</a></li>
-			<li><a href="#none">1</a></li>
-			<li><strong>2</strong></li>
-			<li><a href="#none">3</a></li>
-			<li><a href="#none">4</a></li>
-			<li><a href="#none">5</a></li>
-			<li><a href="#none">6</a></li>
-			<li><a href="#none">7</a></li>
-			<li><a href="#none">8</a></li>
-			<li><span>...</span></li>
-			<li><a href="#none">99</a></li>
-			<li class="pNext"><a href="#none">&rsaquo;</a></li>
-			<li class="pLast"><a href="#none">&raquo;</a></li>
-		</ul>
+
+        {{ paginate(pagination, sort) }}
     </div>
 
 {% endblock contents_main %}
