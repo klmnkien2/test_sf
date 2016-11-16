@@ -70,9 +70,8 @@ class DefaultController extends Controller
     public function accountAction()
     {
         try {
-            $usr = $this->get('security.context')->getToken()->getUser();
             //Call biz logic
-            $params = $this->get('account_biz')->main($usr);
+            $params = $this->get('account_biz')->main();
 
             return $this->render('GaoC5Bundle:Default:account.html.twig', $params);
         } catch (\Exception $ex) {
@@ -83,9 +82,8 @@ class DefaultController extends Controller
     public function disputeAction()
     {
         try {
-            $usr = $this->get('security.context')->getToken()->getUser();
             //Call biz logic
-            $params = $this->get('dispute_biz')->main($usr);
+            $params = $this->get('dispute_biz')->main();
 
             return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
         } catch (\Exception $ex) {

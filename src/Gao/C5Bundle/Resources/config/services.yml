@@ -12,9 +12,18 @@ services:
     history_biz:
         class: Gao\C5Bundle\Biz\HistoryBiz
         arguments: [@service_container]
+    account_biz:
+        class: Gao\C5Bundle\Biz\AccountBiz
+        arguments: [@service_container]
+    dispute_biz:
+        class: Gao\C5Bundle\Biz\DisputeBiz
+        arguments: [@service_container]
     #Service defined
     transaction_service:
         class: Gao\C5Bundle\Service\TransactionService
+        arguments: [@doctrine.orm.entity_manager, @service_container]
+    dispute_service:
+        class: Gao\C5Bundle\Service\DisputeService
         arguments: [@doctrine.orm.entity_manager, @service_container]
     automation_service:
         class: Gao\C5Bundle\Service\AutomationService
