@@ -36,9 +36,8 @@ class AttachmentController extends Controller
                 $reqFile = $reqFile[0];
             }
 
-            $status = 'success';
-            $uploadedURL = '';
-            $message = '';
+            $error = false;
+            $attachment = null;
 
             $MAX_FILE_SIZE = 2000000000;
 
@@ -60,23 +59,26 @@ class AttachmentController extends Controller
                         // Start Uploading File
                         $uploadFileName = $this->get('attachment_service')->generateFileName($reqFile);
                         $uploadedURL = $this->get('attachment_service')->moveUploadedFile($reqFile, $folder ? $folder : 'default', $uploadFileName);
+
+                        // create database record
+                        $attachment = $this->get('attachment_service')->createAttachment($originalName, $uploadedURL, $folder ? $folder : 'default');
+                        if (empty($attachment) || empty($attachment->getId())) {
+                            $error = 'Can not insert attachment to database';
+                        }
                     } else {
-                        $status = 'failed';
-                        $message = 'Invalid File Type';
+                        $error = 'Invalid File Type';
                     }
                 } else {
-                    $status = 'failed';
-                    $message = 'Size exceeds limit';
+                    $error = 'Size exceeds limit';
                 }
             } else {
-                $status = 'failed';
-                $message = 'File Error';
+                $error = 'File Error';
             }
 
+
             return new JsonResponse(array(
-                'status' => $status,
-                'message' => $message,
-                'uploadedURL' => $uploadedURL
+                'error' => $error,
+                'attachment' => $attachment
             ));
         }
     }

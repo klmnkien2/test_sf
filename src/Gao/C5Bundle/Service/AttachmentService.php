@@ -12,6 +12,7 @@ namespace Gao\C5Bundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Gao\C5Bundle\Entity\Attachment;
 
 /**
  * AttachmentService class.
@@ -69,5 +70,20 @@ class AttachmentService
     public function generateFileName(UploadedFile $file)
     {
         return $file->getClientOriginalName();
+    }
+
+    public function createAttachment($originalName, $uploadedURL, $type) {
+        $user = $this->container->get('security.context')->getToken()->getUser();
+
+        $attachment = new Attachment();
+        $attachment->setUserId($user->getId());
+        $attachment->setName($originalName);
+        $attachment->setUrl($uploadedURL);
+        $attachment->setType($type);
+
+        $this->em->persist($attachment);
+        $this->em->flush();
+
+        return $attachment;
     }
 }

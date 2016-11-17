@@ -10,6 +10,11 @@ Gao\C5Bundle\Entity\Attachment:
             generator:
                 strategy: IDENTITY
     fields:
+        userId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: user_id
         name:
             type: string
             nullable: false

@@ -22,6 +22,13 @@ class Attachment
     private $id;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
+     */
+    private $userId;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=1000, nullable=false)
@@ -59,6 +66,29 @@ class Attachment
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set userId
+     *
+     * @param integer $referId
+     * @return Attachment
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer 
+     */
+    public function getUserId()
+    {
+        return $this->userId;
     }
 
     /**
