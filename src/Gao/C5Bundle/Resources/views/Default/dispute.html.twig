@@ -18,28 +18,23 @@
             <div class="form-group">
                 <label for="">Văn bản đính kèm</label>
                 <div class="form-control" style="height: auto">
-                    <label class="btn btn-default btn-file">
-                        Chọn file... <input type="file" style="display: none;">
-                    </label>
+                    <span class="btn-select-file fileinput-button">
+                        <span>Select file...</span>
+                        <!-- The file input field used as target for the file upload widget -->
+                        <input id="fileupload" type="file" name="uploadFile"/>
+                        <!-- <input id="fileupload" type="file" name="uploadFile[]" multiple="">-->
+                    </span>
+                    <br><br>
+                    <!-- The global progress bar -->
+                    <div id="progress" class="progress">
+                        <div class="progress-bar progress-bar-success"></div>
+                    </div>
+                    <!-- The container for the uploaded files -->
+                    <div id="files" class="files"></div>
                 </div>
             </div>
             <div class="btnWrap"><button type="submit" class="btn btn-orange">Submit</button></div>
         </form>
     </div>
 
-    <script type="text/javascript">
-    $(document).on('change', ':file', function() {
-        var input = $(this),
-            numFiles = input.get(0).files ? input.get(0).files.length : 1,
-            label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-        input.trigger('fileselect', [numFiles, label]);
-    });
-
-    $(document).ready( function() {
-        $(':file').on('fileselect', function(event, numFiles, label) {
-            console.log(numFiles);
-            console.log(label);
-        });
-    });
-</script>
 {% endblock contents_main %}
