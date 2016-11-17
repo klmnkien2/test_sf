@@ -4,24 +4,33 @@
    * manage thumbnail of the realestate atrticle
    */
   def(function() {
-    //this.root = $('#prg-raThumbnail');
+	  this.root = $('#prg-disputeForm');
   }).as('app.default.widget.UploadImage').it.provides({
     build : function() {
       this.bindAllListeners();
-      this.initUpload();
+      this.initUploadAjax();
     },
     /**
      * manage an event
      */
     bindAllListeners : function() {
-      // Example listener
-      // this.root.find('.thumbViewSlider').on('click', '.nav .prev', $.proxy(this, 'prev'));
+        //this.root.on('change', '#fileupload', $.proxy(this, 'selectFileUpload')); // for upload file no ajax
+    },
+    /**
+     * trigger fileselect event
+     */
+    selectFileUpload : function(event) {
+        var input = event.target,
+            numFiles = input.files ? input.files.length : 1,
+            label = input.files[0].name.replace(/\\/g, '/').replace(/.*\//, '');
+        console.log(numFiles);
+        console.log(label);
     },
     /**
      * init calling to upload lib
-     * 
+     * Upload file using ajax
      */
-    initUpload : function() {
+    initUploadAjax : function() {
       var url = this.getBaseUrl() + "/attachment/upload/dispute";
 
       $('#fileupload').fileupload(
@@ -48,9 +57,9 @@
      * Get base url
      */
     getBaseUrl : function() {
-    	if (typeof location.origin === 'undefined')
-    	    location.origin = location.protocol + '//' + location.host;
-    	return location.origin;
+        if (typeof location.origin === 'undefined')
+            location.origin = location.protocol + '//' + location.host;
+        return location.origin;
     }
   });
 }(jQuery, require_joo()));
