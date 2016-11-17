@@ -1,4 +1,5 @@
 {% extends 'GaoC5Bundle::layout.html.twig' %}
+{% block datapage %}data-pageId="default_dispute"{% endblock %}
 {% set menu_selected = 'dispute' %}
 {% block contents_main %}
     <div class="clearfix boxHead">
@@ -18,15 +19,15 @@
             <div class="form-group">
                 <label for="">Văn bản đính kèm</label>
                 <div class="form-control" style="height: auto">
-                    <span class="btn-select-file fileinput-button">
-                        <span>Select file...</span>
+                    <label class="btn btn-default btn-file">
+                        Chọn file...
                         <!-- The file input field used as target for the file upload widget -->
-                        <input id="fileupload" type="file" name="uploadFile"/>
+                        <input id="fileupload" type="file" name="uploadFile" style="display: none;"/>
                         <!-- <input id="fileupload" type="file" name="uploadFile[]" multiple="">-->
-                    </span>
+                    </label>
                     <br><br>
                     <!-- The global progress bar -->
-                    <div id="progress" class="progress">
+                    <div id="prg-uploadProgress" class="progress progress-upload-file" style="display: none;">
                         <div class="progress-bar progress-bar-success"></div>
                     </div>
                     <!-- The container for the uploaded files -->

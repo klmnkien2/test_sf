@@ -66,8 +66,9 @@ Importing the bundle routing resource: OK
 
 =================== Some symfony2 command ===================
 Setup resources link
+rm -r app/cache/*
 php app/console cache:clear --env=prod
-php app/console assets:install --symlink
+php app/console assets:install --symlink web
 php app/console assetic:dump --env=prod
 
 Generate entity:

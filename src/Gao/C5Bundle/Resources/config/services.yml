@@ -18,6 +18,7 @@ services:
     dispute_biz:
         class: Gao\C5Bundle\Biz\DisputeBiz
         arguments: [@service_container]
+
     #Service defined
     transaction_service:
         class: Gao\C5Bundle\Service\TransactionService
@@ -28,6 +29,9 @@ services:
     automation_service:
         class: Gao\C5Bundle\Service\AutomationService
         arguments: [@doctrine.orm.entity_manager, @service_container]
+    attachment_service:
+        class: Gao\C5Bundle\Service\AttachmentService
+        arguments: [@service_container]
 
     # Paging module.
     paging_paginate_extension:

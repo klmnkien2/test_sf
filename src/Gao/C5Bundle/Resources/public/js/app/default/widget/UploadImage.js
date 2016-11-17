@@ -22,7 +22,7 @@
      * 
      */
     initUpload : function() {
-      var url = "/app_dev.php/upload/?auctionId=" + $('#auction_auctionId').val();
+      var url = this.getBaseUrl() + "/attachment/upload/dispute";
 
       $('#fileupload').fileupload(
           {
@@ -30,21 +30,27 @@
             dataType : 'json',
             done : function(e, data) {
               if (data.result.status == 'success') {
-                $('<p/>').text(data.result.message).appendTo(
-                    '#files');
+                $('<p/>').text(data.result.message).appendTo('#files');
               } else {
 
               }
-              $('#progress .progress-bar').css('width', 0);
+              $('#prg-uploadProgress .progress-bar').css('width', 0);
+              $('#prg-uploadProgress').hide();
             },
             progressall : function(e, data) {
-              var progress = parseInt(data.loaded / data.total
-                  * 100, 10);
-              $('#progress .progress-bar').css('width',
-                  progress + '%');
+              var progress = parseInt(data.loaded / data.total * 100, 10);
+              $('#prg-uploadProgress').show();
+              $('#prg-uploadProgress .progress-bar').css('width', progress + '%');
             }
-          }).prop('disabled', !$.support.fileInput).parent()
-          .addClass($.support.fileInput ? undefined : 'disabled');
+          }).prop('disabled', !$.support.fileInput).parent().addClass($.support.fileInput ? undefined : 'disabled');
+    },
+    /**
+     * Get base url
+     */
+    getBaseUrl : function() {
+    	if (typeof location.origin === 'undefined')
+    	    location.origin = location.protocol + '//' + location.host;
+    	return location.origin;
     }
   });
 }(jQuery, require_joo()));

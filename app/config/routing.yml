@@ -8,10 +8,14 @@ login_check:
 logout:
   pattern: /logout
 
+attachment_upload:
+    path:     /attachment/upload/{folder}
+    defaults: { _controller: GaoC5Bundle:Attachment:upload }
+
+attachment_download:
+    path:     /attachment/download
+    defaults: { _controller: GaoC5Bundle:Attachment:download }
+
 gao_c5:
     resource: "@GaoC5Bundle/Resources/config/routing.yml"
     prefix:   /c5
-
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
