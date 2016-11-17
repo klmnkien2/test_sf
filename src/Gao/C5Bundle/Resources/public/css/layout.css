@@ -18,7 +18,7 @@ a:hover{color:#f36523;text-decoration:none;}
 #UIhead .primary{height:80px;background-color:#fff;/*background-color:rgba(255,255,255,.75);*/}
 #UIhead .primary .container{padding-top:8px;padding-bottom:7px;}
 #UIhead .primary .col-xs-12{height:65px;}
-#UIhead .navbar-brand{width:250px;height:65px;padding:0;line-height:65px;background:url(/bundles/gaoc5/images/causeflix_logo.png) no-repeat 50% 50%;text-indent:-9999em;}
+#UIhead .navbar-brand{width:250px;height:65px;padding:0;line-height:65px;background:url(../images/causeflix_logo.png) no-repeat 50% 50%;text-indent:-9999em;}
 #UIhead .navMain{background-color:#f36523;}
 #UIhead .navMain .navbar-nav li{font-weight:700;text-transform:uppercase;}
 #UIhead .navMain .navbar-nav a{color:#fff;}
@@ -34,7 +34,7 @@ a:hover{color:#f36523;text-decoration:none;}
 #UIcont {padding-top: 150px;padding-bottom: 50px;}
 
 .userInfo .user{line-height:16px;text-align:right;}
-.userInfo .user strong{padding-left:18px;color:#808080;font-size:14px;font-weight:700;background:url(/bundles/gaoc5/images/icon_user.png) no-repeat 0 0;}
+.userInfo .user strong{padding-left:18px;color:#808080;font-size:14px;font-weight:700;background:url(../images/icon_user.png) no-repeat 0 0;}
 .userInfo .nav-pills{display:inline-block;width:100%;}
 .userInfo .nav-pills>li{position:relative;margin:0 0 0 21px;font-size:12px;line-height:14px;}
 .userInfo .nav-pills>li:first-child{margin-left:0;}
@@ -45,11 +45,11 @@ a:hover{color:#f36523;text-decoration:none;}
 
 
 #UIfoot .primary{padding:30px 0 5px;background-color:#f36523;}
-#UIfoot .primary .container{min-height:195px;background:url(/bundles/gaoc5/images/causeflix_logo_foot.png) no-repeat 100% 100%;}
+#UIfoot .primary .container{min-height:195px;background:url(../images/causeflix_logo_foot.png) no-repeat 100% 100%;}
 #UIfoot .titlebar{margin-bottom:10px;}
-#UIfoot .title{background-image:url(/bundles/gaoc5/images/icon_cloud.png);}
+#UIfoot .title{background-image:url(../images/icon_cloud.png);}
 #UIfoot .cfNav li{display:inline-block;width:100%;}
-#UIfoot .cfNav a{display:inline-block;padding-left:15px;color:#fff;background:url(/bundles/gaoc5/images/bul_nav_foot.png) no-repeat 0 10px;}
+#UIfoot .cfNav a{display:inline-block;padding-left:15px;color:#fff;background:url(../images/bul_nav_foot.png) no-repeat 0 10px;}
 #UIfoot .cfNav a:hover, #UIfoot .cfNav a:focus{color:#ffbfa0;}
 #UIfoot .copyright{padding:10px 0;color:#fff;font-size:12px;text-align:center;background-color:#603912;}
 #UIfoot .copyright a{color:#fff;}
@@ -64,7 +64,7 @@ a:hover{color:#f36523;text-decoration:none;}
 .block-brown{background-color:#603912;}
 .block-orange{background-color:#f36523;}
 
-.causeflix-head{min-height:350px;background-image:url(/bundles/gaoc5/images/bg_causeflix_head.png);background-repeat:no-repeat;background-position:50% 50%;}
+.causeflix-head{min-height:350px;background-image:url(../images/bg_causeflix_head.png);background-repeat:no-repeat;background-position:50% 50%;}
 .causeflix-head .pageTitle{padding:15px 25px;color:#fff;background:rgba(0,0,0,.5);border-radius:10px;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 .causeflix-head .pageTitle h1{font-size:36px;line-height:36px;}
 .causeflix-head .pageTitle h1 span{font-size:24px;}
@@ -81,7 +81,7 @@ a:hover{color:#f36523;text-decoration:none;}
 .searchBar .form-control::-moz-placeholder{color:#;}
 .searchBar .form-control:-ms-input-placeholder{color:#;}
 .searchBar .form-control::-webkit-input-placeholder{color:#;}
-.searchBar .btn{position:absolute;top:0;right:0;width:34px;background:url(/bundles/gaoc5/images/icon_search.png) no-repeat 50% 50%;text-indent:-9999em;outline:none;}
+.searchBar .btn{position:absolute;top:0;right:0;width:34px;background:url(../images/icon_search.png) no-repeat 50% 50%;text-indent:-9999em;outline:none;}
 
 
 img{max-width:100%;}

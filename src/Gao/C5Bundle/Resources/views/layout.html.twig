@@ -9,14 +9,14 @@
 {% block title %}{% endblock title %}
 {% block stylesheets %}
   {% stylesheets filter='cssrewrite'
-  output='bundles/gaoc5/css/common.css'
+  output='bundles/gaoc5/css/c5.css'
 
-  '@GaoC5Bundle/Resources/public/css/bootstrap.min.css'
-  '@GaoC5Bundle/Resources/public/css/theme.css'
-  '@GaoC5Bundle/Resources/public/css/layout.css'
-  '@GaoC5Bundle/Resources/public/css/style.css'
-  '@GaoC5Bundle/Resources/public/css/star-rating.css'
-  '@GaoC5Bundle/Resources/public/css/jquery.fancybox.css' %}
+  'bundles/gaoc5/css/bootstrap.min.css'
+  'bundles/gaoc5/css/theme.css'
+  'bundles/gaoc5/css/layout.css'
+  'bundles/gaoc5/css/style.css'
+  'bundles/gaoc5/css/star-rating.css'
+  'bundles/gaoc5/css/jquery.fancybox.css' %}
   <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
   {% endstylesheets %}
 {% endblock stylesheets %}
@@ -114,7 +114,7 @@
 
   {# If you want to modify include of js, you need modify the minifyjs.php together. #}
   {% javascripts
-  output='bundles/gaoc5/js/all.js'
+  output='bundles/gaoc5/js/c5.js'
 
   '@GaoC5Bundle/Resources/public/js/library/jquery/jquery-1.11.0.min.js'
   '@GaoC5Bundle/Resources/public/js/library/bootstrap/bootstrap.min.js'
