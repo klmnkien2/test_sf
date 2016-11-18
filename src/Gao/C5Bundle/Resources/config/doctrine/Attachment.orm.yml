@@ -27,11 +27,12 @@ Gao\C5Bundle\Entity\Attachment:
             fixed: false
         referId:
             type: integer
-            nullable: false
+            nullable: true
             unsigned: false
             column: refer_id
         type:
-            type: boolean
+            type: string
             nullable: false
-            comment: 1-dispute
+            length: 10
+            fixed: true
     lifecycleCallbacks: {  }

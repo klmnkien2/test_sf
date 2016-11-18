@@ -45,14 +45,14 @@ class Attachment
     /**
      * @var integer
      *
-     * @ORM\Column(name="refer_id", type="integer", nullable=false)
+     * @ORM\Column(name="refer_id", type="integer", nullable=true)
      */
     private $referId;
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="type", type="boolean", nullable=false)
+     * @ORM\Column(name="type", type="string", length=10, nullable=false)
      */
     private $type;
 
@@ -71,7 +71,7 @@ class Attachment
     /**
      * Set userId
      *
-     * @param integer $referId
+     * @param integer $userId
      * @return Attachment
      */
     public function setUserId($userId)
@@ -163,7 +163,7 @@ class Attachment
     /**
      * Set type
      *
-     * @param boolean $type
+     * @param string $type
      * @return Attachment
      */
     public function setType($type)
@@ -176,7 +176,7 @@ class Attachment
     /**
      * Get type
      *
-     * @return boolean 
+     * @return string 
      */
     public function getType()
     {

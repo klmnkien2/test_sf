@@ -10,6 +10,8 @@
 
 namespace Gao\C5Bundle\Service;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Gao\C5Bundle\Entity\Attachment;
@@ -22,6 +24,11 @@ use Gao\C5Bundle\Entity\Attachment;
 class AttachmentService
 {
     /**
+     * EntityManager.
+     */
+    protected $em;
+
+    /**
      * Container Interface.
      */
     protected $container;
@@ -29,10 +36,12 @@ class AttachmentService
     /**
      * Constructor.
      *
-     * @param Container $container The Container Interface.
+     * @param EntityManager $em        The EntityManager.
+     * @param Container     $container The Container Interface.
      */
-    public function __construct(Container $container)
+    public function __construct(EntityManager $em, Container $container)
     {
+        $this->em = $em;
         $this->container = $container;
     }
 

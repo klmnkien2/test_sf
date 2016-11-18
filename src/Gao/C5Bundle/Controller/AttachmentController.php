@@ -62,6 +62,7 @@ class AttachmentController extends Controller
 
                         // create database record
                         $attachment = $this->get('attachment_service')->createAttachment($originalName, $uploadedURL, $folder ? $folder : 'default');
+
                         if (empty($attachment) || empty($attachment->getId())) {
                             $error = 'Can not insert attachment to database';
                         }
@@ -75,10 +76,13 @@ class AttachmentController extends Controller
                 $error = 'File Error';
             }
 
-
             return new JsonResponse(array(
                 'error' => $error,
-                'attachment' => $attachment
+                'attachment' => array(
+                    'id' => $attachment->getId(),
+                    'name' => $attachment->getName(),
+                    'url' => $attachment->getUrl()
+                 )
             ));
         }
     }
