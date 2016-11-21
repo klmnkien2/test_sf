@@ -95,4 +95,19 @@ class AttachmentService
 
         return $attachment;
     }
+
+    public function getAttachmentByIds($ids) {
+        $this->em->getRepository('GaoC5Bundle:Attachment')->findBy(array('id' => $ids));
+    }
+
+    public function updateAttachment($userId, $referId, $attachment) {
+        foreach ($attachment as $id) {
+            $record = $this->em->getRepository('GaoC5Bundle:Attachment')->find((int)$id);
+            if ($record->getUserId() == $userId) {
+                $record->setReferId($referId);
+            }
+            $this->em->persist($record);
+            $this->em->flush();
+        }
+    }
 }

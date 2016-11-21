@@ -112,7 +112,6 @@
 
 {% block javascripts %}
 
-  {# If you want to modify include of js, you need modify the minifyjs.php together. #}
   {% javascripts
   output='bundles/gaoc5/js/c5.js'
 
@@ -133,9 +132,7 @@
 
   '@GaoC5Bundle/Resources/public/js/app/routing.js'%}
   <script type="text/javascript" src="{{ asset_url }}"></script>
-  {# in production mode, other way: just need following line:
-  <script type="text/javascript" src="/bundles/gaoc5/js/all.js"></script>
-  #}
+
   {% endjavascripts %}
     <script>
       //Some global things

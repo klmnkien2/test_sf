@@ -28,90 +28,89 @@ class DisputeBiz
         $this->container = $container;
     }
 
-    public function main()
+    public function main($id, $pdId, $gdId)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
 
         $post = Request::createFromGlobals();
         if ($post->request->has('submit')) {
-            $pin_number = $post->request->get('pin_number');
             $data = [
-                //'oldPassword' => $post->request->get('oldPassword'),
-                'newPassword' => $post->request->get('newPassword'),
-                'retypePassword' => $post->request->get('retypePassword'),
-                'fullName' => $post->request->get('fullName'),
-                'vcbAccNumber' => $post->request->get('vcbAccNumber'),
-                'phone' => $post->request->get('phone'),
-                'email' => $post->request->get('email')
+                'message' => $post->request->get('message'),
+                'attachment' => $post->request->get('attachment'),
+                'id' => $id,
+                'pdId' => $pdId,
+                'gdId' => $gdId
             ];
             $this->formProcess($user, $data);
         }
 
-        $params = $this->prepareData($user);
+        $params = $this->prepareData($user, $data);
 
         return $params;
     }
 
-    private function prepareData($user) {
+    public function mainList($usr, $page, $itemsLimitPerPage, $sort)
+    {
+        try {
+            $disputeList = $this->container->get('dispute_service')->getDisputeByUser($usr->getId(), $page, $itemsLimitPerPage, $sort);
+            $disputeTotal = $this->container->get('dispute_service')->countDisputeByUser($usr->getId());
+            // Get the paginator service from the container
+            $paginator = $this->container->get('paging_paginator');
+
+            // Set information for the paginator.
+            $paginator
+            ->setItemsInCurrentPage($transactionList)
+            ->setTotalNumberOfItems($transactionTotal);
+
+            $paginator->setItemsLimitPerPage($itemsLimitPerPage);
+            // Execute pagination to get pagination information.
+            $pagination = $paginator->paginate($page);
+
+            return array(
+                'pagination' => $pagination,
+                'sort' => $sort
+            );
+        } catch (\Exception $ex) {
+            throw new BizException($ex->getMessage());
+        }
+    }
+
+    private function prepareData($user, $data) {
+        if (!empty($data['attachment'])) {
+            $attachment_array = $this->container->get('attachment_service')->getAttachmentByIds($data['attachment']);
+        }
+
+        $dispute = $this->container->get('dispute_service')->getById($data['id']);
 
         return array(
-            'vcbAccNumber' => $user->getVcbAccNumber(),
-            'fullName' => $user->getFullName(),
-            'phone' => $user->getPhone(),
-            'email' => $user->getEmail()
+            'message' => $dispute->getMessage(),
+            'attachment_array' => $attachment_array,
+            'id' => $data['id']
         );
     }
 
-    private function formProcess(&$user, $data) {
+    private function formProcess($user, $data) {
         $session = $this->container->get('request')->getSession();
         try {
-            $update = false;
-
             // Validate
-            if ($data['newPassword']) {
-                if ($data['newPassword'] != $data['retypePassword']) {
-                    $session->getFlashBag()->add('unsuccess', 'Password khong trung nhau, vui long nhap lai.');
-                    return;
-                }
+            if (empty($data['message']) || !$data['message']) {
+                $session->getFlashBag()->add('unsuccess', 'Chua nhap thong tin Gia trinh.');
+                return;
             }
 
-            if ($data['newPassword']) {
-                // Set encrypted password
-                $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-                $password = $encoder->encodePassword($data['newPassword'], $user->getSalt());
-                $user->setPassword($password);
-                $update = true;
+            if (empty($data['pdId']) || empty($data['gdId'])) {
+                $session->getFlashBag()->add('unsuccess', 'Chua gan voi PD, hoac GD nao.');
+                return;
             }
 
-            if ($data['fullName'] && $data['fullName'] != $user->getFullName()) {
-                $user->setFullName($data['fullName']);
-                $update = true;
-            }
+            $dispute = $this->container->get('dispute_service')->createDispute($user->getId(), $data['pdId'], $data['gdId'], $data['message']);
 
-            if ($data['phone'] && $data['phone'] != $user->getPhone()) {
-                $user->setPhone($data['phone']);
-                $update = true;
-            }
+            $referId = empty($data['pdId']) ? $data['pdId'] : $data['gdId'];
+            $this->container->get('attachment_service')->updateAttachment($userId, $referId, $attachment);
 
-            if ($data['email'] && $data['email'] != $user->getEmail()) {
-                $user->setEmail($data['email']);
-                $update = true;
-            }
-
-            if ($data['vcbAccNumber'] && $data['vcbAccNumber'] != $user->getVcbAccNumber()) {
-                $user->setVcbAccNumber($data['vcbAccNumber']);
-                $update = true;
-            }
-
-            if ($update) {
-                $this->container->get('security.context')->getToken()->setUser($user);
-                $em = $this->container->get('doctrine')->getManager();
-                $em->persist($user);
-                $em->flush();
-
-                $session->getFlashBag()->add('success', 'Cap nhat thanh cong.');
-            }
+            $session->getFlashBag()->add('success', 'Cap nhat thanh cong.');
         } catch (\Exception $ex) {
+            throw  $ex;
             $session->getFlashBag()->add('unsuccess', 'Cap nhat khong thanh cong.');
         }
     }

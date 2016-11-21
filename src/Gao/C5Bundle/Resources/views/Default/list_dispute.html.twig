@@ -1,0 +1,42 @@
+{% extends 'GaoC5Bundle::layout.html.twig' %}
+{% set menu_selected = 'history' %}
+{% block contents_main %}
+    <div class="clearfix boxHead">
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Lịch sử giao dịch</h1>
+        <div class="desc">Quản lý toàn bộ lịch sử giao dịch, dùng để tra lại thông tin</div>
+    </div>
+
+    <div class="clearfix boxBody">
+
+        <div class="clearfix tblWrap">
+            <table class="tbl">
+                <thead>
+                    <tr>
+                        <th scope="col">STT</th>
+                        <th scope="col">Link</th>
+                        <th scope="col">Message</th>
+                        <th scope="col">Trạng thái</th>
+                        <th scope="col">Ngày tạo</th>
+                        <th scope="col">Loại giao dịch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in pagination.getItemsInCurrentPage %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ transaction.full_name | default('N/A') }}</td>
+                            <td>{{ transaction.pd_acc_number | default('N/A') }}</td>
+                            <td>{{ transaction.amount }} VND</td>
+                            <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
+                            <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
+                            <td>{{ transaction.pd_id ? 'GD' : 'PD' }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {{ paginate(pagination, sort) }}
+    </div>
+
+{% endblock contents_main %}

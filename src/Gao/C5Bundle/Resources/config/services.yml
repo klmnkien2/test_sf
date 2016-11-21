@@ -32,6 +32,9 @@ services:
     attachment_service:
         class: Gao\C5Bundle\Service\AttachmentService
         arguments: [@doctrine.orm.entity_manager, @service_container]
+    dispute_service:
+        class: Gao\C5Bundle\Service\DisputeService
+        arguments: [@doctrine.orm.entity_manager, @service_container]
 
     # Paging module.
     paging_paginate_extension:

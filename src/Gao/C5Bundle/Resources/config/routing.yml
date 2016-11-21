@@ -16,6 +16,9 @@ gao_c5_account:
 gao_c5_dispute:
     path:     /dis
     defaults: { _controller: GaoC5Bundle:Default:dispute }
+gao_c5_list_dispute:
+    path:     /list/dis
+    defaults: { _controller: GaoC5Bundle:Default:listDispute }
 gao_c5_test:
     path:     /test
     defaults: { _controller: GaoC5Bundle:Default:test }

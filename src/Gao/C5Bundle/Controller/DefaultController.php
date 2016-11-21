@@ -59,7 +59,7 @@ class DefaultController extends Controller
 
             $usr = $this->get('security.context')->getToken()->getUser();
             //Call biz logic
-            $params = $this->get('history_biz')->main($usr, $page, 1, $sort);
+            $params = $this->get('history_biz')->main($usr, $page, 10, $sort);
 
             return $this->render('GaoC5Bundle:Default:history.html.twig', $params);
         } catch (\Exception $ex) {
@@ -83,9 +83,37 @@ class DefaultController extends Controller
     {
         try {
             //Call biz logic
-            $params = $this->get('dispute_biz')->main();
+            $id = $request->query->get('id');
+            $pdId = $request->query->get('pdId');
+            $gdId = $request->query->get('gdId');
+
+            if (empty($pdId) && empty($gdId) || !empty($pdId) && !empty($gdId)) {
+                throw new BizException('Need to defined pd or gd.');
+            }
+
+            $params = $this->get('dispute_biz')->main($id, $pdId, $gdId);
 
             return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
+        } catch (\Exception $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
+    public function listDisputeAction()
+    {
+        try {
+            // Get request object.
+            $request = $this->getRequest();
+
+            // Get query parameter.
+            $page = $request->query->get('page', 1);
+            $sort = $request->query->get('sort', 'non');
+
+            $usr = $this->get('security.context')->getToken()->getUser();
+            //Call biz logic
+            $params = $this->get('dispute_biz')->mainList($usr, $page, 10, $sort);
+
+            return $this->render('GaoC5Bundle:Default:list_dispute.html.twig', $params);
         } catch (\Exception $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
