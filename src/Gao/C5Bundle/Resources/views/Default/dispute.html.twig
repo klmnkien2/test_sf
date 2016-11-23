@@ -21,7 +21,7 @@
         <form class="form" role="form" id="prg-disputeForm" action="" method="post">
             <div class="form-group">
                 <label for="">Giải trình</label>
-                <textarea class="form-control" name="message" cols="" rows="5" placeholder=""></textarea>
+                <textarea class="form-control" name="message" cols="" rows="5" placeholder="">{{ message }}</textarea>
             </div>
             <div class="form-group">
                 <label for="">Văn bản đính kèm</label>
@@ -38,7 +38,12 @@
                         <div class="progress-bar progress-bar-success"></div>
                     </div>
                     <!-- The container for the uploaded files -->
-                    <div id="files" class="files"></div>
+                    <div id="files" class="files">
+                        {% for attach in attachment_array %}
+                            <p>{{ attach.name }}</p>
+                            <input type="hidden" name="attachment[]" value="{{ attach.id }}">
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
             <div class="btnWrap"><button type="submit" name="submit" class="btn btn-orange">Submit</button></div>

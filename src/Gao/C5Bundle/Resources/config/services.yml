@@ -1,4 +1,12 @@
 services:
+    security_login_success_handler:
+        class:  Gao\C5Bundle\Service\Security\LoginSuccessHandler
+        arguments:  [@service_container, @router, @security.context]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+    security_user_service:
+        class: Gao\C5Bundle\Service\Security\UserService
+        arguments: [@doctrine.orm.entity_manager, @service_container]
     sha256salted_encoder:
         class: Gao\C5Bundle\Service\Sha256Salted
 

@@ -23,7 +23,7 @@ security:
         form_login:
           login_path: /login
           check_path: /login_check
-          default_target_path: /c5
+          success_handler: security_login_success_handler
           csrf_provider: form.csrf_provider
         logout:
           path: /logout

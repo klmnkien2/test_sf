@@ -100,14 +100,54 @@ class AttachmentService
         $this->em->getRepository('GaoC5Bundle:Attachment')->findBy(array('id' => $ids));
     }
 
+    /**
+     * get transaction from user
+     *
+     * @param int $referId The id of refer
+     * @param int $userId  The id of user
+     *
+     * @return array $attachment Is an array of Attachment
+     */
+    public function getAttachmentByRefer($referId, $userId)
+    {
+        try {
+            $query = <<<SQL
+SELECT
+    a.id, a.name, a.url
+FROM
+    attachment a
+WHERE
+    a.refer_id = ? AND
+    a.user_id = ?
+SQL;
+            $stmt = $this->em->getConnection()->prepare($query);
+            $stmt->bindValue(1, $referId, \PDO::PARAM_INT);
+            $stmt->bindValue(2, $userId, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            $list = $stmt->fetchAll();
+    
+            return $list;
+            //None record found exception
+        } catch (\Exception $e) {
+            new BizException('No record found...');
+        }
+    }
+
     public function updateAttachment($userId, $referId, $attachment) {
+        $attachment_array = [];
         foreach ($attachment as $id) {
             $record = $this->em->getRepository('GaoC5Bundle:Attachment')->find((int)$id);
-            if ($record->getUserId() == $userId) {
+            if (!empty($record) && $record->getUserId() == $userId) {
                 $record->setReferId($referId);
+
+                $this->em->persist($record);
+                $this->em->flush();
+
+                $attachment_array[] = ['id' => $record->getId(), 'name' => $record->getName(), 'url' => $record->getUrl()];
             }
-            $this->em->persist($record);
-            $this->em->flush();
         }
+
+        return $attachment_array;
     }
 }

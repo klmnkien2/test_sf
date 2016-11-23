@@ -14,6 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Gao\C5Bundle\Entity\Dispute;
+use Next\ArchiveBundle\Biz\BizException;
 
 /**
  * DisputeService class.
@@ -45,7 +46,15 @@ class DisputeService
     }
 
     public function getById($id) {
-        $this->em->getRepository('GaoC5Bundle:Dispute')->find($id);
+        return $this->em->getRepository('GaoC5Bundle:Dispute')->find($id);
+    }
+
+    public function getByPd($id) {
+        return $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('pdId' => $id))[0];
+    }
+
+    public function getByGd($id) {
+        return $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('gdId' => $id))[0];
     }
 
     public function createDispute($userId, $pdId, $gdId, $message) {
@@ -97,8 +106,7 @@ EOT;
             return $list;
             //None record found exception
         } catch (\Exception $e) {
-            throw $e;//new BizException('No record found...');
-            //return false
+            new BizException('No record found...');
         }
     }
     
@@ -115,7 +123,7 @@ EOT;
         try {
             $query = <<<EOT
 SELECT
-    count(t.id) AS total
+    count(d.id) AS total
 FROM
     dispute d
 WHERE

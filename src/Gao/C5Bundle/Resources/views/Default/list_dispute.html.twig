@@ -1,42 +1,45 @@
 {% extends 'GaoC5Bundle::layout.html.twig' %}
-{% set menu_selected = 'history' %}
+{% set menu_selected = 'dispute' %}
 {% block contents_main %}
     <div class="clearfix boxHead">
-        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Lịch sử giao dịch</h1>
-        <div class="desc">Quản lý toàn bộ lịch sử giao dịch, dùng để tra lại thông tin</div>
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Danh sách</h1>
+        <div class="desc">Danh sách các thông tin đã đăng tải, dùng để tra cứu thông tin</div>
     </div>
 
     <div class="clearfix boxBody">
-
-        <div class="clearfix tblWrap">
-            <table class="tbl">
-                <thead>
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Link</th>
-                        <th scope="col">Message</th>
-                        <th scope="col">Trạng thái</th>
-                        <th scope="col">Ngày tạo</th>
-                        <th scope="col">Loại giao dịch</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in pagination.getItemsInCurrentPage %}
+        <a href="{{ path('gao_c5_dispute') }}" class="btn btn-orange">Thêm thông tin</a><br><br>
+        {% if pagination %}
+            <div class="clearfix tblWrap">
+                <table class="tbl">
+                    <thead>
                         <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ transaction.full_name | default('N/A') }}</td>
-                            <td>{{ transaction.pd_acc_number | default('N/A') }}</td>
-                            <td>{{ transaction.amount }} VND</td>
-                            <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
-                            <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
-                            <td>{{ transaction.pd_id ? 'GD' : 'PD' }}</td>
+                            <th scope="col">STT</th>
+                            <th scope="col">Link</th>
+                            <th scope="col">Message</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Ngày tạo</th>
+                            <th scope="col">Loại giao dịch</th>
                         </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        {{ paginate(pagination, sort) }}
+                    </thead>
+                    <tbody>
+                        {% for dispute in pagination.getItemsInCurrentPage %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ dispute.pd_id ? 'PD' : 'GD' }}</td>
+                                <td>{{ dispute.message }} VND</td>
+                                <td>{{ dispute.status == 1 ? 'Được chấp nhận' : (dispute.status == 2 ? 'Bị từ chối' : 'Pending') }}</td>
+                                <td>{{ dispute.created ? dispute.created|date('d/m/Y H:i:s') : 'N/A' }}</td>
+                                <td>{{ dispute.pd_id ? 'PD' : 'GD' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    
+            {{ paginate(pagination, sort) }}
+        {% else %}
+            <p>Khong co ban ghi nao.</p>
+        {% endif %}
     </div>
 
 {% endblock contents_main %}

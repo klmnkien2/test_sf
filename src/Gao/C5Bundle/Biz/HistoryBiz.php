@@ -42,18 +42,20 @@ class HistoryBiz
         try {
             $transactionList = $this->container->get('transaction_service')->getTransactionByUser($usr->getId(), $page, $itemsLimitPerPage, $sort);
             $transactionTotal = $this->container->get('transaction_service')->countTransactionByUser($usr->getId());
-            // Get the paginator service from the container
-            $paginator = $this->container->get('paging_paginator');
+            $pagination = null;
+            if ($transactionTotal > 0) {
+                // Get the paginator service from the container
+                $paginator = $this->container->get('paging_paginator');
 
-            // Set information for the paginator.
-            $paginator
-            ->setItemsInCurrentPage($transactionList)
-            ->setTotalNumberOfItems($transactionTotal);
+                // Set information for the paginator.
+                $paginator
+                ->setItemsInCurrentPage($transactionList)
+                ->setTotalNumberOfItems($transactionTotal);
 
-            $paginator->setItemsLimitPerPage($itemsLimitPerPage);
-            // Execute pagination to get pagination information.
-            $pagination = $paginator->paginate($page);
-
+                $paginator->setItemsLimitPerPage($itemsLimitPerPage);
+                // Execute pagination to get pagination information.
+                $pagination = $paginator->paginate($page);
+            }
             return array(
                 'pagination' => $pagination,
                 'sort' => $sort

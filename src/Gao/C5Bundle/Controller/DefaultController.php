@@ -82,16 +82,14 @@ class DefaultController extends Controller
     public function disputeAction()
     {
         try {
+            // Get request object.
+            $request = $this->getRequest();
+
             //Call biz logic
-            $id = $request->query->get('id');
             $pdId = $request->query->get('pdId');
             $gdId = $request->query->get('gdId');
 
-            if (empty($pdId) && empty($gdId) || !empty($pdId) && !empty($gdId)) {
-                throw new BizException('Need to defined pd or gd.');
-            }
-
-            $params = $this->get('dispute_biz')->main($id, $pdId, $gdId);
+            $params = $this->get('dispute_biz')->main($pdId, $gdId);
 
             return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
         } catch (\Exception $ex) {

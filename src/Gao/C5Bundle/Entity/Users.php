@@ -428,7 +428,7 @@ class Users implements AdvancedUserInterface, \Serializable
      *
      * @return \DateTime 
      */
-    public function getHash()
+    public function getLastLogin()
     {
         return $this->lastLogin;
     }
