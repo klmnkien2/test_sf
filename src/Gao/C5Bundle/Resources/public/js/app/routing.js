@@ -7,6 +7,10 @@
 
     // routing
     map.go({
+      id: 'default_pd',
+      to: 'app.default.mapping_pd'
+    });
+    map.go({
       id: 'default_dispute',
       to: 'app.default.mapping_dispute'
     });

@@ -1,4 +1,5 @@
 {% extends 'GaoC5Bundle::layout.html.twig' %}
+{% block datapage %}data-pageId="default_pd"{% endblock %}
 {% set menu_selected = 'pd' %}
 {% block contents_main %}
     <div class="clearfix boxHead">
@@ -46,7 +47,7 @@
         {% if transactionList and transactionList is not empty %}
         <h4>Danh sach giao dich can duoc thuc hien</h4><br>
         <div class="clearfix tblWrap">
-            <table class="tbl">
+            <table id="prg-tranTable" class="tbl">
                 <thead>
                     <tr>
                         <th scope="col">STT</th>
@@ -69,8 +70,7 @@
                             <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
                             <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
                             <td>
-                                <button type="button" class="btn btn-success">Đã gửi tiền</button>
-                                <button type="button" class="btn btn-danger">Không gửi tiền</button>
+                                <button class="prg-approveTran" class="btn btn-success">Đã gửi</button>
                             </td>
                         </tr>
                         {% set total_amount = total_amount +  transaction.amount%}
