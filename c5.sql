@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 14, 2016 at 10:59 AM
+-- Generation Time: Nov 30, 2016 at 10:46 AM
 -- Server version: 5.6.24
 -- PHP Version: 5.6.8
 
@@ -28,11 +28,21 @@ SET time_zone = "+00:00";
 
 CREATE TABLE IF NOT EXISTS `attachment` (
   `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `name` varchar(1000) COLLATE utf8_unicode_ci NOT NULL,
   `url` varchar(1000) COLLATE utf8_unicode_ci NOT NULL,
-  `refer_id` int(11) NOT NULL,
-  `type` tinyint(4) NOT NULL COMMENT '1-dispute'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `refer_id` int(11) DEFAULT NULL,
+  `type` char(10) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `attachment`
+--
+
+INSERT INTO `attachment` (`id`, `user_id`, `name`, `url`, `refer_id`, `type`) VALUES
+(20, 5, 'fb_messenger.png', '/uploads/dispute/fb_messenger.png', 1, 'dispute'),
+(21, 5, 'avatar_kiendv.png', '/uploads/dispute/avatar_kiendv.png', 1, 'dispute'),
+(22, 5, '025Pikachu_XY_anime_3.png', '/uploads/dispute/025Pikachu_XY_anime_3.png', NULL, 'dispute');
 
 -- --------------------------------------------------------
 
@@ -67,7 +77,14 @@ CREATE TABLE IF NOT EXISTS `dispute` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0-waiting 1-approved 2-unapproved',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `message` text COLLATE utf8_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `dispute`
+--
+
+INSERT INTO `dispute` (`id`, `user_id`, `pd_id`, `gd_id`, `status`, `created`, `message`) VALUES
+(1, 5, NULL, 1, 0, '2016-11-23 04:28:46', 'test');
 
 -- --------------------------------------------------------
 
@@ -110,7 +127,7 @@ CREATE TABLE IF NOT EXISTS `pd` (
   `pin_number` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'status: 0 waiting, 1 sending, 2 done',
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `pd`
@@ -165,14 +182,15 @@ CREATE TABLE IF NOT EXISTS `transaction` (
   `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `approved_date` timestamp NULL DEFAULT '0000-00-00 00:00:00',
   `status` int(11) NOT NULL COMMENT '0 pending, 1 approved'
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `transaction`
 --
 
 INSERT INTO `transaction` (`id`, `pd_id`, `gd_id`, `pd_user_id`, `gd_user_id`, `gd_acc_number`, `pd_acc_number`, `amount`, `created`, `approved_date`, `status`) VALUES
-(1, 1, 1, 4, 5, '90000', '12345', 5000, '2016-11-14 07:09:27', NULL, 0);
+(1, 1, 1, 4, 5, '90000', '12345', 5000, '2016-11-14 07:09:27', NULL, 0),
+(2, 1, 1, 5, 6, '90000', '12345', 5000, '2016-11-14 07:09:27', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -213,9 +231,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 --
 
 INSERT INTO `users` (`id`, `ref_id`, `creator_id`, `full_name`, `vcb_acc_number`, `phone`, `email`, `username`, `password`, `salt`, `last_login`, `email_verified`, `first_pd_done`, `pd_gd_state`, `last_state_update`, `pd_count`, `pd_total`, `gd_count`, `gd_total`, `outstanding_pd`, `outstanding_gd`, `blocked`, `current_interest_rate`, `c_level`, `outstanding_ref_amount`) VALUES
-(4, NULL, 1, 'Nguyen van test', '12345', '0988', 'test1@c5.com', 'test1', '2b1b9b42953522143d6e0c101c0be835aef6f5effce5aa15f699dd2ca1a8ad33', '47471161058256748afad1', NULL, 1, 1, 'PD_Requested', '2016-11-14 03:43:40', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1, NULL),
-(5, NULL, 1, 'trần thị đép', '90000', '096969', 'test2@c5.com', 'test2', '8c403e9d9cca409c5ad1a04071afa0d0c95e6e1bfa8ff13a5c70ff35fcbdf976', '104057893558256748dadf6', NULL, 1, 1, 'GD_Requested', '2016-11-14 04:53:09', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1, NULL),
-(6, NULL, 1, NULL, NULL, NULL, 'test3@c5.com', 'test3', 'c7b1b09d4de8316e71ffb4992531fca79154d4aea666191fa4ff15269ac5888f', '95161589358256748f3541', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1, NULL);
+(4, NULL, 1, 'Nguyen van test', '12345', '0988', 'test1@c5.com', 'test1', '2b1b9b42953522143d6e0c101c0be835aef6f5effce5aa15f699dd2ca1a8ad33', '47471161058256748afad1', '2016-11-23 03:58:14', 1, 1, 'PD_Requested', '2016-11-23 09:58:14', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1, NULL),
+(5, NULL, 1, 'Trần Thị Dép', '999999', '+8496969', 'test2@c5.com.vn', 'test2', '35c6c60f12ccab4ce7215cf5a7ab46acdac2f84b06ae46c1c3879546490769f4', '104057893558256748dadf6', '2016-11-23 03:52:15', 1, 1, 'GD_Requested', '2016-11-23 09:52:15', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1, NULL),
+(6, NULL, 1, 'trung gian ', NULL, NULL, 'test3@c5.com', 'test3', 'c7b1b09d4de8316e71ffb4992531fca79154d4aea666191fa4ff15269ac5888f', '95161589358256748f3541', NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 1, NULL);
 
 --
 -- Indexes for dumped tables
@@ -277,7 +295,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attachment`
 --
 ALTER TABLE `attachment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `bank_acc_log`
 --
@@ -287,7 +305,7 @@ ALTER TABLE `bank_acc_log`
 -- AUTO_INCREMENT for table `dispute`
 --
 ALTER TABLE `dispute`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `gd`
 --
@@ -297,7 +315,7 @@ ALTER TABLE `gd`
 -- AUTO_INCREMENT for table `pd`
 --
 ALTER TABLE `pd`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `pin`
 --
@@ -307,7 +325,7 @@ ALTER TABLE `pin`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `users`
 --

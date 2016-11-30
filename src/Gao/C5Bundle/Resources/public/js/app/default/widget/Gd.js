@@ -12,7 +12,7 @@
                 showOnInit: false
             }
         ).data("loadingIndicator");
-    }).as('app.default.widget.Pd').it.provides({
+    }).as('app.default.widget.Gd').it.provides({
         build : function() {
             this.bindAllListeners();
         },
