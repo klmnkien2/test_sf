@@ -75,7 +75,7 @@ class PdBiz
                 $message = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
             } else if ($pdGdState == $allState['PD_Matched']) {
                 $mode = 'tran';
-                $message = 'Vui long doi hoan tat cac giao dich duoi day.';
+                $message = 'Dang trong phien giao dich. Vui long hoan tat cac giao dich duoi day.';
             } else if ($pdGdState == $allState['PD_Done']) {
                 $mode = 'error';
                 $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';

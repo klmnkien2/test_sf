@@ -19,6 +19,9 @@ gao_c5_dispute:
 gao_c5_list_dispute:
     path:     /list/dis
     defaults: { _controller: GaoC5Bundle:Default:listDispute }
+gao_c5_transaction_approve:
+    path:     /transaction/approve
+    defaults: { _controller: GaoC5Bundle:Default:tranApprove }
 gao_c5_test:
     path:     /test
     defaults: { _controller: GaoC5Bundle:Default:test }

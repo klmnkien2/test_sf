@@ -8,6 +8,10 @@ login_check:
 logout:
   pattern: /logout
 
+login_forgot:
+  path: /forgot
+  defaults: { _controller: GaoC5Bundle:Security:forgot }
+
 attachment_upload:
     path:     /attachment/upload/{folder}
     defaults: { _controller: GaoC5Bundle:Attachment:upload }

@@ -28,12 +28,17 @@ security:
         logout:
           path: /logout
           target: /login
+        remember_me:
+          key: aSecretKey
+          lifetime: 360000
+          path: /
         security: true
         anonymous: true
 
 
     access_control:
       - { path: /login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST, GET] }
       - { path: /c5/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoc5/js/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoc5/css/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }

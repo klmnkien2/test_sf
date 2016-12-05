@@ -3,31 +3,30 @@
 {% block contents_main %}
     <div id="login" class="fancyCommon">
         <div class="titlebar clearfix">
-            <h2 class="title">Account Login!</h2>
-            <div class="isMember pull-right"><span class="txt">No member?</span> <a class="btn btn-primary btn-xs login" href="#signup">Sign Up</a></div>
+            <h2 class="title">ĐĂNG NHẬP</h2>
         </div>
         {% if error %}
             <div class="fcDesc">{{ error.message }}</div>
         {% endif %}
-        <form action="{{ path('login_check') }}" method="post" class="formLogin" role="form">        
+        <form action="{{ path('login_check') }}" method="post" class="formLogin" role="form">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <div class="form-group">
-                <label for="username">Email address</label>
-                <input type="text" class="form-control" id="username" name="_username" placeholder="Email or Username">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="username" name="_username" value="{{ last_username }}" placeholder="Email hoặc Tài khoản">
             </div>
             <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" name="_password" placeholder="Your password">
+                <label for="password">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" name="_password" placeholder="Mật khẩu">
             </div>
             <div class="form-group">
                 <div class="checkbox">
                     <label>
-                        <input type="checkbox"> Remember Me
+                        <input type="checkbox" name="_remember_me" checked> Nhớ mật khẩu
                     </label>
                 </div>
-                <div class="forgotPw"><a class="link orange" href="">Forgot Password?</a></div>
+                <div class="forgotPw"><a class="link orange" href="{{ path('login_forgot') }}">Quên mật khẩu?</a></div>
             </div>
-            <div class="btnWrap"><button type="submit" class="btn btn-orange">Login</button></div>
+            <div class="btnWrap"><button type="submit" class="btn btn-orange">Đăng nhập</button></div>
         </form>
     </div>
 

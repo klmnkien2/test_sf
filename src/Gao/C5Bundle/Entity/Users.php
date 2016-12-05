@@ -94,6 +94,13 @@ class Users implements AdvancedUserInterface, \Serializable
     private $lastLogin;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="current_login", type="datetime", nullable=true)
+     */
+    private $currentLogin;
+
+    /**
      * @var boolean
      *
      * @ORM\Column(name="email_verified", type="boolean", nullable=false)
@@ -431,6 +438,29 @@ class Users implements AdvancedUserInterface, \Serializable
     public function getLastLogin()
     {
         return $this->lastLogin;
+    }
+
+    /**
+     * Set currentLogin
+     *
+     * @param \DateTime $currentLogin
+     * @return Users
+     */
+    public function setCurrentLogin($currentLogin)
+    {
+        $this->currentLogin = $currentLogin;
+
+        return $this;
+    }
+
+    /**
+     * Get currentLogin
+     *
+     * @return \DateTime 
+     */
+    public function getCurrentLogin()
+    {
+        return $this->currentLogin;
     }
 
     /**

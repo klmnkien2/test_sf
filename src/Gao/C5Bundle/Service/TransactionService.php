@@ -9,6 +9,7 @@ use Gao\C5Bundle\Biz\BizException;
 use Gao\C5Bundle\Entity\Pin;
 use Gao\C5Bundle\Entity\Pd;
 use Gao\C5Bundle\Entity\Gd;
+use Gao\C5Bundle\Entity\Transaction;
 
 /**
  * TransactionService class.
@@ -268,9 +269,9 @@ class TransactionService
     }
 
     /**
-     * ========================
-     * BLOCK FOR GD TRANSACTION
-     * ========================
+     * ===================================
+     * BLOCK FOR TRANSACTION OTHER ACTIONS
+     * ===================================
      */
 
     /**
@@ -355,5 +356,77 @@ EOT;
             throw new BizException('can not count transaction ...');
             //return false
         }
+    }
+
+    public function getEntity($id)
+    {
+        return $this->em->getRepository('GaoC5Bundle:Transaction')->find($id);
+    }
+
+    public function getEntityPd($id)
+    {
+        return $this->em->getRepository('GaoC5Bundle:Pd')->find($id);
+    }
+
+    public function getEntityGd($id)
+    {
+        return $this->em->getRepository('GaoC5Bundle:Gd')->find($id);
+    }
+
+    public function updateEntity($entity) {
+        $this->em->persist($entity);
+        $this->em->flush();
+    }
+
+    public function beginTransaction() {
+        $this->em->getConnection()->beginTransaction();
+    }
+
+    public function rollbackTransaction() {
+        $this->em->getConnection()->rollBack();
+    }
+
+    public function commitTransaction() {
+        $this->em->getConnection()->commit();
+    }
+
+    /**
+     * Check if an PD can be finished or not, if yes, update user pd_gd_state
+     * 
+     * @param int $pdId The id of Pd
+     *
+     * @return bool $finished Aready finish or not
+     */
+    public function checkPdFinish($pdId) {
+        $finished = true;
+        $transactionList = $this->getTransactionByPd($pdId);
+        foreach ($transactionList as $transtaction) {
+            if ($transtaction['status'] != 1) {
+                $finished = false;
+                break;
+            }
+        }
+
+        return $finished;
+    }
+
+    /**
+     * Check if an GD can be finished or not, if yes, update user pd_gd_state
+     * 
+     * @param int $gdId The id of Pd
+     *
+     * @return bool $finished Aready finish or not
+     */
+    public function checkGdFinish($gdId) {
+        $finished = true;
+        $transactionList = $this->getTransactionByGd($gdId);
+        foreach ($transactionList as $transtaction) {
+            if ($transtaction['status'] != 1) {
+                $finished = false;
+                break;
+            }
+        }
+        
+        return $finished;
     }
 }

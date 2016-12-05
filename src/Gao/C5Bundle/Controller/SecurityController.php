@@ -24,14 +24,33 @@ class SecurityController extends Controller
             $error = '';
         }
 
+        $lastUsername = (null === $session) ? '' : $session->get(SecurityContextInterface::LAST_USERNAME);
 
         return $this->render(
             'GaoC5Bundle:Security:login.html.twig',
             array(
+                'last_username' => $lastUsername,
                 'error' => $error,
             )
         );
     }
+
+    public function forgotAction(Request $request)
+    {
+        $session = $request->getSession();
+
+        $post = Request::createFromGlobals();
+        if ($post->request->has('submit')) {
+            if (!$this->get('form.csrf_provider')->isCsrfTokenValid('forgot_password', $post->request->get('csrf_token'))) {
+                var_dump("token wrong!");die;
+            }
+            $email = $post->request->get('email');
+            $username = $post->request->get('username');
+            var_dump($email, $username);die;
+        }
+
+        return $this->render(
+            'GaoC5Bundle:Security:forgot.html.twig'
+        );
+    }
 }
-
-

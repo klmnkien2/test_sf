@@ -62,6 +62,10 @@ Gao\C5Bundle\Entity\Users:
             type: datetime
             nullable: true
             column: last_login
+        currentLogin:
+            type: datetime
+            nullable: true
+            column: current_login
         emailVerified:
             type: boolean
             nullable: false

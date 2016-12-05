@@ -46,9 +46,20 @@ class UserService
 
     public function updateLastLogin(Users $user) {
 
-        $user->setLastLogin(new \DateTime("now"));
+        $user->setLastLogin($user->getCurrentLogin());
+        $user->setCurrentLogin(new \DateTime("now"));
         $this->em->persist($user);
         $this->em->flush();
 
+    }
+
+    public function getEntity($id)
+    {
+        return $this->em->getRepository('GaoC5Bundle:Users')->find($id);
+    }
+
+    public function updateUser(Users $user) {
+        $this->em->persist($user);
+        $this->em->flush();
     }
 }

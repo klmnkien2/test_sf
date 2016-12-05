@@ -3,10 +3,12 @@
 namespace Gao\C5Bundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernelBizException\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Gao\C5Bundle\Biz\BizException;
+use Symfony\Component\Validator\Constraints;
 
 class DefaultController extends Controller
 {
@@ -29,7 +31,7 @@ class DefaultController extends Controller
             $params = $this->get('pd_biz')->main($usr);
 
             return $this->render('GaoC5Bundle:Default:pd.html.twig', $params);
-        } catch (\Exception $ex) {
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
     }
@@ -42,7 +44,7 @@ class DefaultController extends Controller
             $params = $this->get('gd_biz')->main($usr);
 
             return $this->render('GaoC5Bundle:Default:gd.html.twig', $params);
-        } catch (\Exception $ex) {
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
     }
@@ -62,9 +64,129 @@ class DefaultController extends Controller
             $params = $this->get('history_biz')->main($usr, $page, 10, $sort);
 
             return $this->render('GaoC5Bundle:Default:history.html.twig', $params);
-        } catch (\Exception $ex) {
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
+    }
+
+    public function tranApproveAction()
+    {
+        $this->container->get('transaction_service')->beginTransaction();
+        try {
+            $user = $this->get('security.context')->getToken()->getUser();
+            $request = $this->getRequest();
+            $post = Request::createFromGlobals();
+            // response result to client
+
+            $idList = $post->request->get('id');
+            foreach ($idList as $id) {
+                $entity = $this->container->get('transaction_service')->getEntity($id);
+
+                if (empty($entity)) {
+                    throw new BizException('transaction not exsit.');
+                }
+
+                // CHeck transaction belong to user_gd or not
+                if ($entity->getGdUserId() != $user->getId()) {
+                    throw new BizException('transaction gd_id not map current login user');
+                }
+
+                $entity->setStatus(1);
+                $entity->setApprovedDate(new \DateTime());
+                $this->container->get('transaction_service')->updateEntity($entity);
+
+                $finishPd = $this->container->get('transaction_service')->checkPdFinish($entity->getPdId());
+                if ($finishPd) {
+                    $userPd = $this->container->get('security_user_service')->getEntity($entity->getPdUserId());
+                    if (empty($userPd)) {
+                        throw new BizException('pd user not exsit with user_id='.$entity->getPdUserId());
+                    }
+                    $userPd->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Done']);
+                    $this->container->get('security_user_service')->updateUser($userPd);
+                    //Cap nhat PD
+                    $pd = $this->container->get('transaction_service')->getEntityPd($entity->getPdId());
+                    if (empty($pd)) {
+                        throw new BizException('pd not exsit with pd_id='.$entity->getPdId());
+                    }
+                    $pd->setStatus($this->container->getParameter('pd_status')['done']);
+                    $this->container->get('transaction_service')->updateEntity($pd);
+                }
+
+                $finishGd = $this->container->get('transaction_service')->checkGdFinish($entity->getGdId());
+                if ($finishGd) {
+                    $user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Done']);
+                    $this->container->get('security_user_service')->updateUser($user);
+                    //Cap nhat GD
+                    $gd = $this->container->get('transaction_service')->getEntityGd($entity->getGdId());
+                    if (empty($gd)) {
+                        throw new BizException('gd not exsit with gd_id='.$entity->getGdId());
+                    }
+                    $gd->setStatus($this->container->getParameter('gd_status')['done']);
+                    $this->container->get('transaction_service')->updateEntity($gd);
+                }
+            }
+
+            $this->container->get('transaction_service')->commitTransaction();
+
+            $session = $this->get('request')->getSession();
+            $session->getFlashBag()->add('success', 'Da xac nhan yeu cau cua ban. Cam on da su dung.');
+
+            return $this->redirect($this->generateUrl('gao_c5_gd'));
+
+        } catch (BizException $ex) {
+            $this->container->get('transaction_service')->rollbackTransaction();
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
+    public function tranApproveAjaxAction()
+    {
+        $response = ['status' => 'unsuccess'];
+        try {
+            $user = $this->get('security.context')->getToken()->getUser();
+            $request = $this->getRequest();
+            $post = Request::createFromGlobals();
+            // response result to client
+            if ($request->isXmlHttpRequest()) {
+                $id = $post->request->get('id');
+
+                if (empty($id)) {
+                    throw new BizException('transaction id null');
+                }
+
+                $entity = $this->container->get('transaction_service')->getEntity($id);
+
+                // CHeck transaction belong to user_gd or not
+                if ($entity->getGdUserId() != $user->getId()) {
+                    throw new BizException('transaction gd_id not map current login user');
+                }
+
+                $entity->setStatus(1);
+                $entity->setApprovedDate(new \DateTime());
+                $this->container->get('transaction_service')->updateEntity($entity);
+
+                $finishPd = $this->container->get('transaction_service')->checkPdFinish($entity->getPdId());
+                if ($finishPd) {
+                    $userPd = $this->container->get('security_user_service')->getEntity($entity->getPdUserId());
+                    $userPd->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Done']);
+                    $this->container->get('security_user_service')->updateUser($userPd);
+                    //Cap nhat PD 
+                }
+
+                $finishGd = $this->container->get('transaction_service')->checkGdFinish($entity->getGdId());
+                if ($finishGd) {
+                    $user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Done']);
+                    $this->container->get('security_user_service')->updateUser($user);
+                }
+
+                $response['status'] = 'success';
+
+            }
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+
+        return new JsonResponse($response);
     }
 
     public function accountAction()
@@ -74,7 +196,7 @@ class DefaultController extends Controller
             $params = $this->get('account_biz')->main();
 
             return $this->render('GaoC5Bundle:Default:account.html.twig', $params);
-        } catch (\Exception $ex) {
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
     }
@@ -92,7 +214,7 @@ class DefaultController extends Controller
             $params = $this->get('dispute_biz')->main($pdId, $gdId);
 
             return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
-        } catch (\Exception $ex) {
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
     }
@@ -112,7 +234,7 @@ class DefaultController extends Controller
             $params = $this->get('dispute_biz')->mainList($usr, $page, 10, $sort);
 
             return $this->render('GaoC5Bundle:Default:list_dispute.html.twig', $params);
-        } catch (\Exception $ex) {
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
     }
