@@ -50,11 +50,21 @@ class DisputeService
     }
 
     public function getByPd($id) {
-        return $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('pdId' => $id))[0];
+        $result = $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('pdId' => $id));
+        if (!empty($result) && is_array($result)) {
+            return $result[0];
+        } else {
+            return null;
+        }
     }
 
     public function getByGd($id) {
-        return $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('gdId' => $id))[0];
+        $result = $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('gdId' => $id));
+        if (!empty($result) && is_array($result)) {
+            return $result[0];
+        } else {
+            return null;
+        }
     }
 
     public function createDispute($userId, $pdId, $gdId, $message) {

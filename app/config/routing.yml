@@ -16,6 +16,10 @@ attachment_upload:
     path:     /attachment/upload/{folder}
     defaults: { _controller: GaoC5Bundle:Attachment:upload }
 
+attachment_delete:
+    path:     /attachment/delete
+    defaults: { _controller: GaoC5Bundle:Attachment:delete }
+
 attachment_download:
     path:     /attachment/download
     defaults: { _controller: GaoC5Bundle:Attachment:download }

@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Gao\C5Bundle\Biz\BizException;
 
 /**
  * Class: AttachmentController
@@ -85,6 +86,37 @@ class AttachmentController extends Controller
                  )
             ));
         }
+    }
+
+
+    /**
+     * deleteAction
+     *
+     * @return Symfony\Component\HttpFoundation\Response
+     *
+     */
+    public function deleteAction()
+    {
+        $error = false;
+        try {
+            $request = $this->get('request');
+            $id = $request->get('id');
+            $token = $request->get('token');
+            if (!$this->get('form.csrf_provider')->isCsrfTokenValid('attachment', $token)) {
+                throw new BizExcetion("token wrong!");
+            }
+            $attachment = $this->get('attachment_service')->getEntity($id);
+            if (empty($attachment)) {
+                throw new BizExcetion("Attachment does not exist.");
+            }
+            $this->get('attachment_service')->deleteEntity($attachment);
+        } catch (BizException $ex) {
+            $error = $ex->getMessage();
+        }
+
+        return new JsonResponse(array(
+            'error' => $error
+        ));
     }
 }
 

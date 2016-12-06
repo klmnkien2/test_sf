@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Gao\C5Bundle\Biz\BizException;
 use Gao\C5Bundle\Entity\Dispute;
 use Gao\C5Bundle\Form\DisputeType;
+use Proxies\__CG__\Gao\C5Bundle\Entity;
 
 /**
  * Class: DisputeBiz.
@@ -107,7 +108,12 @@ class DisputeBiz
         } else {
             $dispute = $this->container->get('dispute_service')->getByGd($gdId);
         }
-        $attachment_array = $this->container->get('attachment_service')->getAttachmentByRefer($dispute->getId(), $user->getId());
+        if (empty($dispute)) {
+            $dispute = new Dispute;
+            $attachment_array = [];
+        } else {
+            $attachment_array = $this->container->get('attachment_service')->getAttachmentByRefer($dispute->getId(), $user->getId());
+        }
 
         return array(
             'message' => $dispute->getMessage(),

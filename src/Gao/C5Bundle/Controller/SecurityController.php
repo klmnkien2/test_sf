@@ -46,7 +46,11 @@ class SecurityController extends Controller
             }
             $email = $post->request->get('email');
             $username = $post->request->get('username');
-            var_dump($email, $username);die;
+
+            $session->getFlashBag()->add('success', 'He thong da gui thong tin cap nhat tai khoan cho ban. Vui long kiem tra email cua ban.');
+
+            //$messageTemplate = $this->getParameter('email_forgot_message');
+            //$message = sprintf($messageTemplate, $email, $username);
         }
 
         return $this->render(

@@ -96,8 +96,13 @@ class AttachmentService
         return $attachment;
     }
 
-    public function getAttachmentByIds($ids) {
-        $this->em->getRepository('GaoC5Bundle:Attachment')->findBy(array('id' => $ids));
+    public function getEntity($id) {
+        return $this->em->getRepository('GaoC5Bundle:Attachment')->find($id);
+    }
+
+    public function deleteEntity($attachment) {
+        $this->em->remove($attachment);
+        $this->em->flush();
     }
 
     /**

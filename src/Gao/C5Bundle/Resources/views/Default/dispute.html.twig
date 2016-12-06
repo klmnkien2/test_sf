@@ -29,6 +29,7 @@
                     <label class="btn btn-default btn-file">
                         Chọn file...
                         <!-- The file input field used as target for the file upload widget -->
+                        <input type="hidden" id="csrf_token_attachment" value="{{ csrf_token("attachment") }}" />
                         <input id="fileupload" type="file" name="uploadFile" style="display: none;"/>
                         <!-- <input id="fileupload" type="file" name="uploadFile[]" multiple="">-->
                     </label>
