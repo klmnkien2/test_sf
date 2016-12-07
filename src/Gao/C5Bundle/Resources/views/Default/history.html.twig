@@ -1,4 +1,5 @@
 {% extends 'GaoC5Bundle::layout.html.twig' %}
+{% block datapage %}data-pageId="default_history"{% endblock %}
 {% set menu_selected = 'history' %}
 {% block contents_main %}
     <div class="clearfix boxHead">
@@ -8,36 +9,63 @@
 
     <div class="clearfix boxBody">
 
-        <div class="clearfix tblWrap">
-            <table class="tbl">
-                <thead>
-                    <tr>
-                        <th scope="col">STT</th>
-                        <th scope="col">Tên</th>
-                        <th scope="col">Số tài khoản</th>
-                        <th scope="col">Số tiền</th>
-                        <th scope="col">Trạng thái</th>
-                        <th scope="col">Ngày phản hồi</th>
-                        <th scope="col">Loại giao dịch</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for transaction in pagination.getItemsInCurrentPage %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ transaction.full_name | default('N/A') }}</td>
-                            <td>{{ transaction.pd_acc_number | default('N/A') }}</td>
-                            <td>{{ transaction.amount }} VND</td>
-                            <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
-                            <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
-                            <td>{{ transaction.pd_id ? 'GD' : 'PD' }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="form-group" id="prg-formFilter">
+            <div class="row">
+                <div class="col-md-3 col-sm-2">
+                    <label for="">Lọc PD, GD</label>
+                    <select class="form-control" id="pd_or_gd">
+                        <option value="">Tất cả</option>
+                        <option value="pd" {{ condition.pd_or_gd == 'pd' ? 'selected' : '' }}>PD</option>
+                        <option value="gd" {{ condition.pd_or_gd == 'gd' ? 'selected' : '' }}>GD</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-2">
+                    <label for="">Lọc theo trạng thái</label>
+                    <select class="form-control" id="tran_status">
+                        <option value="">Tất cả</option>
+                        <option value="1" {{ condition.tran_status == '1' ? 'selected' : '' }}>Hoàn thành</option>
+                        <option value="0" {{ condition.tran_status == '0' ? 'selected' : '' }}>Chưa hoàn thành</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="btnWrap"><button type="button" id="prg-filterResult" class="btn btn-orange">Lọc thông tin</button></div>
         </div>
+        {% if pagination %}
+            <div class="clearfix tblWrap">
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Tên</th>
+                            <th scope="col">Số tài khoản</th>
+                            <th scope="col">Số tiền</th>
+                            <th scope="col">Trạng thái</th>
+                            <th scope="col">Ngày phản hồi</th>
+                            <th scope="col">Loại giao dịch</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in pagination.getItemsInCurrentPage %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ transaction.full_name | default('N/A') }}</td>
+                                <td>{{ transaction.pd_acc_number | default('N/A') }}</td>
+                                <td>{{ transaction.amount }} VND</td>
+                                <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
+                                <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
+                                <td>{{ transaction.pd_id ? 'GD' : 'PD' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
 
-        {{ paginate(pagination, sort) }}
+            {{ paginate(pagination, sort) }}
+
+        {% else %}
+            <strong>Không có bản ghi nào.</strong>
+        {% endif %}
     </div>
 
 {% endblock contents_main %}

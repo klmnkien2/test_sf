@@ -58,10 +58,16 @@ class DefaultController extends Controller
             // Get query parameter.
             $page = $request->query->get('page', 1);
             $sort = $request->query->get('sort', 'non');
+            $pd_or_gd = $request->query->get('pd_or_gd');
+            $tran_status = $request->query->get('tran_status');
+            $condition = [
+                'pd_or_gd' => $pd_or_gd,
+                'tran_status' => $tran_status
+            ];
 
             $usr = $this->get('security.context')->getToken()->getUser();
             //Call biz logic
-            $params = $this->get('history_biz')->main($usr, $page, 10, $sort);
+            $params = $this->get('history_biz')->main($usr, $condition, $page, 10, $sort);
 
             return $this->render('GaoC5Bundle:Default:history.html.twig', $params);
         } catch (BizException $ex) {

@@ -281,9 +281,20 @@ class TransactionService
      *
      * @return array $transactionList Is an array of Transaction
      */
-    public function getTransactionByUser($id, $page, $itemsLimitPerPage, $sort)
+    public function getTransactionByUser($id, $condition, $page, $itemsLimitPerPage, $sort)
     {
         try {
+            $query_condition = "";
+            if (!empty($condition['pd_or_gd'])) {
+                if ($condition['pd_or_gd'] == 'pd')
+                    $query_condition .= " AND t.pd_user_id = :user_id";
+                else if ($condition['pd_or_gd'] == 'gd')
+                    $query_condition .= " AND t.gd_user_id = :user_id";
+            }
+            if ($condition['tran_status'] != "") {
+                $query_condition .= " AND t.status = :tran_status";
+            }
+
             $query = <<<EOT
 SELECT 
     t.id, t.amount, t.status, t.approved_date, t.created,
@@ -294,8 +305,9 @@ FROM
     transaction t
 LEFT JOIN
     users u ON u.id = t.pd_user_id
+    {$query_condition}
 WHERE 
-    t.gd_user_id = ?
+    t.gd_user_id = :user_id
 UNION
 SELECT 
     t.id, t.amount, t.status, t.approved_date, t.created,
@@ -307,14 +319,18 @@ FROM
 LEFT JOIN 
     users u ON u.id = t.gd_user_id
 WHERE 
-    t.pd_user_id = ?
-LIMIT ?, ?
+    t.pd_user_id = :user_id
+    {$query_condition}
+LIMIT :start_item, :item_per_page
 EOT;
+
             $stmt = $this->em->getConnection()->prepare($query);
-            $stmt->bindValue(1, $id, \PDO::PARAM_INT);
-            $stmt->bindValue(2, $id, \PDO::PARAM_INT);
-            $stmt->bindValue(3, ($page-1) * $itemsLimitPerPage, \PDO::PARAM_INT);
-            $stmt->bindValue(4, $itemsLimitPerPage, \PDO::PARAM_INT);
+            $stmt->bindValue('user_id', $id, \PDO::PARAM_INT);
+            $stmt->bindValue('start_item', ($page-1) * $itemsLimitPerPage, \PDO::PARAM_INT);
+            $stmt->bindValue('item_per_page', $itemsLimitPerPage, \PDO::PARAM_INT);
+            if ($condition['tran_status'] != "") {
+                $stmt->bindValue('tran_status', $condition['tran_status'], \PDO::PARAM_INT);
+            }
             $stmt->execute();
 
             $list = $stmt->fetchAll();
@@ -334,9 +350,21 @@ EOT;
      *
      * @return array $transactionList Is an array of Transaction
      */
-    public function countTransactionByUser($id)
+    public function countTransactionByUser($id, $condition)
     {
         $params = array('user_id' => $id);
+        $query_condition = "";
+        if (!empty($condition['pd_or_gd'])) {
+            if ($condition['pd_or_gd'] == 'pd')
+                $query_condition .= " AND t.pd_user_id = :user_id";
+            else if ($condition['pd_or_gd'] == 'gd')
+                $query_condition .= " AND t.gd_user_id = :user_id";
+        }
+        if ($condition['tran_status'] != "") {
+            $params['tran_status'] = $condition['tran_status'];
+            $query_condition .= " AND t.status = :tran_status";
+        }
+
         try {
             $query = <<<EOT
 SELECT
@@ -344,7 +372,8 @@ SELECT
 FROM
     transaction t
 WHERE
-    t.gd_user_id = :user_id OR t.pd_user_id = :user_id
+    (t.gd_user_id = :user_id OR t.pd_user_id = :user_id)
+    {$query_condition}
 EOT;
             $conn = $this->em->getConnection()->prepare($query);
             $conn->execute($params);

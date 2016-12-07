@@ -15,6 +15,10 @@
       to: 'app.default.mapping_gd'
     });
     map.go({
+      id: 'default_history',
+      to: 'app.default.mapping_history'
+    });
+    map.go({
       id: 'default_dispute',
       to: 'app.default.mapping_dispute'
     });

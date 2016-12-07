@@ -37,11 +37,11 @@ class HistoryBiz
      *
      * @return mixed
      */
-    public function main($usr, $page, $itemsLimitPerPage, $sort)
+    public function main($usr, $condition, $page, $itemsLimitPerPage, $sort)
     {
         try {
-            $transactionList = $this->container->get('transaction_service')->getTransactionByUser($usr->getId(), $page, $itemsLimitPerPage, $sort);
-            $transactionTotal = $this->container->get('transaction_service')->countTransactionByUser($usr->getId());
+            $transactionList = $this->container->get('transaction_service')->getTransactionByUser($usr->getId(), $condition, $page, $itemsLimitPerPage, $sort);
+            $transactionTotal = $this->container->get('transaction_service')->countTransactionByUser($usr->getId(), $condition);
             $pagination = null;
             if ($transactionTotal > 0) {
                 // Get the paginator service from the container
@@ -58,6 +58,7 @@ class HistoryBiz
             }
             return array(
                 'pagination' => $pagination,
+                'condition' => $condition,
                 'sort' => $sort
             );
         } catch (\Exception $ex) {
