@@ -14,7 +14,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Gao\C5Bundle\Entity\Dispute;
-use Next\ArchiveBundle\Biz\BizException;
+use Gao\C5Bundle\Biz\BizException;
 
 /**
  * DisputeService class.
@@ -49,8 +49,8 @@ class DisputeService
         return $this->em->getRepository('GaoC5Bundle:Dispute')->find($id);
     }
 
-    public function getByPd($id) {
-        $result = $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('pdId' => $id));
+    public function getByTransaction($id) {
+        $result = $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('transactionId' => $id));
         if (!empty($result) && is_array($result)) {
             return $result[0];
         } else {
@@ -58,32 +58,11 @@ class DisputeService
         }
     }
 
-    public function getByGd($id) {
-        $result = $this->em->getRepository('GaoC5Bundle:Dispute')->findBy(array('gdId' => $id));
-        if (!empty($result) && is_array($result)) {
-            return $result[0];
-        } else {
-            return null;
-        }
-    }
-
-    public function createDispute($userId, $pdId, $gdId, $message) {
-
-        $dispute = new Dispute();
-        $dispute->setUserId($userId);
-        $dispute->setMessage($message);
-        $dispute->setStatus(0);
-        if (!empty($pdId)) {
-            $dispute->setPdId($pdId);
-        }
-        if (!empty($gdId)) {
-            $dispute->setGdId($gdId);
-        }
+    public function updateDispute($dispute) {
 
         $this->em->persist($dispute);
         $this->em->flush();
 
-        return $dispute;
     }
 
     /**
@@ -98,9 +77,10 @@ class DisputeService
         try {
             $query = <<<EOT
 SELECT
-    d.id, d.message, d.pd_id, d.gd_id, d.created, d.status 
+    d.id, d.message, d.transaction_id, d.created, d.status, t.pd_user_id, t.gd_user_id
 FROM
     dispute d
+LEFT JOIN transaction t ON t.id = d.transaction_id
 WHERE
     d.user_id = ?
 LIMIT ?, ?
@@ -116,7 +96,8 @@ EOT;
             return $list;
             //None record found exception
         } catch (\Exception $e) {
-            new BizException('No record found...');
+            //throw $e;
+            throw new BizException('No record found...');
         }
     }
     

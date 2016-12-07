@@ -41,7 +41,7 @@
                     <!-- The container for the uploaded files -->
                     <div id="files" class="files">
                         {% for attach in attachment_array %}
-                            <p>{{ attach.name }}</p>
+                            <p style="color: blue;">{{ attach.name }} <a data-id="{{ attach.id }}" class="prg-deleteFile glyphicon glyphicon-remove"></a></p>
                             <input type="hidden" name="attachment[]" value="{{ attach.id }}">
                         {% endfor %}
                     </div>

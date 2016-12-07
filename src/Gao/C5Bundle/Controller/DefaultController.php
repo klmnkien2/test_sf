@@ -214,10 +214,9 @@ class DefaultController extends Controller
             $request = $this->getRequest();
 
             //Call biz logic
-            $pdId = $request->query->get('pdId');
-            $gdId = $request->query->get('gdId');
+            $transaction_id = $request->query->get('transaction_id');
 
-            $params = $this->get('dispute_biz')->main($pdId, $gdId);
+            $params = $this->get('dispute_biz')->main($transaction_id);
 
             return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
         } catch (BizException $ex) {

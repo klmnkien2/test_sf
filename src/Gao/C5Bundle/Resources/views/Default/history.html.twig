@@ -54,7 +54,16 @@
                                 <td>{{ transaction.amount }} VND</td>
                                 <td>{{ transaction.status == 1 ? 'Approved' : 'Pending' }}</td>
                                 <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
-                                <td>{{ transaction.pd_id ? 'GD' : 'PD' }}</td>
+                                <td>
+                                    {% if transaction.pd_id %}
+                                        GD
+                                    {% else %}
+                                        PD
+                                        {% if transaction.status != 1 %} 
+                                            [ <a href="{{ path('gao_c5_dispute', { transaction_id: transaction.id }) }}">Báo đã gửi</a> ]
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>

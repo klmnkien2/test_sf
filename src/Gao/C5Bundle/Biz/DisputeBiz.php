@@ -29,47 +29,32 @@ class DisputeBiz
         $this->container = $container;
     }
 
-    public function main($pdId, $gdId)
+    public function main($transaction_id)
     {
         $user = $this->container->get('security.context')->getToken()->getUser();
-        if (empty($pdId) && empty($gdId)) {
-            // Check current state and current pd, gd
-            $allState = $this->container->getParameter('pd_gd_state');
-            $pdGdState = $user->getPdGdState();
-            if ($pdGdState == $allState['PD_Matched']) {
-                $current_pd = $this->container->get('transaction_service')->getCurrentPdByUser($user->getId());
-                if (!empty($current_pd)) {
-                    $pdId = $current_pd->getId();
-                }
-            } else if ($pdGdState == $allState['GD_Requested']) {
-                $current_gd = $this->container->get('transaction_service')->getCurrentGdByUser($user->getId());
-                if (!empty($current_gd)) {
-                    $gdId = $current_gd->getId();
-                }
-            }
+        if (empty($transaction_id)) {
+            throw new BizException('transaction id null.');
         }
 
-        if (!empty($pdId) || !empty($gdId)) {
-            $params = $this->prepareData($user, $pdId, $gdId);
-        } else {
-            $params = [
-                'message' => '',
-                'attachment_array' => []
-            ];
-        }
+        $params = $this->prepareData($user, $transaction_id);
 
         $post = Request::createFromGlobals();
         if ($post->request->has('submit')) {
             $data = [
+                'transaction_id' => $transaction_id,
                 'message' => $post->request->get('message'),
-                'attachment' => $post->request->get('attachment'),
-                'pdId' => $pdId,
-                'gdId' => $gdId
+                'attachment' => $post->request->get('attachment')
             ];
             $this->formProcess($user, $data, $params);
         }
 
-        return $params;
+        $dispute = $params['dispute'];
+        $attachment_array = $params['attachment_array'];
+        return array(
+            'message' => $dispute?$dispute->getMessage():null,
+            'attachment_array' => $attachment_array,
+            'id' => $dispute?$dispute->getId():null
+        );
     }
 
     public function mainList($usr, $page, $itemsLimitPerPage, $sort)
@@ -101,24 +86,20 @@ class DisputeBiz
         }
     }
 
-    private function prepareData($user, $pdId, $gdId) {
-
-        if (!empty($pdId)) {
-            $dispute = $this->container->get('dispute_service')->getByPd($pdId);
-        } else {
-            $dispute = $this->container->get('dispute_service')->getByGd($gdId);
+    private function prepareData($user, $transaction_id) {
+        $dispute = null;
+        if (!empty($transaction_id)) {
+            $dispute = $this->container->get('dispute_service')->getByTransaction($transaction_id);
         }
         if (empty($dispute)) {
-            $dispute = new Dispute;
             $attachment_array = [];
         } else {
             $attachment_array = $this->container->get('attachment_service')->getAttachmentByRefer($dispute->getId(), $user->getId());
         }
 
         return array(
-            'message' => $dispute->getMessage(),
-            'attachment_array' => $attachment_array,
-            'id' => $dispute->getId()
+            'dispute' => $dispute,
+            'attachment_array' => $attachment_array
         );
     }
 
@@ -127,24 +108,37 @@ class DisputeBiz
 
         // Validate
         if (empty($data['message']) || !$data['message']) {
-            $session->getFlashBag()->add('unsuccess', 'Chua nhap thong tin Gia trinh.');
+            $session->getFlashBag()->add('unsuccess', 'Chua nhap thong tin Giai trinh.');
             return;
         }
 
-        if (empty($data['pdId']) && empty($data['gdId'])) {
-            $session->getFlashBag()->add('unsuccess', 'Hien tai ban khong trong qua trinh thuc hien giao dich. Khong the thuc hien chuc nang nay');
+        if (empty($data['transaction_id'])) {
+            $session->getFlashBag()->add('unsuccess', 'Hien tai ban khong the thuc hien chuc nang nay');
             return;
         }
 
-        $dispute = $this->container->get('dispute_service')->createDispute($user->getId(), $data['pdId'], $data['gdId'], $data['message']);
+        $dispute = $params['dispute'];
+        if (empty($dispute)) {
+            $dispute = new Dispute();
+        }
 
-        $referId = empty($data['pdId']) ? $data['pdId'] : $data['gdId'];
+        $dispute->setUserId($user->getId());
+        $dispute->setMessage($data['message']);
+        $dispute->setTransactionId($data['transaction_id']);
+        $dispute->setStatus(0);
+        $this->container->get('dispute_service')->updateDispute($dispute);
+
+        if (empty($dispute) || empty($dispute->getId())) {
+            $session->getFlashBag()->add('unsuccess', 'Khong the tao phan hoi cho giao dich nay. Vui long thu lai');
+            return;
+        }
+
+        $referId = $dispute->getId();
         $attachment_array = $this->container->get('attachment_service')->updateAttachment($user->getId(), $referId, $data['attachment']);
 
         $session->getFlashBag()->add('success', 'Cap nhat thanh cong.');
 
-        $params['message'] = $dispute->getMessage();
+        $params['dispute'] = $dispute;
         $params['attachment_array'] = $attachment_array;
-        $params['id'] = $dispute->getId();
     }
 }

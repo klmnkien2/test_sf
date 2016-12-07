@@ -15,6 +15,7 @@
      */
     bindAllListeners : function() {
         //this.root.on('change', '#fileupload', $.proxy(this, 'selectFileUpload')); // for upload file no ajax
+    	this.root.on('click', '.prg-deleteFile', $.proxy(this, 'deleteFileUpload'));
     },
     /**
      * trigger fileselect event

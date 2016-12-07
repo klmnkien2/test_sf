@@ -2,19 +2,19 @@
 {% set menu_selected = 'dispute' %}
 {% block contents_main %}
     <div class="clearfix boxHead">
-        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Danh sách</h1>
-        <div class="desc">Danh sách các thông tin đã đăng tải, dùng để tra cứu thông tin</div>
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Danh sách phản hồi</h1>
+        <div class="desc">Danh sách thông tin phản hồi đã đăng tải, khi có tranh chấp xảy ra</div>
     </div>
 
     <div class="clearfix boxBody">
-        <a href="{{ path('gao_c5_dispute') }}" class="btn btn-orange">Thêm thông tin</a><br><br>
+        {#<a href="{{ path('gao_c5_dispute') }}" class="btn btn-orange">Thêm thông tin</a><br><br>#}
         {% if pagination %}
             <div class="clearfix tblWrap">
                 <table class="tbl">
                     <thead>
                         <tr>
                             <th scope="col">STT</th>
-                            <th scope="col">Link</th>
+                            <th scope="col">?</th>
                             <th scope="col">Message</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Ngày tạo</th>
@@ -25,11 +25,19 @@
                         {% for dispute in pagination.getItemsInCurrentPage %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>{{ dispute.pd_id ? 'PD' : 'GD' }}</td>
+                                <td>?</td>
                                 <td>{{ dispute.message }} VND</td>
                                 <td>{{ dispute.status == 1 ? 'Được chấp nhận' : (dispute.status == 2 ? 'Bị từ chối' : 'Pending') }}</td>
                                 <td>{{ dispute.created ? dispute.created|date('d/m/Y H:i:s') : 'N/A' }}</td>
-                                <td>{{ dispute.pd_id ? 'PD' : 'GD' }}</td>
+                                <td>
+                                    {% if app.security.getToken().getUser().getId() == dispute.gd_user_id %}
+                                        GD
+                                    {% elseif app.security.getToken().getUser().getId() == dispute.pd_user_id %}
+                                        PD
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
