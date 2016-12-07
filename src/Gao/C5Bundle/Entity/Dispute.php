@@ -31,16 +31,9 @@ class Dispute
     /**
      * @var integer
      *
-     * @ORM\Column(name="pd_id", type="integer", nullable=true)
+     * @ORM\Column(name="transaction_id", type="integer", nullable=true)
      */
-    private $pdId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="gd_id", type="integer", nullable=true)
-     */
-    private $gdId;
+    private $transactionId;
 
     /**
      * @var boolean
@@ -99,49 +92,26 @@ class Dispute
     }
 
     /**
-     * Set pdId
+     * Set transactionId
      *
-     * @param integer $pdId
+     * @param integer $transactionId
      * @return Dispute
      */
-    public function setPdId($pdId)
+    public function setTransactionId($transactionId)
     {
-        $this->pdId = $pdId;
+        $this->transactionId = $transactionId;
 
         return $this;
     }
 
     /**
-     * Get pdId
+     * Get transactionId
      *
      * @return integer 
      */
-    public function getPdId()
+    public function getTransactionId()
     {
-        return $this->pdId;
-    }
-
-    /**
-     * Set gdId
-     *
-     * @param integer $gdId
-     * @return Dispute
-     */
-    public function setGdId($gdId)
-    {
-        $this->gdId = $gdId;
-
-        return $this;
-    }
-
-    /**
-     * Get gdId
-     *
-     * @return integer 
-     */
-    public function getGdId()
-    {
-        return $this->gdId;
+        return $this->transactionId;
     }
 
     /**

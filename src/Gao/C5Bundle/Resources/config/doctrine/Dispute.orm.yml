@@ -19,16 +19,11 @@ Gao\C5Bundle\Entity\Dispute:
             nullable: false
             unsigned: false
             column: user_id
-        pdId:
+        transactionId:
             type: integer
             nullable: true
             unsigned: false
-            column: pd_id
-        gdId:
-            type: integer
-            nullable: true
-            unsigned: false
-            column: gd_id
+            column: transaction_id
         status:
             type: boolean
             nullable: false
