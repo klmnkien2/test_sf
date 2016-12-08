@@ -1,3 +1,7 @@
+gao_admin:
+    resource: "@GaoAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
 login:
   path: /login
   defaults: { _controller: GaoC5Bundle:Security:login }
