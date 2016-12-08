@@ -15,7 +15,7 @@
      */
     bindAllListeners : function() {
         //this.root.on('change', '#fileupload', $.proxy(this, 'selectFileUpload')); // for upload file no ajax
-    	this.root.on('click', '.prg-deleteFile', $.proxy(this, 'deleteFileUpload'));
+        this.root.on('click', '.prg-deleteFile', $.proxy(this, 'deleteFileUpload'));
     },
     /**
      * trigger fileselect event
@@ -33,7 +33,7 @@
      */
     initUploadAjax : function() {
       var url = this.getBaseUrl() + "/attachment/upload/dispute"
-      	,that = this;
+          ,that = this;
 
       $('#fileupload').fileupload({
           url : url,
@@ -41,11 +41,11 @@
           done : function(e, data) {
               if (data.result.error === false) {
                   // Add text filename
-            	  //var deleteBtn = '<a data-id="' + data.result.attachment.id + '" class="prg-deleteFile"><span class="glyphicon glyphicon-remove"></span></a>';
-            	  var deleteBtn = $('<a/>')
-            	  	.attr('data-id', data.result.attachment.id)
-            	  	.attr('class', 'prg-deleteFile glyphicon glyphicon-remove')
-            	  	.on('click', $.proxy(that, 'deleteFileUpload'));
+                  //var deleteBtn = '<a data-id="' + data.result.attachment.id + '" class="prg-deleteFile"><span class="glyphicon glyphicon-remove"></span></a>';
+                  var deleteBtn = $('<a/>')
+                      .attr('data-id', data.result.attachment.id)
+                      .attr('class', 'prg-deleteFile glyphicon glyphicon-remove')
+                      .on('click', $.proxy(that, 'deleteFileUpload'));
                   $('<p/>').css('color', 'blue').text(data.result.attachment.name).append(deleteBtn).appendTo('#files');
                   // Add input attachment id
                   $('<input>').attr({
@@ -67,24 +67,27 @@
      * delete file ajax
      */
     deleteFileUpload : function(event) {
-    	event.stopPropagation();
-    	event.preventDefault();
+        event.stopPropagation();
+        event.preventDefault();
 
         var deleteBtn = $(event.target)
-        	, delete_id = deleteBtn.attr('data-id')
-        	, url = this.getBaseUrl() + "/attachment/delete?id=" + delete_id + "&token=" + $("#csrf_token_attachment").val();
+            , that = this
+            , delete_id = deleteBtn.attr('data-id')
+            , url = this.getBaseUrl() + "/attachment/delete?id=" + delete_id + "&token=" + $("#csrf_token_attachment").val();
         var jqxhr = $.get( url );
         jqxhr.done(function(data) {
-        	if (data.error === false) {
-        		deleteBtn.closest( "p" ).remove();
+            if (data.error === false) {
+                deleteBtn.closest( "p" ).remove();
                 $("input[name='attachment\[\]'][value='" + delete_id + "']").remove();
-        	} else {
-        		// Khong thanh cong
-        		alert(data.error);
-        	}
+                that.showPopupMessage('Yeu cau da duoc thuc hien thanh cong.');
+            } else {
+                // Khong thanh cong
+                that.showPopupMessage('Yeu cau thuc hien khong thanh cong.');
+            }
         })
         .fail(function() {
-        	// Khong thanh cong
+            // Khong thanh cong
+            that.showPopupMessage('Yeu cau thuc hien khong thanh cong.');
         })
         .always(function() {
             // Do something
@@ -99,6 +102,13 @@
         return location.origin;
     },
     /**
+     * showPopupMessage
+     */
+    showPopupMessage : function(message) {
+        $('#prg-modal-content').html(message);
+        $("#prg-popup-message").modal();
+    },
+    /**
      * Progress done
      */
     doneProgress : function() {
@@ -109,8 +119,8 @@
      * Progress update
      */
     updateProgress : function(progress) {
-    	$('#prg-uploadProgress').show();
-    	$('#prg-uploadProgress .progress-bar').css('width', progress + '%');
+        $('#prg-uploadProgress').show();
+        $('#prg-uploadProgress .progress-bar').css('width', progress + '%');
     }
   });
 }(jQuery, require_joo()));

@@ -5,7 +5,7 @@
    */
   def.hash({
     widget: [
-
+      'app.common.widget.GlobalSetup'
     ]
   }).as('app.common.mapping');
 
