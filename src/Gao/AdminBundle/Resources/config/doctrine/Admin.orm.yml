@@ -1,0 +1,69 @@
+Gao\AdminBundle\Entity\Admin:
+    type: entity
+    table: admin
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        creatorId:
+            type: integer
+            nullable: true
+            unsigned: false
+            column: creator_id
+        fullName:
+            type: string
+            nullable: true
+            length: 255
+            fixed: false
+            column: full_name
+        phone:
+            type: string
+            nullable: true
+            length: 20
+            fixed: true
+        email:
+            type: string
+            nullable: true
+            length: 255
+            fixed: true
+        username:
+            type: string
+            nullable: false
+            length: 50
+            fixed: true
+        password:
+            type: string
+            nullable: false
+            length: 1000
+            fixed: false
+        role:
+            type: string
+            nullable: true
+            length: 100
+            fixed: false
+        salt:
+            type: string
+            nullable: false
+            length: 100
+            fixed: true
+        lastLogin:
+            type: datetime
+            nullable: true
+            column: last_login
+        currentLogin:
+            type: datetime
+            nullable: true
+            column: current_login
+        emailVerified:
+            type: boolean
+            nullable: true
+            column: email_verified
+        blocked:
+            type: boolean
+            nullable: true
+    lifecycleCallbacks: {  }

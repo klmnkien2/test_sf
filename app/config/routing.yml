@@ -1,6 +1,16 @@
+admin_login:
+  path: /admin/login
+  defaults: { _controller: GaoAdminBundle:Security:login }
+
+admin_login_check:
+  path: /admin/login_check
+
+admin_logout:
+  pattern: /admin/logout
+
 gao_admin:
     resource: "@GaoAdminBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /admin
 
 login:
   path: /login

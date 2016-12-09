@@ -73,10 +73,12 @@ php app/console assetic:dump --env=prod
 
 Generate entity:
 php app/console doctrine:mapping:import --force GaoC5Bundle yml
-php app/console doctrine:mapping:convert annotation src --force
+php app/console doctrine:mapping:convert annotation src/Gao/C5Bundle --force
 php app/console doctrine:generate:entities GaoC5Bundle --no-backup
 
-php bin/console doctrine:generate:entities AppBundle/Entity/User
+php app/console doctrine:mapping:import --force GaoAdminBundle yml --filter="Admin"
+php app/console doctrine:mapping:convert annotation src/Gao/AdminBundle/Entity --from-database --filter="Admin" --force
+php app/console doctrine:generate:entities GaoAdminBundle --no-backup
 
 Update to database
 php bin/console doctrine:schema:update --force

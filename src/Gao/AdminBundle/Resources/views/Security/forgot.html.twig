@@ -1,0 +1,32 @@
+{% extends 'GaoC5Bundle::layout.html.twig' %}
+{% set menu_selected = 'null' %}
+{% block contents_main %}
+    <div id="login" class="fancyCommon">
+        <div class="titlebar clearfix">
+            <h2 class="title">QUÊN MẬT KHẨU</h2>
+        </div>
+        {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-info">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('unsuccess') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+        <form action="" method="post" class="form" role="form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token("forgot_password") }}" />
+            <div class="form-group">
+                <label for="username">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="email">Email đăng ký</label>
+                <input type="email" class="form-control" id="email" name="email">
+            </div>
+            <div class="btnWrap"><button type="submit" name="submit" class="btn btn-orange">Gửi yêu cầu</button></div>
+        </form>
+    </div>
+
+{% endblock contents_main %}

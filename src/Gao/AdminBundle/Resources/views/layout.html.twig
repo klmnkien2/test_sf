@@ -1,0 +1,166 @@
+{% extends "::base.html.twig" %}
+{% block datapage %}data-pageId="no_match"{% endblock %}
+{% block meta %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1, user-scalable=no">
+  {% block others_meta %}{% endblock others_meta %}
+{% endblock meta %}
+{% block title %}{% endblock title %}
+{% block stylesheets %}
+  {% stylesheets filter='cssrewrite'
+  output='bundles/gaoc5/css/c5.css'
+
+  'bundles/gaoc5/css/bootstrap.min.css'
+  'bundles/gaoc5/css/theme.css'
+  'bundles/gaoc5/css/layout.css'
+  'bundles/gaoc5/css/style.css'
+  'bundles/gaoc5/plugin/jQueryLoadingIndicator/jquery.loading-indicator.css'%}
+  <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+{% endblock stylesheets %}
+{% block noscript %}
+  <p>This site using javascript, please enable it.</p>
+{% endblock noscript %}
+{% block header %}
+  <div id="UIhead" class="navbar-fixed-top">
+    <div class="primary">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="Toggle Menu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html" title="Causeflix">Causeflix</a>
+            </div>
+            {% if is_granted('ROLE_USER') %}
+            <div class="userInfo pull-right">
+              <div class="user"><strong>{{ app.user.username }}</strong></div>
+              <ul class="nav nav-pills">
+                <li class="active pull-right"><a href="{{ path('logout') }}">Logout</a></li>
+              </ul>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navMain">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="navbar-collapse collapse">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- //#UIhead -->
+{% endblock header %}
+
+{% block contents %}
+  <div id="UIcont" class="UIcont">
+    <div class="dashboardCont">
+      <div class="container">
+        <div class="row">
+          {% if is_granted('ROLE_USER') %}
+            {% block contents_aside %}
+            <div class="col-md-2 col-sm-3">
+              <div class="dashboardSidebar">
+                <h2 class="title">Account <i class="glyphicon glyphicon-hand-down"></i></h2>
+                <ul class="dashboardNav">
+                  <li {% if menu_selected|default('index') == 'index' %}class="active"{% endif %}><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-eye-open"></i>Tổng quan</a></li>
+                  <li {% if menu_selected == 'pd' %}class="active"{% endif %}><a href="{{ path('gao_c5_pd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý PD</a></li>
+                  <li {% if menu_selected == 'gd' %}class="active"{% endif %}><a href="{{ path('gao_c5_gd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý GD</a></li>
+                  <li {% if menu_selected == 'history' %}class="active"{% endif %}><a href="{{ path('gao_c5_history') }}"><i class="glyphicon glyphicon-list-alt"></i>Lịch sử giao dịch</a></li>
+                  <li {% if menu_selected == 'dispute' %}class="active"{% endif %}><a href="{{ path('gao_c5_list_dispute') }}"><i class="glyphicon glyphicon-facetime-video"></i>Tranh chấp</a></li>
+                  <li {% if menu_selected == 'account' %}class="active"{% endif %}><a href="{{ path('gao_c5_account') }}"><i class="glyphicon glyphicon-user"></i>Tài khoản</a></li>
+                  {#<li><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-cog"></i>Cài đặt khác</a></li>#}
+                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-log-out"></i>Đăng xuất</a></li>
+                </ul>
+              </div>
+            </div>
+            {% endblock contents_aside %}
+          {% endif %}
+          <div class="{% if is_granted('ROLE_USER') %}col-md-10 col-sm-9{% else %}col-md-12 col-sm-12{% endif %}">
+            <div class="mainCont">
+              {% block contents_main %}
+              {% endblock contents_main %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="prg-popup-message" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Thông báo</h4>
+        </div>
+        <div class="modal-body">
+          <p id="prg-modal-content">Some text in the modal.</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+{% endblock contents %}
+
+{% block footer %}
+  <div id="UIfoot">
+    <div class="copyright">
+      <div class="container">
+        <div>Copyright &copy; 2014 <a class="brand" href="index.html">Causefix</a>. All rights reserved.</div>
+      </div>
+    </div>
+  </div><!-- //#UIfoot -->
+{% endblock footer %}
+
+{% block javascripts %}
+
+  {% javascripts
+  output='bundles/gaoc5/js/c5.js'
+
+  '@GaoC5Bundle/Resources/public/js/library/jquery/jquery-1.11.0.min.js'
+  '@GaoC5Bundle/Resources/public/js/library/bootstrap/bootstrap.min.js'
+
+  '@GaoC5Bundle/Resources/public/plugin/jQueryFileUpload/js/vendor/jquery.ui.widget.js'
+  '@GaoC5Bundle/Resources/public/plugin/jQueryFileUpload/js/jquery.iframe-transport.js'
+  '@GaoC5Bundle/Resources/public/plugin/jQueryFileUpload/js/jquery.fileupload.js'
+  '@GaoC5Bundle/Resources/public/plugin/jQueryLoadingIndicator/jquery.loading-indicator.min.js'
+
+  '@GaoC5Bundle/Resources/public/js/library/joo/joo.js'
+  '@GaoC5Bundle/Resources/public/js/library/routing/routing.js'
+
+  '@GaoC5Bundle/Resources/public/js/app/no_match/mapping.js'
+  '@GaoC5Bundle/Resources/public/js/app/common/widget/GlobalSetup.js'
+  '@GaoC5Bundle/Resources/public/js/app/common/mapping.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/widget/Pd.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/mapping_pd.js'  
+  '@GaoC5Bundle/Resources/public/js/app/default/widget/Gd.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/mapping_gd.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/widget/History.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/mapping_history.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/widget/UploadImage.js'
+  '@GaoC5Bundle/Resources/public/js/app/default/mapping_dispute.js'
+
+  '@GaoC5Bundle/Resources/public/js/app/routing.js'%}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
+
+  {% endjavascripts %}
+    <script>
+      //Some global things
+    </script>
+{% endblock javascripts %}
+

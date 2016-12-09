@@ -1,0 +1,2 @@
+parameters:
+    email_forgot_message: Chao %, mat khau moi cua ban la [%]. Vui long cap nhat mat khau ngay khi dang nhap lai.
