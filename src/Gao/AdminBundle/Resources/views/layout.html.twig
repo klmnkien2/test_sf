@@ -9,13 +9,11 @@
 {% block title %}{% endblock title %}
 {% block stylesheets %}
   {% stylesheets filter='cssrewrite'
-  output='bundles/gaoc5/css/c5.css'
+  output='bundles/gaoadmin/css/admin.css'
 
-  'bundles/gaoc5/css/bootstrap.min.css'
-  'bundles/gaoc5/css/theme.css'
-  'bundles/gaoc5/css/layout.css'
-  'bundles/gaoc5/css/style.css'
-  'bundles/gaoc5/plugin/jQueryLoadingIndicator/jquery.loading-indicator.css'%}
+  'bundles/gaoadmin/css/style.css'
+  'bundles/gaoadmin/plugin/bootstrap-3.3.7/css/bootstrap.min.css'
+  'bundles/gaoadmin/plugin/bootstrap-3.3.7/css/bootstrap-theme.min.css' %}
   <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
   {% endstylesheets %}
 {% endblock stylesheets %}
@@ -23,139 +21,86 @@
   <p>This site using javascript, please enable it.</p>
 {% endblock noscript %}
 {% block header %}
-  <div id="UIhead" class="navbar-fixed-top">
-    <div class="primary">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse" title="Toggle Menu">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="index.html" title="Causeflix">Causeflix</a>
-            </div>
-            {% if is_granted('ROLE_USER') %}
-            <div class="userInfo pull-right">
-              <div class="user"><strong>{{ app.user.username }}</strong></div>
-              <ul class="nav nav-pills">
-                <li class="active pull-right"><a href="{{ path('logout') }}">Logout</a></li>
-              </ul>
-            </div>
-            {% endif %}
-          </div>
-        </div>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="collapse navbar-collapse navbar-right">
+        {% if is_granted('ROLE_ADMIN') %}
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <strong>{{ app.user.username }}</strong>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Edit</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('admin_logout') }}">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+        {% else %}
+            <a href="#" class="btn btn-default navbar-btn">Register</a>
+        {% endif %}
       </div>
     </div>
-
-    <div class="navMain">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="navbar-collapse collapse">
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><!-- //#UIhead -->
+  </nav>
 {% endblock header %}
 
 {% block contents %}
-  <div id="UIcont" class="UIcont">
-    <div class="dashboardCont">
-      <div class="container">
-        <div class="row">
-          {% if is_granted('ROLE_USER') %}
-            {% block contents_aside %}
-            <div class="col-md-2 col-sm-3">
-              <div class="dashboardSidebar">
-                <h2 class="title">Account <i class="glyphicon glyphicon-hand-down"></i></h2>
-                <ul class="dashboardNav">
-                  <li {% if menu_selected|default('index') == 'index' %}class="active"{% endif %}><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-eye-open"></i>Tổng quan</a></li>
-                  <li {% if menu_selected == 'pd' %}class="active"{% endif %}><a href="{{ path('gao_c5_pd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý PD</a></li>
-                  <li {% if menu_selected == 'gd' %}class="active"{% endif %}><a href="{{ path('gao_c5_gd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý GD</a></li>
-                  <li {% if menu_selected == 'history' %}class="active"{% endif %}><a href="{{ path('gao_c5_history') }}"><i class="glyphicon glyphicon-list-alt"></i>Lịch sử giao dịch</a></li>
-                  <li {% if menu_selected == 'dispute' %}class="active"{% endif %}><a href="{{ path('gao_c5_list_dispute') }}"><i class="glyphicon glyphicon-facetime-video"></i>Tranh chấp</a></li>
-                  <li {% if menu_selected == 'account' %}class="active"{% endif %}><a href="{{ path('gao_c5_account') }}"><i class="glyphicon glyphicon-user"></i>Tài khoản</a></li>
-                  {#<li><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-cog"></i>Cài đặt khác</a></li>#}
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-log-out"></i>Đăng xuất</a></li>
-                </ul>
-              </div>
-            </div>
-            {% endblock contents_aside %}
-          {% endif %}
-          <div class="{% if is_granted('ROLE_USER') %}col-md-10 col-sm-9{% else %}col-md-12 col-sm-12{% endif %}">
-            <div class="mainCont">
-              {% block contents_main %}
-              {% endblock contents_main %}
-            </div>
+  <div class="admin-content container">
+    <div class="row">
+      {% if is_granted('ROLE_ADMIN') %}
+        {% block contents_aside %}
+        <div class="col-md-2 col-sm-3">
+          <div class="dashboardSidebar">
+            <h2 class="title">Account <i class="glyphicon glyphicon-hand-down"></i></h2>
+            <ul class="dashboardNav">
+              <li {% if menu_selected|default('index') == 'index' %}class="active"{% endif %}><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-eye-open"></i>Tổng quan</a></li>
+              <li {% if menu_selected == 'pd' %}class="active"{% endif %}><a href="{{ path('gao_c5_pd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý PD</a></li>
+              <li {% if menu_selected == 'gd' %}class="active"{% endif %}><a href="{{ path('gao_c5_gd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý GD</a></li>
+              <li {% if menu_selected == 'history' %}class="active"{% endif %}><a href="{{ path('gao_c5_history') }}"><i class="glyphicon glyphicon-list-alt"></i>Lịch sử giao dịch</a></li>
+              <li {% if menu_selected == 'dispute' %}class="active"{% endif %}><a href="{{ path('gao_c5_list_dispute') }}"><i class="glyphicon glyphicon-facetime-video"></i>Tranh chấp</a></li>
+              <li {% if menu_selected == 'account' %}class="active"{% endif %}><a href="{{ path('gao_c5_account') }}"><i class="glyphicon glyphicon-user"></i>Tài khoản</a></li>
+              {#<li><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-cog"></i>Cài đặt khác</a></li>#}
+              <li><a href="{{ path('admin_logout') }}"><i class="glyphicon glyphicon-log-out"></i>Đăng xuất</a></li>
+            </ul>
           </div>
         </div>
+        {% endblock contents_aside %}
+      {% endif %}
+      <div class="{% if is_granted('ROLE_ADMIN') %}col-md-10 col-sm-9{% else %}col-md-12 col-sm-12{% endif %}">
+        {% block contents_main %}
+        {% endblock contents_main %}
       </div>
     </div>
   </div>
 
-  <div id="prg-popup-message" class="modal fade" role="dialog">
-    <div class="modal-dialog">
-    
-      <!-- Modal content-->
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Thông báo</h4>
-        </div>
-        <div class="modal-body">
-          <p id="prg-modal-content">Some text in the modal.</p>
-        </div>
-      </div>
-      
-    </div>
-  </div>
+  {% block popup_bottom %}
+  {% endblock %}
 
 {% endblock contents %}
 
 {% block footer %}
-  <div id="UIfoot">
-    <div class="copyright">
-      <div class="container">
-        <div>Copyright &copy; 2014 <a class="brand" href="index.html">Causefix</a>. All rights reserved.</div>
-      </div>
-    </div>
-  </div><!-- //#UIfoot -->
+  <footer class="admin-footer">
+    <p class="text-center">
+      Copyright &copy; 2016 <a class="brand" href="index.html">My administration</a>. All rights reserved.
+    </p>
+  </footer>
 {% endblock footer %}
 
 {% block javascripts %}
 
   {% javascripts
-  output='bundles/gaoc5/js/c5.js'
+  output='bundles/gaoadmin/js/admin.js'
 
-  '@GaoC5Bundle/Resources/public/js/library/jquery/jquery-1.11.0.min.js'
-  '@GaoC5Bundle/Resources/public/js/library/bootstrap/bootstrap.min.js'
+  '@GaoAdminBundle/Resources/public/js/library/jquery/jquery-1.11.0.min.js'
 
-  '@GaoC5Bundle/Resources/public/plugin/jQueryFileUpload/js/vendor/jquery.ui.widget.js'
-  '@GaoC5Bundle/Resources/public/plugin/jQueryFileUpload/js/jquery.iframe-transport.js'
-  '@GaoC5Bundle/Resources/public/plugin/jQueryFileUpload/js/jquery.fileupload.js'
-  '@GaoC5Bundle/Resources/public/plugin/jQueryLoadingIndicator/jquery.loading-indicator.min.js'
+  '@GaoAdminBundle/Resources/public/js/library/joo/joo.js'
+  '@GaoAdminBundle/Resources/public/js/library/routing/routing.js'
 
-  '@GaoC5Bundle/Resources/public/js/library/joo/joo.js'
-  '@GaoC5Bundle/Resources/public/js/library/routing/routing.js'
+  '@GaoAdminBundle/Resources/public/plugin/bootstrap-3.3.7/js/bootstrap.min.js'
 
-  '@GaoC5Bundle/Resources/public/js/app/no_match/mapping.js'
-  '@GaoC5Bundle/Resources/public/js/app/common/widget/GlobalSetup.js'
-  '@GaoC5Bundle/Resources/public/js/app/common/mapping.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/widget/Pd.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/mapping_pd.js'  
-  '@GaoC5Bundle/Resources/public/js/app/default/widget/Gd.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/mapping_gd.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/widget/History.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/mapping_history.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/widget/UploadImage.js'
-  '@GaoC5Bundle/Resources/public/js/app/default/mapping_dispute.js'
-
-  '@GaoC5Bundle/Resources/public/js/app/routing.js'%}
+  '@GaoAdminBundle/Resources/public/js/app/routing.js'%}
   <script type="text/javascript" src="{{ asset_url }}"></script>
 
   {% endjavascripts %}

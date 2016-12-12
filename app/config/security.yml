@@ -39,7 +39,7 @@ security:
           path: /admin
         security: true
         anonymous: true
-      main:
+      general_area:
         pattern: /.*
         provider: chain_provider
         form_login:
@@ -59,6 +59,7 @@ security:
 
 
     access_control:
+      - { path: /_wdt/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /admin/forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -72,5 +73,6 @@ security:
       - { path: /bundles/gaoadmin/css/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoadmin/images/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoadmin/fonts/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /.*, roles: ROLE_USER }      
       - { path: /admin/.*, roles: ROLE_ADMIN }
-      - { path: /.*, roles: ROLE_USER }
+      
