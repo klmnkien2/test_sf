@@ -26,13 +26,13 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
     
     public function onAuthenticationSuccess(Request $request, TokenInterface $token)
     {
-        if ($this->security->isGranted('ROLE_USER'))
+        if ($this->security->isGranted('ROLE_ADMIN'))
         {
-//             $this->container->get('security_user_service')->updateLastLogin($token->getUser());
-//             // redirect the user to where they were before the login process begun.
-//             // $referer_url = $request->headers->get('referer');
+            $this->container->get('admin_service')->updateLastLogin($token->getUser());
+            // redirect the user to where they were before the login process begun.
+            // $referer_url = $request->headers->get('referer');
 
-//             $response = new RedirectResponse($this->router->generate('gao_c5_homepage'));
+            $response = new RedirectResponse($this->router->generate('gao_admin_homepage'));
         }
 
         return $response;

@@ -25,26 +25,47 @@
 {% endblock noscript %}
 
 {% block header %}
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="collapse navbar-collapse navbar-right">
+        {% if is_granted('ROLE_ADMIN') %}
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <strong>{{ app.user.username }}</strong>
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Edit</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="{{ path('admin_logout') }}">Logout</a></li>
+                </ul>
+              </li>
+            </ul>
+        {% else %}
+            <a href="{{ path('admin_login_register') }}" class="btn btn-default navbar-btn">Register</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
 {% endblock header %}
 
 {% block contents %}
-<div class="admin-wrapper">
-  <div class="admin-sidebar">
-    {% block contents_aside %}
-      {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'modify_date': ''} only %}
-    {% endblock contents_aside %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        {% block contents_main %}
+        {% endblock contents_main %}
+      </div>
+    </div>
   </div>
-  <div class="admin-content">
-    {% block contents_main %}
-    {% endblock contents_main %}
-    {% block popup_bottom %}
-    {% endblock %}
-  </div>
-</div>
+
+  {% block popup_bottom %}
+  {% endblock %}
 {% endblock contents %}
 
 {% block footer %}
-  <footer class="admin-footer">
+  <footer>
     <p class="text-center">
       Copyright &copy; 2016 <a class="brand" href="index.html">My administration</a>. All rights reserved.
     </p>

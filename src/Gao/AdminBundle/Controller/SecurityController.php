@@ -57,4 +57,27 @@ class SecurityController extends Controller
             'GaoAdminBundle:Security:forgot.html.twig'
         );
     }
+
+    public function registerAction(Request $request)
+    {
+        $session = $request->getSession();
+    
+        $post = Request::createFromGlobals();
+        if ($post->request->has('submit')) {
+            if (!$this->get('form.csrf_provider')->isCsrfTokenValid('forgot_password', $post->request->get('csrf_token'))) {
+                var_dump("token wrong!");die;
+            }
+            $email = $post->request->get('email');
+            $username = $post->request->get('username');
+    
+            $session->getFlashBag()->add('success', 'He thong da gui thong tin cap nhat tai khoan cho ban. Vui long kiem tra email cua ban.');
+    
+            //$messageTemplate = $this->getParameter('email_forgot_message');
+            //$message = sprintf($messageTemplate, $email, $username);
+        }
+    
+        return $this->render(
+            'GaoAdminBundle:Security:register.html.twig'
+        );
+    }
 }

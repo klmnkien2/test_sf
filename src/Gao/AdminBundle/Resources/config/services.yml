@@ -6,4 +6,6 @@ services:
             - { name: 'monolog.logger', channel: 'security' }
     admin.sha256salted_encoder:
         class: Gao\AdminBundle\Service\Sha256Salted
-
+    admin_service:
+        class: Gao\AdminBundle\Service\AdminService
+        arguments: [@doctrine.orm.entity_manager, @service_container]

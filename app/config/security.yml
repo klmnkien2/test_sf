@@ -2,11 +2,14 @@ security:
     encoders:
       Gao\C5Bundle\Entity\Users:
         id: sha256salted_encoder
-      Gao\C5Bundle\Entity\Admin:
+      Gao\AdminBundle\Entity\Admin:
         id: admin.sha256salted_encoder
     role_hierarchy:
       ROLE_SUPER_ADMIN: [ROLE_ADMIN]
     providers:
+      admin_db_provider:
+        entity:
+          class: Gao\AdminBundle\Entity\Admin
       chain_provider:
         chain:
           providers: [in_memory, our_db_provider]
@@ -17,9 +20,6 @@ security:
       our_db_provider:
         entity:
           class: Gao\C5Bundle\Entity\Users
-      admin_db_provider:
-        entity:
-          class: Gao\C5Bundle\Entity\Admin
 
     firewalls:
       admin_secured_area:
@@ -62,6 +62,7 @@ security:
       - { path: /_wdt/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /admin/forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /admin/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /c5/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
@@ -73,6 +74,6 @@ security:
       - { path: /bundles/gaoadmin/css/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoadmin/images/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoadmin/fonts/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-      - { path: /.*, roles: ROLE_USER }      
       - { path: /admin/.*, roles: ROLE_ADMIN }
+      - { path: /.*, roles: ROLE_USER }
       

@@ -20,7 +20,7 @@ class AdminRepository extends EntityRepository implements UserProviderInterface
 
     public function refreshUser(UserInterface $user)
     {
-        if (!$user instanceof Users) {
+        if (!$user instanceof Admin) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
     

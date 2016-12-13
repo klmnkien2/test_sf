@@ -8,6 +8,14 @@ admin_login_check:
 admin_logout:
   pattern: /admin/logout
 
+admin_login_forgot:
+  path: /admin/forgot
+  defaults: { _controller: GaoAdminBundle:Security:forgot }
+
+admin_login_register:
+  path: /admin/register
+  defaults: { _controller: GaoAdminBundle:Security:register }
+
 gao_admin:
     resource: "@GaoAdminBundle/Resources/config/routing.yml"
     prefix:   /admin

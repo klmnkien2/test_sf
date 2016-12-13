@@ -1,6 +1,7 @@
 Gao\AdminBundle\Entity\Admin:
     type: entity
     table: admin
+    repositoryClass: Gao\AdminBundle\Entity\AdminRepository
     id:
         id:
             type: integer
