@@ -1,5 +1,8 @@
 {% extends 'GaoAdminBundle::layout.html.twig' %}
 
 {% block contents_main %}
-Hello {{ name }}!
+  <div class="container-fluid">
+    <h4>Welcome <strong>{{ app.security.getToken().getUser().getUsername() }}</strong></h4>
+    <h4>Last login: <strong>{{ app.security.getToken().getUser().lastLogin()|date('d/m/Y H:i:s') }}</strong> </h4>
+  </div>
 {% endblock contents_main %}

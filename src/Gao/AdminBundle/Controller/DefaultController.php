@@ -8,6 +8,6 @@ class DefaultController extends Controller
 {
     public function indexAction()
     {
-        return $this->render('GaoAdminBundle:Default:index.html.twig', array('name' => 'test'));
+        return $this->render('GaoAdminBundle:Default:index.html.twig');
     }
 }
