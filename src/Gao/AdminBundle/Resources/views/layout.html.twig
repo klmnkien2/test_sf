@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+{% extends "::base_admin.html.twig" %}
 {% block datapage %}data-pageId="no_match"{% endblock %}
 {% block meta %}
   <meta charset="utf-8">
@@ -8,63 +8,72 @@
 {% endblock meta %}
 {% block title %}{% endblock title %}
 {% block stylesheets %}
-  <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
   {% stylesheets filter='cssrewrite'
   output='bundles/gaoadmin/css/admin.css'
 
-  'bundles/gaoadmin/plugin/bootstrap-3.3.7/css/bootstrap.min.css'
-  'bundles/gaoadmin/plugin/bootstrap-3.3.7/css/bootstrap-theme.min.css'
-  'bundles/gaoadmin/css/bootstrap_reponsive_nav_menu.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/bootstrap/css/bootstrap.min.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/dist/css/AdminLTE.min.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/dist/css/skins/_all-skins.min.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/datepicker/datepicker3.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css'
   
   'bundles/gaoadmin/css/style.css'%}
   <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
   {% endstylesheets %}
 {% endblock stylesheets %}
+
+{% block body_class %}hold-transition skin-blue sidebar-mini{% endblock %}
+
 {% block noscript %}
   <p>This site using javascript, please enable it.</p>
 {% endblock noscript %}
 
-{% block header %}
-{% endblock header %}
-
 {% block contents %}
-<div class="admin-wrapper">
-  <div class="admin-sidebar">
-    {% block contents_aside %}
-      {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'modify_date': ''} only %}
-    {% endblock contents_aside %}
+  <div class="wrapper">
+    {% include "GaoAdminBundle:mod:header.html.twig" %}
+    {% include "GaoAdminBundle:mod:sidebar.html.twig" with { active: [] } only %}
+    <div class="content-wrapper">
+      {% block contents_main %}
+      {% endblock contents_main %}
+      {% block popup_bottom %}
+      {% endblock popup_bottom %}
+    </div>
+    {% include "GaoAdminBundle:mod:footer.html.twig" %}
   </div>
-  <div class="admin-content">
-    {% block contents_main %}
-    {% endblock contents_main %}
-    {% block popup_bottom %}
-    {% endblock %}
-  </div>
-</div>
+  
 {% endblock contents %}
 
 {% block footer %}
-  <footer class="admin-footer">
-    <p class="text-center">
-      Copyright &copy; 2016 <a class="brand" href="index.html">My administration</a>. All rights reserved.
-    </p>
-  </footer>
+  
 {% endblock footer %}
 
 {% block javascripts %}
 
-  {% javascripts
-  output='bundles/gaoadmin/js/admin.js'
+  {% javascripts output='bundles/gaoadmin/js/admin.js'
 
-  '@GaoAdminBundle/Resources/public/js/library/jquery/jquery-1.11.0.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/jQuery/jquery-2.2.3.min.js'
 
-  '@GaoAdminBundle/Resources/public/js/library/joo/joo.js'
-  '@GaoAdminBundle/Resources/public/js/library/routing/routing.js'
+    '@GaoAdminBundle/Resources/public/js/library/joo/joo.js'
+    '@GaoAdminBundle/Resources/public/js/library/routing/routing.js'
 
-  '@GaoAdminBundle/Resources/public/plugin/bootstrap-3.3.7/js/bootstrap.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/bootstrap/js/bootstrap.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/iCheck/icheck.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/datepicker/bootstrap-datepicker.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/slimScroll/jquery.slimscroll.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/fastclick/fastclick.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/dist/js/app.min.js'
 
-  '@GaoAdminBundle/Resources/public/js/app/routing.js'%}
-  <script type="text/javascript" src="{{ asset_url }}"></script>
+    '@GaoAdminBundle/Resources/public/js/app/no_match/mapping.js'
+    '@GaoAdminBundle/Resources/public/js/app/common/widget/GlobalSetup.js'
+    '@GaoAdminBundle/Resources/public/js/app/common/mapping.js'
+
+    '@GaoAdminBundle/Resources/public/js/app/routing.js'%}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
 
   {% endjavascripts %}
     <script>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html {% block datapage %}{% endblock%}>
+    <head>
+        {% block meta %}{% endblock meta %}
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+        <noscript>
+            {% block noscript %}{% endblock %}
+        </noscript>
+        {% block contents %}{% endblock %}
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>
