@@ -1,3 +1,31 @@
 gao_admin_homepage:
     path:     /
     defaults: { _controller: GaoAdminBundle:Default:index }
+
+gao_admin_account_list:
+    path:     /account/list
+    defaults: { _controller: GaoAdminBundle:Admin:list }
+
+gao_admin_account_new:
+    path:     /account/new
+    defaults: { _controller: GaoAdminBundle:Admin:new }
+
+gao_admin_account_profile:
+    path:     /account/profile
+    defaults: { _controller: GaoAdminBundle:Admin:profile }
+
+gao_admin_account_edit:
+    path:     /account/edit
+    defaults: { _controller: GaoAdminBundle:Admin:edit }
+
+gao_admin_user_list:
+    path:     /user/list
+    defaults: { _controller: GaoAdminBundle:User:list }
+
+gao_admin_user_new:
+    path:     /user/new
+    defaults: { _controller: GaoAdminBundle:User:new }
+
+gao_admin_user_edit:
+    path:     /user/edit
+    defaults: { _controller: GaoAdminBundle:User:edit }
