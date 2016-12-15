@@ -4,7 +4,7 @@
    * this widget manage global header
    */
   def(function () {
-    this.popupMessage = $('#popup-message');
+    
   }).as(
     'app.common.widget.GlobalSetup'
   ).it.provides({
@@ -15,9 +15,11 @@
        *  manage an event
        */
       initialize: function () {
-    	  this.popupMessage.dialog({
-		    autoOpen : false, modal : true, show : "blind", hide : "blind"
-		  });
+        $('input').iCheck({
+          checkboxClass: 'icheckbox_square-blue',
+          radioClass: 'iradio_square-blue',
+          increaseArea: '20%' // optional
+        });
       }
   });
 }(jQuery, require_joo()));

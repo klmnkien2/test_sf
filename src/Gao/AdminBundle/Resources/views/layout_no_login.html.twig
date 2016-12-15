@@ -1,0 +1,65 @@
+{% extends "::base.html.twig" %}
+{% block datapage %}data-pageId="no_match"{% endblock %}
+{% block meta %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  {% block others_meta %}{% endblock others_meta %}
+{% endblock meta %}
+{% block title %}{% endblock title %}
+{% block stylesheets %}
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+  {% stylesheets filter='cssrewrite'
+  output='bundles/gaoadmin/css/admin.css'
+
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/bootstrap/css/bootstrap.min.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/dist/css/AdminLTE.min.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/iCheck/square/blue.css'
+
+  'bundles/gaoadmin/css/style.css'%}
+  <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
+  {% endstylesheets %}
+{% endblock stylesheets %}
+{% block noscript %}
+  <p>This site using javascript, please enable it.</p>
+{% endblock noscript %}
+
+{% block header %}
+{% endblock header %}
+
+{% block contents %}
+  {% block contents_main %}
+  {% endblock contents_main %}
+
+  {% block popup_bottom %}
+  {% endblock popup_bottom %}
+{% endblock contents %}
+
+{% block footer %}
+
+{% endblock footer %}
+
+{% block javascripts %}
+
+  {% javascripts
+  output='bundles/gaoadmin/js/admin.js'
+
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/jQuery/jquery-2.2.3.min.js'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/bootstrap/js/bootstrap.min.js'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/iCheck/icheck.min.js'
+
+  '@GaoAdminBundle/Resources/public/js/library/joo/joo.js'
+  '@GaoAdminBundle/Resources/public/js/library/routing/routing.js'
+
+  '@GaoAdminBundle/Resources/public/js/app/routing.js'%}
+  <script type="text/javascript" src="{{ asset_url }}"></script>
+
+  {% endjavascripts %}
+    <script>
+      //Some global things
+    </script>
+{% endblock javascripts %}
+
