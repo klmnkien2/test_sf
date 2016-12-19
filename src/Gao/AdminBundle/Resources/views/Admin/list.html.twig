@@ -20,14 +20,26 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
+          {% for flashMessage in app.session.flashbag.get('success') %}
+            <div class="alert alert-info alert-dismissible">
+                {{ flashMessage }}
+            </div>
+          {% endfor %}
+          {% for flashMessage in app.session.flashbag.get('unsuccess') %}
+            <div class="alert alert-danger alert-dismissible">
+                {{ flashMessage }}
+            </div>
+          {% endfor %}
           <table id="prg-adminTable" class="table table-bordered table-hover">
             <thead>
               <tr>
+                <th>#ID</th>
                 <th>Username</th>
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Last login</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>

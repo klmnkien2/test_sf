@@ -19,5 +19,5 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  */
 class BizException extends Exception
 {
-    public $redirectResponse;
+    public $redirect;
 }

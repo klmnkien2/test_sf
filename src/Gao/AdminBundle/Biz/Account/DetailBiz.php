@@ -41,13 +41,20 @@ class DetailBiz
         // process the form on POST
         if ($request->isMethod('POST')) {
             if ($form->isValid()) {
-                //var_dump($admin);die;
-                $this->container->get('admin_service')->saveEntity($admin);
+                if (!$admin->getId() && $this->container->get('admin_service')->isExist($admin->getUsername())) {
+                    $session = $request->getSession();
+                    $session->getFlashBag()->add('unsuccess', 'Username have been used');
+                } else {
+                    $this->container->get('admin_service')->saveEntity($admin);
 
-                $session = $this->getRequest()->getSession();
-                $session->getFlashBag()->add('success', 'An admin have been saved!');
+                    $session = $request->getSession();
+                    $session->getFlashBag()->add('success', 'An admin have been saved!');
 
-                return $this->redirect($this->container->get('router')->generate('gao_admin_account_list'));
+                    $exception = new BizException();
+                    $exception->redirect = $this->container->get('router')->generate('gao_admin_account_list');
+
+                    throw $exception;
+                }
             }
         }
 

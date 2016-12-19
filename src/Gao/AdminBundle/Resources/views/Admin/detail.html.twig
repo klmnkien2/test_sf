@@ -30,6 +30,16 @@
                 {{ form_errors(form) }}
               </div>
             {% endif %}
+            {% for flashMessage in app.session.flashbag.get('success') %}
+              <div class="alert alert-info alert-dismissible">
+                  {{ flashMessage }}
+              </div>
+            {% endfor %}
+            {% for flashMessage in app.session.flashbag.get('unsuccess') %}
+              <div class="alert alert-danger alert-dismissible">
+                  {{ flashMessage }}
+              </div>
+            {% endfor %}
             {{ form_row(form.username, { 'attr': {'class': 'form-control' } }) }}
             {{ form_row(form.password, { 'attr': {'class': 'form-control' } }) }}
             {{ form_row(form.fullName, { 'attr': {'class': 'form-control' } }) }}

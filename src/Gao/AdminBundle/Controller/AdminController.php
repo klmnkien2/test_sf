@@ -19,6 +19,9 @@ class AdminController extends Controller
 
             return $this->render('GaoAdminBundle:Admin:detail.html.twig', $params);
         } catch (BizException $ex) {
+            if ($ex->redirect) {
+                return $this->redirect($ex->redirect);
+            }
             throw new NotFoundHttpException($ex->getMessage());
         }
     }
