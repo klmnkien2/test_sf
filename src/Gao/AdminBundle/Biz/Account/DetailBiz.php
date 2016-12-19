@@ -5,6 +5,8 @@ namespace Gao\AdminBundle\Biz\Account;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Symfony\Component\HttpFoundation\Request;
 use Gao\AdminBundle\Biz\BizException;
+use Gao\AdminBundle\Entity\Admin;
+use Gao\AdminBundle\Form\AdminType;
 
 /**
  * Class: DetailBiz.
@@ -26,31 +28,31 @@ class DetailBiz
         $this->container = $container;
     }
 
-    public function main($transaction_id)
+    public function main($id = null)
     {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        if (empty($transaction_id)) {
-            throw new BizException('transaction id null.');
+        $adminUser = $this->container->get('security.context')->getToken()->getUser();
+        // Get request object.
+        $request = $this->container->get('request');
+
+        $admin = new Admin();
+        $form = $this->container->get('form.factory')->create(new AdminType(), $admin);
+        $form->handleRequest($request);
+
+        // process the form on POST
+        if ($request->isMethod('POST')) {
+            if ($form->isValid()) {
+                //var_dump($admin);die;
+                $this->container->get('admin_service')->saveEntity($admin);
+
+                $session = $this->getRequest()->getSession();
+                $session->getFlashBag()->add('success', 'An admin have been saved!');
+
+                return $this->redirect($this->container->get('router')->generate('gao_admin_account_list'));
+            }
         }
 
-        $params = $this->prepareData($user, $transaction_id);
-
-        $post = Request::createFromGlobals();
-        if ($post->request->has('submit')) {
-            $data = [
-                'transaction_id' => $transaction_id,
-                'message' => $post->request->get('message'),
-                'attachment' => $post->request->get('attachment')
-            ];
-            $this->formProcess($user, $data, $params);
-        }
-
-        $dispute = $params['dispute'];
-        $attachment_array = $params['attachment_array'];
         return array(
-            'message' => $dispute?$dispute->getMessage():null,
-            'attachment_array' => $attachment_array,
-            'id' => $dispute?$dispute->getId():null
+            'form' => $form->createView()
         );
     }
 

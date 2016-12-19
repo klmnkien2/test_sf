@@ -16,6 +16,7 @@
   output='bundles/gaoadmin/css/admin.css'
 
   'bundles/gaoadmin/plugin/AdminLTE-2.3.7/bootstrap/css/bootstrap.min.css'
+  'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/datatables/dataTables.bootstrap.css'
   'bundles/gaoadmin/plugin/AdminLTE-2.3.7/dist/css/AdminLTE.min.css'
   'bundles/gaoadmin/plugin/AdminLTE-2.3.7/dist/css/skins/_all-skins.min.css'
   'bundles/gaoadmin/plugin/AdminLTE-2.3.7/plugins/datepicker/datepicker3.css'
@@ -37,10 +38,21 @@
     {% include "GaoAdminBundle:mod:header.html.twig" %}
     {% include "GaoAdminBundle:mod:sidebar.html.twig" with { active: [] } only %}
     <div class="content-wrapper">
-      {% block contents_main %}
-      {% endblock contents_main %}
-      {% block popup_bottom %}
-      {% endblock popup_bottom %}
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          {% block content_header %}{% endblock %}
+        </h1>
+        <ol class="breadcrumb">
+          {% block content_breadcrumb %}{% endblock %}
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+        {% block contents_main %}{% endblock contents_main %}
+        {% block popup_bottom %}{% endblock popup_bottom %}
+      </section>
     </div>
     {% include "GaoAdminBundle:mod:footer.html.twig" %}
   </div>
@@ -64,6 +76,8 @@
     '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/iCheck/icheck.min.js'
     '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/datepicker/bootstrap-datepicker.js'
     '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/datatables/jquery.dataTables.min.js'
+    '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/datatables/dataTables.bootstrap.min.js'
     '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/slimScroll/jquery.slimscroll.min.js'
     '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/plugins/fastclick/fastclick.js'
     '@GaoAdminBundle/Resources/public/plugin/AdminLTE-2.3.7/dist/js/app.min.js'
@@ -71,6 +85,8 @@
     '@GaoAdminBundle/Resources/public/js/app/no_match/mapping.js'
     '@GaoAdminBundle/Resources/public/js/app/common/widget/GlobalSetup.js'
     '@GaoAdminBundle/Resources/public/js/app/common/mapping.js'
+    '@GaoAdminBundle/Resources/public/js/app/admin/widget/List.js'
+    '@GaoAdminBundle/Resources/public/js/app/admin/mapping.js'
 
     '@GaoAdminBundle/Resources/public/js/app/routing.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>

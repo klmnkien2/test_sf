@@ -10,6 +10,10 @@
       id: 'no_match',
       to: 'app.no_match.mapping'
     });
+    map.go({
+      id: 'admin',
+      to: 'app.admin.mapping'
+    });
   }, function getId() {
     var root = $(document.documentElement);
     return root.data('pageid') || 'no-match';

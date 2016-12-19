@@ -6,6 +6,10 @@ gao_admin_account_list:
     path:     /account/list
     defaults: { _controller: GaoAdminBundle:Admin:list }
 
+gao_admin_account_list_ajax:
+    path:     /account/ajax_list
+    defaults: { _controller: GaoAdminBundle:Admin:ajaxList }
+
 gao_admin_account_new:
     path:     /account/new
     defaults: { _controller: GaoAdminBundle:Admin:new }

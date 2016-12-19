@@ -400,7 +400,7 @@ class Admin implements AdvancedUserInterface, \Serializable
      */
     public function getRoles()
     {
-        return array('ROLE_ADMIN');
+        return array($this->role);
     }
     
     public function eraseCredentials()

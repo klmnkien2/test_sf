@@ -15,7 +15,7 @@ class AdminController extends Controller
     public function newAction()
     {
         try {
-            $params = $this->get('admin_detail_biz')->main();
+            $params = $this->get('admin.account_detail_biz')->main();
 
             return $this->render('GaoAdminBundle:Admin:detail.html.twig', $params);
         } catch (BizException $ex) {
@@ -31,7 +31,7 @@ class AdminController extends Controller
 
             $id = $request->query->get('id');
 
-            $params = $this->get('admin_detail_biz')->main($id);
+            $params = $this->get('admin.account_detail_biz')->main($id);
 
             return $this->render('GaoAdminBundle:Admin:detail.html.twig', $params);
         } catch (BizException $ex) {
@@ -42,17 +42,18 @@ class AdminController extends Controller
     public function listAction()
     {
         try {
-            // Get request object.
-            $request = $this->getRequest();
+            return $this->render('GaoAdminBundle:Admin:list.html.twig');
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
 
-            // Get query parameter.
-            $page = $request->query->get('page', 1);
-            $sort = $request->query->get('sort', 'non');
+    public function ajaxListAction()
+    {
+        try {
+            $response = $this->get('admin_service')->getAdminByUserId(null, null);
 
-            //Call biz logic
-            $params = $this->get('admin_list_biz')->mainList($usr, $page, 10, $sort);
-
-            return $this->render('GaoAdminBundle:Admin:list.html.twig', $params);
+            return new JsonResponse($response);
         } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
