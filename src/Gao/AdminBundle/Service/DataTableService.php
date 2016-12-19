@@ -151,7 +151,7 @@ class DataTableService {
                 $column = $columns[ $columnIdx ];
 
                 if ( $requestColumn['searchable'] == 'true' ) {
-                    $binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
+                    $binding = self::bind( $bindings, '%'.$str.'%', \PDO::PARAM_STR );
                     $globalSearch[] = "`".$column['db']."` LIKE ".$binding;
                 }
             }
@@ -168,7 +168,7 @@ class DataTableService {
 
                 if ( $requestColumn['searchable'] == 'true' &&
                  $str != '' ) {
-                    $binding = self::bind( $bindings, '%'.$str.'%', PDO::PARAM_STR );
+                    $binding = self::bind( $bindings, '%'.$str.'%', \PDO::PARAM_STR );
                     $columnSearch[] = "`".$column['db']."` LIKE ".$binding;
                 }
             }
@@ -433,7 +433,7 @@ class DataTableService {
                 "mysql:host={$sql_details['host']};dbname={$sql_details['db']}",
                 $sql_details['user'],
                 $sql_details['pass'],
-                array( PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION )
+                array( \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION )
             );
         }
         catch (PDOException $e) {
@@ -484,7 +484,7 @@ class DataTableService {
         }
 
         // Return all
-        return $stmt->fetchAll();
+        return $stmt->fetchAll( \PDO::FETCH_BOTH  );
     }
 
 
