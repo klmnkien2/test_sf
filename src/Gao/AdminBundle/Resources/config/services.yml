@@ -16,9 +16,18 @@ services:
     admin.account_list_biz:
         class: Gao\AdminBundle\Biz\Account\ListBiz
         arguments: [@service_container]
+    admin.user_detail_biz:
+        class: Gao\AdminBundle\Biz\User\DetailBiz
+        arguments: [@service_container]
+    admin.user_list_biz:
+        class: Gao\AdminBundle\Biz\User\ListBiz
+        arguments: [@service_container]
     #================================
     # SERVICES DEFINED
     #================================
     admin_service:
         class: Gao\AdminBundle\Service\AdminService
+        arguments: [@doctrine.orm.entity_manager, @service_container]
+    admin.user_service:
+        class: Gao\AdminBundle\Service\UserService
         arguments: [@doctrine.orm.entity_manager, @service_container]

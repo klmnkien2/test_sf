@@ -10,14 +10,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Gao\AdminBundle\Biz\BizException;
 use Symfony\Component\Validator\Constraints;
 
-class AdminController extends Controller
+class UserController extends Controller
 {
     public function newAction()
     {
         try {
-            $params = $this->get('admin.account_detail_biz')->main();
+            $params = $this->get('admin.user_detail_biz')->main();
 
-            return $this->render('GaoAdminBundle:Admin:detail.html.twig', $params);
+            return $this->render('GaoAdminBundle:User:detail.html.twig', $params);
         } catch (BizException $ex) {
             if ($ex->redirect) {
                 return $this->redirect($ex->redirect);
@@ -34,9 +34,9 @@ class AdminController extends Controller
 
             $id = $request->query->get('id');
 
-            $params = $this->get('admin.account_detail_biz')->main($id);
+            $params = $this->get('admin.user_detail_biz')->main($id);
 
-            return $this->render('GaoAdminBundle:Admin:detail.html.twig', $params);
+            return $this->render('GaoAdminBundle:User:detail.html.twig', $params);
         } catch (BizException $ex) {
             if ($ex->redirect) {
                 return $this->redirect($ex->redirect);
@@ -52,14 +52,14 @@ class AdminController extends Controller
             $token = $request->query->get('token');
             $id = $request->query->get('id');
 
-            if (!$this->get('form.csrf_provider')->isCsrfTokenValid('admin_list', $token)) {
+            if (!$this->get('form.csrf_provider')->isCsrfTokenValid('user_list', $token)) {
                 $this->get('session')->getFlashBag()->add('unsuccess', 'Woops! Token invalid!');
             } else {
-                $this->get('admin_service')->removeEntity($id);
-                $this->get('session')->getFlashBag()->add('success', 'An admin have been removed.');
+                $this->get('admin.user_service')->removeEntity($id);
+                $this->get('session')->getFlashBag()->add('success', 'An user have been removed.');
             }
 
-            $listPath = $this->container->get('router')->generate('gao_admin_account_list');
+            $listPath = $this->container->get('router')->generate('gao_admin_user_list');
             return $this->redirect($listPath);
         } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
@@ -69,7 +69,7 @@ class AdminController extends Controller
     public function listAction()
     {
         try {
-            return $this->render('GaoAdminBundle:Admin:list.html.twig');
+            return $this->render('GaoAdminBundle:User:list.html.twig');
         } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
@@ -78,8 +78,8 @@ class AdminController extends Controller
     public function ajaxListAction()
     {
         try {
-            $token = $this->get('form.csrf_provider')->generateCsrfToken('admin_list');
-            $response = $this->get('admin_service')->getAdminTable(null, $token);
+            $token = $this->get('form.csrf_provider')->generateCsrfToken('user_list');
+            $response = $this->get('admin.user_service')->getDataTable(null, $token);
 
             return new JsonResponse($response);
         } catch (BizException $ex) {

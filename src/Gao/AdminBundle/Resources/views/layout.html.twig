@@ -36,7 +36,9 @@
 {% block contents %}
   <div class="wrapper">
     {% include "GaoAdminBundle:mod:header.html.twig" %}
-    {% include "GaoAdminBundle:mod:sidebar.html.twig" with { active: [] } only %}
+    {% block content_sidebar %}
+      {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['dashboard'] } only %}
+    {% endblock %}
     <div class="content-wrapper">
       <!-- Content Header (Page header) -->
       <section class="content-header">
@@ -87,6 +89,8 @@
     '@GaoAdminBundle/Resources/public/js/app/common/mapping.js'
     '@GaoAdminBundle/Resources/public/js/app/admin/widget/List.js'
     '@GaoAdminBundle/Resources/public/js/app/admin/mapping.js'
+    '@GaoAdminBundle/Resources/public/js/app/user/widget/List.js'
+    '@GaoAdminBundle/Resources/public/js/app/user/mapping.js'
 
     '@GaoAdminBundle/Resources/public/js/app/routing.js'%}
     <script type="text/javascript" src="{{ asset_url }}"></script>

@@ -22,9 +22,18 @@ gao_admin_account_edit:
     path:     /account/edit
     defaults: { _controller: GaoAdminBundle:Admin:edit }
 
+gao_admin_account_delete:
+    path:     /account/delete
+    defaults: { _controller: GaoAdminBundle:Admin:delete }
+    requirements: { _method: POST }
+
 gao_admin_user_list:
     path:     /user/list
     defaults: { _controller: GaoAdminBundle:User:list }
+
+gao_admin_user_list_ajax:
+    path:     /user/ajax_list
+    defaults: { _controller: GaoAdminBundle:User:ajaxList }
 
 gao_admin_user_new:
     path:     /user/new
@@ -33,3 +42,8 @@ gao_admin_user_new:
 gao_admin_user_edit:
     path:     /user/edit
     defaults: { _controller: GaoAdminBundle:User:edit }
+
+gao_admin_user_delete:
+    path:     /user/delete
+    defaults: { _controller: GaoAdminBundle:User:delete }
+    requirements: { _method: POST }

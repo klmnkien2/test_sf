@@ -6,7 +6,7 @@
   def(function () {
     
   }).as(
-    'app.admin.widget.List'
+    'app.user_manage.widget.List'
   ).it.provides({
       build: function () {
         this.initialize();
@@ -22,7 +22,7 @@
        * initialize third party lib or somthing...
        */
       initialize: function () {
-        var url = this.getBaseUrl() + "/admin/account/ajax_list";
+        var url = this.getBaseUrl() + "/admin/user/ajax_list";
         var that = this;
         var dt = $('#prg-adminTable').DataTable({
           "processing": true,

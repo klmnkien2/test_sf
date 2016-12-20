@@ -13,13 +13,13 @@ namespace Gao\AdminBundle\Service;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
-use Gao\AdminBundle\Entity\Admin;
+use Gao\C5Bundle\Entity\Users;
 use Gao\AdminBundle\Service\DataTableService;
 
 /**
- * Admin Service.
+ * User Service.
  */
-class AdminService
+class UserService
 {
     /**
      * EntityManager.
@@ -43,18 +43,18 @@ class AdminService
         $this->container = $container;
     }
 
-    public function updateLastLogin(Admin $admin) {
+    public function updateLastLogin(Users $user) {
 
-        $admin->setLastLogin($admin->getCurrentLogin());
-        $admin->setCurrentLogin(new \DateTime("now"));
-        $this->em->persist($admin);
+        $user->setLastLogin($user->getCurrentLogin());
+        $user->setCurrentLogin(new \DateTime("now"));
+        $this->em->persist($user);
         $this->em->flush();
 
     }
 
     public function getEntity($id)
     {
-        return $this->em->getRepository('GaoAdminBundle:Admin')->find($id);
+        return $this->em->getRepository('GaoC5Bundle:Users')->find($id);
     }
 
     public function removeEntity($id)
@@ -68,38 +68,38 @@ class AdminService
 
     public function isExist($username)
     {
-        $check = $this->em->getRepository('GaoAdminBundle:Admin')->findBy( array( 'username' => $username ) );
+        $check = $this->em->getRepository('GaoC5Bundle:Users')->findBy( array( 'username' => $username ) );
         return !empty($check);
     }
 
-    public function saveEntity($admin)
+    public function saveEntity($entity)
     {
-        if ($admin->getPassword()) {
-            $admin->setSalt(uniqid(mt_rand())); // Unique salt for user
+        if ($entity->getPassword()) {
+            $entity->setSalt(uniqid(mt_rand())); // Unique salt for user
 
             // Set encrypted password
-            $encoder = $this->container->get('security.encoder_factory')->getEncoder($admin);
-            $password = $encoder->encodePassword($admin->getPassword(), $admin->getSalt());
-            $admin->setPassword($password);
+            $encoder = $this->container->get('security.encoder_factory')->getEncoder($entity);
+            $password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
+            $entity->setPassword($password);
         }
 
-        $this->em->persist($admin);
+        $this->em->persist($entity);
         $this->em->flush();
     }
 
 
     /**
-     * get transaction from user
+     * get data table from user
      *
-     * @param int     $accountId The id of admin user
-     * @param string  $token     Token to do action
+     * @param int     $userId The id of admin user
+     * @param string  $token  Token to do action
      *
      * @return Array results
      */
-    public function getAdminTable($accountId, $token)
+    public function getDataTable($userId, $token)
     {
         // DB table to use
-        $table = 'admin';
+        $table = 'users';
 
         // Table's primary key
         $primaryKey = 'id';
@@ -112,18 +112,15 @@ class AdminService
             array( 'db' => 'id',        'dt' => 0 ),
             array( 'db' => 'username',  'dt' => 1 ),
             array( 'db' => 'full_name', 'dt' => 2 ),
-            array( 'db' => 'email',     'dt' => 3 ),
-            array( 'db' => 'phone',     'dt' => 4 ),
-            array(
-                'db'        => 'last_login',
-                'dt'        => 5,
-                'formatter' => function( $d, $row ) {
-                    return date( 'jS M y', strtotime($d));
-                }
-            ),
+            array( 'db' => 'phone',     'dt' => 3 ),
+            array( 'db' => 'c_level',   'dt' => 4 ),
+            array( 'db' => 'pd_count',  'dt' => 5 ),
+            array( 'db' => 'pd_total',  'dt' => 6 ),
+            array( 'db' => 'gd_count',  'dt' => 7 ),
+            array( 'db' => 'gd_total',  'dt' => 8 ),
             array(
                 'db'        => 'id',
-                'dt'        => 6,
+                'dt'        => 9,
                 'formatter' => function( $d, $row ) use ($token) {
                     return $this->actionFormatter($d, $token);
                 }
@@ -134,8 +131,8 @@ class AdminService
 
     public function actionFormatter($id, $token)
     {
-        $editlink = $this->container->get('router')->generate('gao_admin_account_edit') . "?id=$id";
-        $deletelink = $this->container->get('router')->generate('gao_admin_account_delete') . "?id=$id&token=$token";
+        $editlink = $this->container->get('router')->generate('gao_admin_user_edit') . "?id=$id";
+        $deletelink = $this->container->get('router')->generate('gao_admin_user_delete') . "?id=$id&token=$token";
         return "<a href='$editlink' class='editlink'>Edit</a> <a href='$deletelink' class='deletelink'>Delete</a>";
     }
 }

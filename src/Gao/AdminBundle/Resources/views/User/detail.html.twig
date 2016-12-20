@@ -1,14 +1,14 @@
 {% extends 'GaoAdminBundle::layout.html.twig' %}
 
-{% block datapage %}data-pageId="admin"{% endblock %}
+{% block datapage %}data-pageId="user_manage"{% endblock %}
 
 {% block content_header %}
-  New Admin
-  <small>Admin's details</small>
+  New User
+  <small>User's details</small>
 {% endblock content_header %}
 
 {% block content_sidebar %}
-  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['admin', 'admin-new'] } only %}
+  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['user', 'user-new'] } only %}
 {% endblock content_sidebar %}
 
 {% block contents_main %}
@@ -17,7 +17,7 @@
       <!-- general form elements -->
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Admin's form</h3>
+          <h3 class="box-title">User's form</h3>
         </div>
         <!-- /.box-header -->
         <!-- form start -->
@@ -33,9 +33,9 @@
             {{ form_row(form.username, { 'attr': {'class': 'form-control' } }) }}
             {{ form_row(form.password, { 'attr': {'class': 'form-control' } }) }}
             {{ form_row(form.fullName, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.role, { 'attr': {'class': 'form-control' } }) }}
             {{ form_row(form.email, { 'attr': {'class': 'form-control' } }) }}
             {{ form_row(form.phone, { 'attr': {'class': 'form-control' } }) }}
+            {{ form_row(form.vcbAccNumber, { 'attr': {'class': 'form-control' } }) }}
           </div>
           <!-- /.box-body -->
     
