@@ -1,8 +1,127 @@
 {% extends 'GaoAdminBundle::layout.html.twig' %}
 
+{% block content_sidebar %}
+  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['dashboard'] } only %}
+{% endblock content_sidebar %}
+
+{% block content_header %}
+  Dashboard
+{% endblock content_header %}
+
 {% block contents_main %}
-  <div class="container-fluid">
-    <h4>Welcome <strong>{{ app.security.getToken().getUser().getUsername() }}</strong></h4>
-    <h4>Last login: <strong>{{ app.security.getToken().getUser().lastLogin()|date('d/m/Y H:i:s') }}</strong> </h4>
+  <!-- Small boxes (Stat box) -->
+  <div class="row">
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-aqua">
+        <div class="inner">
+          <h3>150</h3>
+
+          <p>New Orders</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-bag"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-green">
+        <div class="inner">
+          <h3>53<sup style="font-size: 20px">%</sup></h3>
+
+          <p>Bounce Rate</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-yellow">
+        <div class="inner">
+          <h3>44</h3>
+
+          <p>User Registrations</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-person-add"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+      <!-- small box -->
+      <div class="small-box bg-red">
+        <div class="inner">
+          <h3>65</h3>
+
+          <p>Unique Visitors</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-pie-graph"></i>
+        </div>
+        <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!-- ./col -->
+  </div>
+  <!-- /.row -->
+
+  <div class="row">
+    <div class="col-xs-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Top PD Bank Accounts</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="prg-adminTable" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Vcb Account</th>
+                <th>PD count</th>
+                <th>PD total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
+    <div class="col-xs-6">
+      <div class="box">
+        <div class="box-header with-border">
+          <h3 class="box-title">Top GD Bank Accounts</h3>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body">
+          <table id="prg-adminTable" class="table table-bordered table-hover">
+            <thead>
+              <tr>
+                <th>Vcb Account</th>
+                <th>GD count</th>
+                <th>GD total</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+        <!-- /.box-body -->
+      </div>
+      <!-- /.box -->
+    </div>
   </div>
 {% endblock contents_main %}

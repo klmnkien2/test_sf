@@ -104,6 +104,9 @@ class UserService
         // Table's primary key
         $primaryKey = 'id';
 
+        // Where all
+        $whereResult = array("creator_id=$userId");
+
         // Array of database columns which should be read and sent back to DataTables.
         // The `db` parameter represents the column name in the database, while the `dt`
         // parameter represents the DataTables column identifier. In this case simple
@@ -126,7 +129,7 @@ class UserService
                 }
             )
         );
-        return DataTableService::getData( $_GET, $this->em->getConnection(), $table, $primaryKey, $columns );
+        return DataTableService::getData( $_GET, $this->em->getConnection(), $table, $primaryKey, $columns, $whereResult );
     }
 
     public function actionFormatter($id, $token)

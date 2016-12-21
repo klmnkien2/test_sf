@@ -78,8 +78,9 @@ class UserController extends Controller
     public function ajaxListAction()
     {
         try {
+            $adminUser = $this->container->get('security.context')->getToken()->getUser();
             $token = $this->get('form.csrf_provider')->generateCsrfToken('user_list');
-            $response = $this->get('admin.user_service')->getDataTable(null, $token);
+            $response = $this->get('admin.user_service')->getDataTable($adminUser->getId(), $token);
 
             return new JsonResponse($response);
         } catch (BizException $ex) {

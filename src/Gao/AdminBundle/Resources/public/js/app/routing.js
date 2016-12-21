@@ -18,6 +18,10 @@
       id: 'user_manage',
       to: 'app.user_manage.mapping'
     });
+    map.go({
+      id: 'admin_default',
+      to: 'app.admin_default.mapping'
+    });
   }, function getId() {
     var root = $(document.documentElement);
     return root.data('pageid') || 'no-match';

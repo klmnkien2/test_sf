@@ -78,8 +78,9 @@ class AdminController extends Controller
     public function ajaxListAction()
     {
         try {
+            $adminUser = $this->container->get('security.context')->getToken()->getUser();
             $token = $this->get('form.csrf_provider')->generateCsrfToken('admin_list');
-            $response = $this->get('admin_service')->getAdminTable(null, $token);
+            $response = $this->get('admin_service')->getAdminTable($adminUser->getId(), $token);
 
             return new JsonResponse($response);
         } catch (BizException $ex) {

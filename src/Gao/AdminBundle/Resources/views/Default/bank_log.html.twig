@@ -1,45 +1,34 @@
 {% extends 'GaoAdminBundle::layout.html.twig' %}
 
-{% block datapage %}data-pageId="user_manage"{% endblock %}
+{% block datapage %}data-pageId="admin_default"{% endblock %}
 
 {% block content_sidebar %}
-  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['user', 'user-list'] } only %}
+  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['bank-log'] } only %}
 {% endblock content_sidebar %}
 
 {% block content_header %}
-  User's List Page
-  <small></small>
+  Bank Account Page
+  <small>all logs</small>
 {% endblock content_header %}
-
-{% block content_breadcrumb %}
-  {% include "GaoAdminBundle:mod:breadcrumb.html.twig" %}
-{% endblock content_breadcrumb %}
 
 {% block contents_main %}
   <div class="row">
     <div class="col-xs-12">
       <div class="box">
         <div class="box-header with-border">
-          <h3 class="box-title">User Data Table</h3>
-          <a href="{{ path('gao_admin_user_new') }}" class="btn btn-primary pull-right">Add New</a>
+          <h3 class="box-title">Logging Data Table</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-          {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
-
           <table id="prg-adminTable" class="table table-bordered table-hover">
             <thead>
               <tr>
-                <th>#ID</th>
-                <th>Username</th>
-                <th>Full Name</th>
-                <th>Phone</th>
-                <th>Level</th>
+                <th>Vcb Account</th>
                 <th>PD count</th>
-                <th>PD total</th>
                 <th>GD count</th>
+                <th>PD total</th>
                 <th>GD total</th>
-                <th>Action</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>

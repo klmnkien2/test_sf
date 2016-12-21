@@ -2,6 +2,14 @@ gao_admin_homepage:
     path:     /
     defaults: { _controller: GaoAdminBundle:Default:index }
 
+gao_admin_bank_log:
+    path:     /bank
+    defaults: { _controller: GaoAdminBundle:Default:bank }
+
+gao_admin_bank_log_ajax:
+    path:     /ajax_bank
+    defaults: { _controller: GaoAdminBundle:Default:ajaxBank }
+
 gao_admin_account_list:
     path:     /account/list
     defaults: { _controller: GaoAdminBundle:Admin:list }

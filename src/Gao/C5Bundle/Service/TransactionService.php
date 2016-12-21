@@ -10,6 +10,7 @@ use Gao\C5Bundle\Entity\Pin;
 use Gao\C5Bundle\Entity\Pd;
 use Gao\C5Bundle\Entity\Gd;
 use Gao\C5Bundle\Entity\Transaction;
+use Gao\AdminBundle\Service\DataTableService;
 
 /**
  * TransactionService class.
@@ -457,5 +458,34 @@ EOT;
         }
         
         return $finished;
+    }
+
+    public function getBankLogTable()
+    {
+        // DB table to use
+        $table = 'bank_acc_log';
+
+        // Table's primary key
+        $primaryKey = 'id';
+
+        // Array of database columns which should be read and sent back to DataTables.
+        // The `db` parameter represents the column name in the database, while the `dt`
+        // parameter represents the DataTables column identifier. In this case simple
+        // indexes
+        $columns = array(
+            array( 'db' => 'vcb_acc_number',  'dt' => 0 ),
+            array( 'db' => 'count_gd',        'dt' => 1 ),
+            array( 'db' => 'count_pd',        'dt' => 2 ),
+            array( 'db' => 'total_gd_amount', 'dt' => 3 ),
+            array( 'db' => 'total_pd_amount', 'dt' => 4 ),
+            array( 
+                'db' => 'status',
+                'dt' => 5,
+                'formatter' => function( $d, $row ) {
+                    return $d == 0 ? 'Active' : 'Block';
+                }
+            )
+        );
+        return DataTableService::getData( $_GET, $this->em->getConnection(), $table, $primaryKey, $columns );
     }
 }
