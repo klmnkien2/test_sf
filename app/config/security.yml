@@ -74,6 +74,12 @@ security:
       - { path: /bundles/gaoadmin/css/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoadmin/images/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoadmin/fonts/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /admin/bank, roles: ROLE_SUPER_ADMIN }
+      - { path: /admin/ajax_bank, roles: ROLE_SUPER_ADMIN }
+      - { path: /admin/account/list, roles: ROLE_SUPER_ADMIN }
+      - { path: /admin/account/ajax_list, roles: ROLE_SUPER_ADMIN }
+      - { path: /admin/account/new, roles: ROLE_SUPER_ADMIN }
+      - { path: /admin/account/edit, roles: ROLE_SUPER_ADMIN }
       - { path: /admin/.*, roles: ROLE_ADMIN }
       - { path: /.*, roles: ROLE_USER }
       
