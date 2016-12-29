@@ -107,28 +107,21 @@ class DefaultController extends Controller
                     if (empty($userPd)) {
                         throw new BizException('pd user not exsit with user_id='.$entity->getPdUserId());
                     }
-                    $userPd->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Done']);
-                    $this->container->get('security_user_service')->updateUser($userPd);
-                    //Cap nhat PD
                     $pd = $this->container->get('transaction_service')->getEntityPd($entity->getPdId());
                     if (empty($pd)) {
                         throw new BizException('pd not exsit with pd_id='.$entity->getPdId());
                     }
-                    $pd->setStatus($this->container->getParameter('pd_status')['done']);
-                    $this->container->get('transaction_service')->updateEntity($pd);
+                    $this->container->get('security_user_service')->userFinishPd($userPd, $pd);
                 }
 
                 $finishGd = $this->container->get('transaction_service')->checkGdFinish($entity->getGdId());
                 if ($finishGd) {
-                    $user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Done']);
-                    $this->container->get('security_user_service')->updateUser($user);
                     //Cap nhat GD
                     $gd = $this->container->get('transaction_service')->getEntityGd($entity->getGdId());
                     if (empty($gd)) {
                         throw new BizException('gd not exsit with gd_id='.$entity->getGdId());
                     }
-                    $gd->setStatus($this->container->getParameter('gd_status')['done']);
-                    $this->container->get('transaction_service')->updateEntity($gd);
+                    $this->container->get('security_user_service')->userFinishGd($user, $gd);
                 }
             }
 

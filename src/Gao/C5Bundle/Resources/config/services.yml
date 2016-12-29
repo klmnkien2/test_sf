@@ -55,3 +55,9 @@ services:
         calls:
             - [setItemsLimitPerPage, [%paging.defaults.items_limit_per_page%]]
             - [setPagesLimitInRange, [%paging.defaults.pages_limit_in_range%]]
+
+    # Command
+    match_transaction_command:
+        class: Gao\C5Bundle\Command\MatchTransaction
+        tags: 
+            - { name: console.command }

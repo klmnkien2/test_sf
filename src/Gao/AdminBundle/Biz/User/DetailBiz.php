@@ -40,7 +40,8 @@ class DetailBiz
         if (empty($user)) {
             $user = new Users();
             $user->setCreatorId($adminUser->getId());
-            $user->setCLevel(1);
+            $user->setCLevel(10); // C1
+            $user->setCurrentInterestRate($this->container->getParameter('default_interest_rate'));
             $user->setEmailVerified(1);
             $user->setBlocked(0);
         }

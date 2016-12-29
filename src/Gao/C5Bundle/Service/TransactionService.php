@@ -97,8 +97,8 @@ class TransactionService
         }
     }
 
-    public function checkPinForPd($data) {
-        // $em instanceof EntityManager
+    public function checkPinForPd($data)
+    {
         $response = ['error' => '', 'message' => '', 'pd' => null];
         $this->em->getConnection()->beginTransaction(); // suspend auto-commit
         try {
@@ -109,12 +109,18 @@ class TransactionService
                 $pin = $pin[0];
             }
 
+            $user = $this->em->getRepository('GaoC5Bundle:Users')->find($data['user_id']);
+            if (empty($user)) {
+                throw new BizException('User Account khong ton tai. Vui long thu lai');
+            }
+
             // create new Pd
             $pd = new Pd;
             $pd->setUserId($data['user_id']);
             $pd->setPinId($pin->getId());
             $pd->setPinNumber($pin->getPinNumber());
-            $pd->setAppliedInterestRate(35);
+            $pd->setAppliedInterestRate($user->getCurrentInterestRate());
+            $pd->setPdAmount($this->container->getParameter('default_pd_amount'));
             $pd->setStatus($this->container->getParameter('pd_status')['waiting']);
             $this->em->persist($pd);
             $this->em->flush();
@@ -127,10 +133,10 @@ class TransactionService
             $this->em->flush();
 
             // update pd_gd_state of user
-            $udpateUser = $this->em->getRepository('GaoC5Bundle:Users')->find($data['user_id']);
-            $udpateUser->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Requested']);
-            $udpateUser->setFirstPdDone(1);
-            $this->em->persist($udpateUser);
+            $user->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Requested']);
+            $user->setOutstandingPd($pd->getId());
+
+            $this->em->persist($user);
             $this->em->flush();
 
             $response['message'] = 'Ma PIN dung. Vui long cho de thuc hien tiep';
@@ -221,16 +227,28 @@ class TransactionService
                 $pin = $pin[0];
             }
 
-            // create new Pd
+            $user = $this->em->getRepository('GaoC5Bundle:Users')->find($data['user_id']);
+            if (empty($user)) {
+                throw new BizException('User Account khong ton tai. Vui long thu lai');
+            }
+
+            $pd = $this->em->getRepository('GaoC5Bundle:Pd')->find($user->getOutstandingPd());
+            if (empty($pd)) {
+                throw BizException('Khong tim thay thong tin PD truoc do. Vui long thu lai');
+            }
+
+            // create new Gd
             $gd = new Gd;
             $gd->setUserId($data['user_id']);
             $gd->setPinId($pin->getId());
             $gd->setPinNumber($pin->getPinNumber());
 
-            //May be need set PD, ref infomation
-            $gd->setPdId(-1); // for test only
-            $gd->setPdAmount(5000); // pd_amount
-            $gd->setRefAmount(0); // ref_amount
+            //Update refer information
+            $gd->setPdId($pd->getId());
+            $gd->setPdAmount($pd->getPdAmount());
+            $refAmount = $user->getOutstandingRefAmount()?:0;
+            $gd->setRefAmount($refAmount);
+            $gd->setGdAmount($pd->getPdAmount() * (100 + $pd->getAppliedInterestRate()) / 100 + $refAmount);
 
             $gd->setStatus($this->container->getParameter('gd_status')['waiting']);
             $this->em->persist($gd);
@@ -244,9 +262,10 @@ class TransactionService
             $this->em->flush();
 
             // update pd_gd_state of user
-            $udpateUser = $this->em->getRepository('GaoC5Bundle:Users')->find($data['user_id']);
-            $udpateUser->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Requested']);
-            $this->em->persist($udpateUser);
+            $user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Requested']);
+            $user->setOutstandingRefAmount(0);
+            $user->setOutstandingGd($gd->getId());
+            $this->em->persist($user);
             $this->em->flush();
 
             $response['message'] = 'Ma PIN dung. Vui long cho de thuc hien tiep';

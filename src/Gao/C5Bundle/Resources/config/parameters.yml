@@ -1,4 +1,6 @@
 parameters:
+    default_interest_rate: 30
+    default_pd_amount: 2200000
     pd_gd_state:
         Pending: Pending
         PD_Requested: PD_Requested

@@ -62,4 +62,54 @@ class UserService
         $this->em->persist($user);
         $this->em->flush();
     }
+
+    public function userFinishPd($user, $pd) {
+        $user->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Done']);
+        $user->setLastStateUpdate(new \DateTime("now"));
+        $pdCount = $user->getPdCount();
+        if (empty($pdCount)) {
+            $pdCount = 0;
+        }
+        $user->setPdCount($pdCount + 1);
+        $pdTotal = $user->getPdTotal();
+        if (empty($pdTotal)) {
+            $pdTotal = 0;
+        }
+        $user->setPdTotal($pdTotal + $pd->getPdAmount());
+        if(empty($user->getFirstPdDone())) {
+            $user->setFirstPdDone($pd->getPdAmount());
+        }
+
+        $pd->setStatus($this->container->getParameter('pd_status')['done']);
+
+        $this->em->persist($user);
+        $this->em->flush();
+        $this->em->persist($pd);
+        $this->em->flush();
+    }
+
+    public function userFinishGd($user, $gd) {
+        $user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Done']);
+        $user->setLastStateUpdate(new \DateTime("now"));
+        $gdCount = $user->getGdCount();
+        if (empty($gdCount)) {
+            $gdCount = 0;
+        }
+        $user->setGdCount($gdCount + 1);
+        $gdTotal = $user->getGdTotal();
+        if (empty($gdTotal)) {
+            $gdTotal = 0;
+        }
+        $user->setGdTotal($gdTotal + $gd->getGdAmount());
+        $user->setOutstandingPd(null);
+        $user->setOutstandingGd(null);
+
+        $gd->setStatus($this->container->getParameter('gd_status')['done']);
+
+        $this->em->persist($user);
+        $this->em->flush();
+        $this->em->persist($gd);
+        $this->em->flush();
+    }
+
 }
