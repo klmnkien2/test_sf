@@ -263,7 +263,6 @@ class TransactionService
 
             // update pd_gd_state of user
             $user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Requested']);
-            $user->setOutstandingRefAmount(0);
             $user->setOutstandingGd($gd->getId());
             $this->em->persist($user);
             $this->em->flush();

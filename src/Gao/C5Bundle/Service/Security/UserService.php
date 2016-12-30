@@ -103,6 +103,7 @@ class UserService
         $user->setGdTotal($gdTotal + $gd->getGdAmount());
         $user->setOutstandingPd(null);
         $user->setOutstandingGd(null);
+        $user->setOutstandingRefAmount(0);
 
         $gd->setStatus($this->container->getParameter('gd_status')['done']);
 

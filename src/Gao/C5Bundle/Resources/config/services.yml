@@ -57,7 +57,17 @@ services:
             - [setPagesLimitInRange, [%paging.defaults.pages_limit_in_range%]]
 
     # Command
-    match_transaction_command:
-        class: Gao\C5Bundle\Command\MatchTransaction
-        tags: 
+    app.command.match_transaction_command:
+        class: Gao\C5Bundle\Command\MatchTransactionCommand
+        tags:
+            - { name: console.command }
+
+    app.command.create_pin_command:
+        class: Gao\C5Bundle\Command\CreatePinCommand
+        tags:
+            - { name: console.command }
+
+    app.command.finish_round_command:
+        class: Gao\C5Bundle\Command\FinishRoundCommand
+        tags:
             - { name: console.command }
