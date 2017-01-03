@@ -37,8 +37,11 @@ class MatchTransactionCommand extends ContainerAwareCommand
         try {
             echo "========START========", PHP_EOL;
             $this->init_data();
-            //$this->match_job();
+            $this->getContainer()->get('automation_service')->beginTransaction();
+            $this->match_job();
+            $this->getContainer()->get('automation_service')->commitTransaction();
         } catch (\Exception $ex) {
+            $this->getContainer()->get('automation_service')->rollbackTransaction();
             echo "[ERROR]", $ex->getMessage(), PHP_EOL;
         } finally {
             echo "========FINISH=======", PHP_EOL;
@@ -90,41 +93,53 @@ class MatchTransactionCommand extends ContainerAwareCommand
 
         $total_send = array_sum($this->send_amounts);
         $send_up_to = 0;
+        $last_receive_id = null;
         $total_receive = 0;
-        while ($total_receive <= $total_send && $send_up_to < count($this->receive_amounts)) {
-            $total_receive += $this->receive_amounts[$send_up_to];
-            $send_up_to ++;
+        foreach($this->receive_amounts as $key => $value) {
+            if ($total_receive <= $total_send && $send_up_to < count($this->receive_amounts)) {
+                $total_receive += $value;
+                $send_up_to ++;
+                $last_receive_id = $key;
+            } else {
+                unset($this->receive_amounts[$key]);
+            }
         }
         if ($send_up_to == count($this->receive_amounts) && $total_receive < $total_send) {
-            echo "Bad input", PHP_EOL;
-            return;
+            echo "[NOTICE] Lack PD. Push BOT to GD stack", PHP_EOL;
+            $more_gd = $this->getContainer()->get('automation_service')->getMoreBotGd(3, $total_send - $total_receive);
+            foreach ($more_gd as $gd){
+                $this->receive_amounts[$gd->getId()] = $gd->getGdAmount()?:0;
+                $total_receive += $gd->getGdAmount()?:0;
+            }
         }
-        $send_up_to --;
+
         if ($total_receive == $total_send) {
             // already good!
         } else {
-            $total_receive -= $this->receive_amounts[$send_up_to];
-            $send_up_to --;
+            $total_receive -= $this->receive_amounts[$last_receive_id];
+            unset($this->receive_amounts[$last_receive_id]);
+            // CREATE BOT RECEIVE MONEY
+            $more_gd = $this->getContainer()->get('automation_service')->getMoreBotGd(1, $total_send - $total_receive);
+            foreach ($more_gd as $gd){
+                $this->receive_amounts[$gd->getId()] = $gd->getGdAmount()?:0;
+                $total_receive += $gd->getGdAmount()?:0;
+            }
         }
-        echo "SEND UP TO", $send_up_to , PHP_EOL;
-        echo "TOTAL RECEIVE", $total_receive , PHP_EOL;
-        echo "TOTAL SEND", $total_send , PHP_EOL;
-        $receive_count = count($this->receive_amounts);
-        for ($i = $send_up_to + 1; $i < $receive_count; $i ++) {
-            unset($this->receive_amounts[$i]);
-        }
-        if ($total_send > $total_receive) {
-            $this->receive_amounts[$send_up_to + 1] = $total_send - $total_receive;
-        }
+
+        echo "TOTAL SEND: ", $total_send , PHP_EOL;
+        echo "TOTAL RECEIVE: ", $total_receive , PHP_EOL;
 
         asort($this->send_amounts);
         asort($this->receive_amounts);
 
-        echo "SEND DATA" , PHP_EOL;
+        echo "SEND DATA: " , PHP_EOL;
         print_r($this->send_amounts);
-        echo "RECEIVE DATA" , PHP_EOL;
+        echo "RECEIVE DATA: " , PHP_EOL;
         print_r($this->receive_amounts);
 
+        /**
+         * START ALGORITHM
+         */
         $receive_keys = array_keys($this->receive_amounts);
         $send_keys = array_keys($this->send_amounts);
         $send_full_to = - 1;

@@ -1,0 +1,37 @@
+Gao\C5Bundle\Entity\InterestLog:
+    type: entity
+    table: interest_log
+    id:
+        id:
+            type: integer
+            nullable: false
+            unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        fromUserId:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: from_user_id
+        pdAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: pd_amount
+        interestAmount:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: interest_amount
+        fromUserLevel:
+            type: integer
+            nullable: false
+            unsigned: false
+            column: from_user_level
+        created:
+            type: datetime
+            nullable: true
+            default: CURRENT_TIMESTAMP
+    lifecycleCallbacks: {  }

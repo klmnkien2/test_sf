@@ -8,6 +8,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Gao\C5Bundle\Biz\BizException;
 use Gao\C5Bundle\Entity\Pin;
 use Gao\C5Bundle\Entity\Users;
+use Gao\C5Bundle\Entity\Pd;
+use Gao\C5Bundle\Entity\Gd;
 use Gao\C5Bundle\Entity\Transaction;
 
 /**
@@ -70,27 +72,59 @@ class AutomationService
         return substr(hash_final($hash), 0, 10);
     }
 
-    public function createUserForTest($username, $rawPassword)
+    public function getMoreBotGd($wantedNumber, $wantedAmount)
     {
-        $user = new Users();
-        $user->setUsername($username);
-        $user->setSalt(uniqid(mt_rand())); // Unique salt for user
+        $created_gd = array();
+        $this->em->getConnection()->beginTransaction(); // suspend auto-commit
+        try {
+            $params = array();
+            $params['systemUsers'] = $this->container->getParameter('system_bot_users');
+            $params['pd_gd_state'] = $this->container->getParameter('pd_gd_state')['GD_Matched'];
+    
+            $qr = $this->em->getRepository('GaoC5Bundle:Users')->createQueryBuilder('e');
+            $bot_users = $qr->where('e.pdGdState is null or e.pdGdState != :pd_gd_state')
+            ->andWhere(
+                $qr->expr()->andX(
+                    $qr->expr()->in('e.username', ':systemUsers')
+                )
+            )
+            ->setParameters($params)
+            ->setMaxResults($wantedNumber)
+            ->getQuery()
+            ->getResult();
 
-        // Set encrypted password
-        $encoder = $this->container->get('security.encoder_factory')->getEncoder($user);
-        $password = $encoder->encodePassword($rawPassword, $user->getSalt());
-        $user->setPassword($password);
+            $gdAmount = $wantedAmount / count($bot_users);
 
-        $user->setCreatorId(1);
-        $user->setEmail("$username@c5.com");
-        $user->setCLevel(10);
-        $user->setEmailVerified(1);
-        $user->setBlocked(0);
+            foreach ($bot_users as $gd_user) {
+                $gd = new Gd;
+                $gd->setUserId($gd_user->getId());
+                $gd->setPinId(1);
+                $gd->setPinNumber('bot');
 
-        $this->em->persist($user);
-        $this->em->flush();
+                //Update refer information
+                $gd->setPdId(0);
+                $gd->setPdAmount(0);
+                $gd->setRefAmount(0);
+                $gd->setGdAmount($gdAmount);
+                $gd->setStatus($this->container->getParameter('gd_status')['waiting']);
+                $this->em->persist($gd);
 
-        var_dump($user);
+                $gd_user->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Matched']);
+                $gd_user->setOutstandingGd($gd->getId());
+                $this->em->persist($gd_user);
+                $created_gd[] = $gd;
+            }
+            //After all work commit it
+            $this->em->flush();
+            $this->em->getConnection()->commit();
+        } catch (\Exception $ex) {
+            var_dump($ex->getMessage());
+            //Rollback everything
+            $this->em->getConnection()->rollBack();
+            $created_gd = null;
+        }
+
+        return $created_gd;
     }
 
     public function createTransactionFromPdGd($pd_id, $gd_id, $amount)
@@ -103,7 +137,7 @@ class AutomationService
         if (empty($user_pd)) {
             throw new BizException("USER PD empty.");
         }
-        $gd = $this->em->getRepository('GaoC5Bundle:Pd')->find($pd_id);
+        $gd = $this->em->getRepository('GaoC5Bundle:Gd')->find($gd_id);
         if (empty($gd)) {
             throw new BizException("GD empty.");
         }
@@ -128,15 +162,15 @@ class AutomationService
         $this->em->persist($pd);
         $this->em->flush();
 
-        $user_pd->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Requested']);
+        $user_pd->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Matched']);
         $this->em->persist($user_pd);
         $this->em->flush();
 
-        $gd->setStatus($this->container->getParameter('gd_status')['sending']);
+        $gd->setStatus($this->container->getParameter('gd_status')['receiving']);
         $this->em->persist($gd);
         $this->em->flush();
 
-        $user_gd->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Requested']);
+        $user_gd->setPdGdState($this->container->getParameter('pd_gd_state')['GD_Matched']);
         $this->em->persist($user_gd);
         $this->em->flush();
     }
@@ -183,6 +217,133 @@ class AutomationService
                 $gd_user->setPdGdState('GD_Done');
                 $gd_user->setOutstandingPd(null);
                 $gd_user->setOutstandingGd(null);
+                $this->em->persist($gd_user);
+                $this->em->flush();
+            }
+
+            //After all work commit it
+            $this->em->getConnection()->commit();
+        } catch (\Exception $ex) {
+            var_dump($ex->getMessage());
+            //Rollback everything
+            $this->em->getConnection()->rollBack();
+        }
+    }
+
+    /**
+     * FOR TESTING PURPOSE ONLY
+     */
+    // assume that all people done right thing
+    public function testFinishRound()
+    {
+        $this->em->getConnection()->beginTransaction(); // suspend auto-commit
+        try {
+            // Finish all PD that sending, ban user
+            $pd_user_list = $this->em->getRepository('GaoC5Bundle:Users')->findBy(array('blocked' => 0, 'pdGdState' => 'PD_Matched'));
+            foreach ($pd_user_list as $pd_user) {
+                $pd_user->setPdGdState('PD_Done');
+                $pd_user->setFirstPdDone(1);
+                $this->em->persist($pd_user);
+                $this->em->flush();
+
+                $current_pd = $this->container->get('transaction_service')->getCurrentPdByUser($pd_user->getId());
+                if (!empty($current_pd)) {
+                    $q = $this->em->createQuery('update GaoC5Bundle:Transaction t set t.status = 1, t.approvedDate = :today WHERE t.pdId = :pdId');
+                    $q->execute(['today' => new \DateTime(), 'pdId' => $current_pd->getId()]);
+
+                    $current_pd->setStatus(2);//DONE
+                    $this->em->persist($current_pd);
+                    $this->em->flush();
+                }
+            }
+
+            // Finish all GD that receiving force user to PD
+            $gd_user_list = $this->em->getRepository('GaoC5Bundle:Users')->findBy(array('blocked' => 0, 'pdGdState' => 'GD_Matched'));
+            foreach ($gd_user_list as $gd_user) {
+                $current_gd = $this->container->get('transaction_service')->getCurrentGdByUser($gd_user->getId());
+                if (!empty($current_gd)) {
+                    $current_gd->setStatus(2);//DONE
+                    $this->em->persist($current_gd);
+                    $this->em->flush();
+                }
+
+                $gd_user->setPdGdState('GD_Done');
+                $gd_user->setOutstandingPd(null);
+                $gd_user->setOutstandingGd(null);
+                $this->em->persist($gd_user);
+                $this->em->flush();
+            }
+
+            //After all work commit it
+            $this->em->getConnection()->commit();
+        } catch (\Exception $ex) {
+            var_dump($ex->getMessage());
+            //Rollback everything
+            $this->em->getConnection()->rollBack();
+        }
+    }
+
+    public function resetUser()
+    {
+        $q = $this->em->createQuery('update GaoC5Bundle:Users u set u.blocked = 0, u.pdGdState = NULL, u.firstPdDone = NULL, u.outstandingPd = NULL, u.outstandingGd = NULL');
+        $numUpdated = $q->execute();
+        echo "User updated: ", $numUpdated, PHP_EOL;
+    }
+
+    public function forceRequest() {
+        $this->em->getConnection()->beginTransaction(); // suspend auto-commit
+        try {
+            $systemUsers = $this->container->getParameter('system_bot_users');
+            // Finish all PD that sending, ban user
+            $pd_user_list1 = $this->em->getRepository('GaoC5Bundle:Users')->findBy(array('blocked' => 0, 'pdGdState' => 'GD_Done'));
+            $pd_user_list2 = $this->em->getRepository('GaoC5Bundle:Users')->findBy(array('blocked' => 0, 'pdGdState' => null));
+            $pd_user_list = array_merge($pd_user_list1, $pd_user_list2);
+            foreach ($pd_user_list as $pd_user) {
+                if (in_array($pd_user->getUsername(), $systemUsers)) {
+                    continue;
+                }
+                $pd = new Pd;
+                $pd->setUserId($pd_user->getId());
+                $pd->setPinId(1);
+                $pd->setPinNumber('test');
+                $pd->setAppliedInterestRate($pd_user->getCurrentInterestRate());
+                $pd->setPdAmount($this->container->getParameter('default_pd_amount'));
+                $pd->setStatus($this->container->getParameter('pd_status')['waiting']);
+                $this->em->persist($pd);
+                $this->em->flush();
+
+                $pd_user->setPdGdState('PD_Requested');
+                $pd_user->setOutstandingPd($pd->getId());
+                $this->em->persist($pd_user);
+                $this->em->flush();
+            }
+
+            // Finish all GD that receiving force user to PD
+            $gd_user_list = $this->em->getRepository('GaoC5Bundle:Users')->findBy(array('blocked' => 0, 'pdGdState' => 'PD_Done'));
+            foreach ($gd_user_list as $gd_user) {
+                if (in_array($gd_user->getUsername(), $systemUsers)) {
+                    continue;
+                }
+                $pd = $this->em->getRepository('GaoC5Bundle:Pd')->find($gd_user->getOutstandingPd());
+
+                $gd = new Gd;
+                $gd->setUserId($gd_user->getId());
+                $gd->setPinId(1);
+                $gd->setPinNumber('test');
+
+                //Update refer information
+                $gd->setPdId($pd->getId());
+                $gd->setPdAmount($pd->getPdAmount());
+                $refAmount = $user->getOutstandingRefAmount()?:0;
+                $gd->setRefAmount($refAmount);
+                $gd->setGdAmount($pd->getPdAmount() * (100 + $pd->getAppliedInterestRate()) / 100 + $refAmount);
+
+                $gd->setStatus($this->container->getParameter('gd_status')['waiting']);
+                $this->em->persist($gd);
+                $this->em->flush();
+
+                $gd_user->setPdGdState('GD_Requested');
+                $gd_user->setOutstandingGd($gd->getId());
                 $this->em->persist($gd_user);
                 $this->em->flush();
             }

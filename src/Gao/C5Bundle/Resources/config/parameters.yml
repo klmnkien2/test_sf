@@ -1,5 +1,5 @@
 parameters:
-    system_bot_users: [bot1, bot2, bot3]
+    system_bot_users: [bot1, bot2, bot3, bot4, bot5]
     default_interest_rate: 30
     default_pd_amount: 2200000
     default_tran_base_amount: 700000

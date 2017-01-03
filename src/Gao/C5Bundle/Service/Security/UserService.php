@@ -86,6 +86,9 @@ class UserService
         $this->em->flush();
         $this->em->persist($pd);
         $this->em->flush();
+
+        $this->triggerInterestDirect($user, $pd->getPdAmount());
+        $this->triggerInterestMediate();
     }
 
     public function userFinishGd($user, $gd) {
@@ -113,4 +116,23 @@ class UserService
         $this->em->flush();
     }
 
+    private function triggerInterestDirect($user, $amount)
+    {
+        $refer_id = $user->getRefId();
+        if (empty($refer_id)) {
+            return;
+        }
+        $ref_user = $this->getEntity($refer_id);
+        $refAmount = $ref_user->getOutstandingRefAmount()?:0;
+        $ref_user->setOutstandingRefAmount($refAmount + $amount);
+        $this->em->persist($ref_user);
+        $this->em->flush();
+
+        
+    }
+
+    private function triggerInterestMediate()
+    {
+    
+    }
 }

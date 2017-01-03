@@ -138,6 +138,12 @@ class DefaultController extends Controller
         }
     }
 
+    /**
+     * NOT USING NOW
+     * @throws BizException
+     * @throws NotFoundHttpException
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
     public function tranApproveAjaxAction()
     {
         $response = ['status' => 'unsuccess'];
@@ -239,17 +245,20 @@ class DefaultController extends Controller
 
     public function testAction()
     {
-        // Add a new User
-        //$this->container->get('automation_service')->createUserForTest('test1', '123');
-        //$this->container->get('automation_service')->createUserForTest('test2', '123');
-        //$this->container->get('automation_service')->createUserForTest('test3', '123');
+        $request = $this->getRequest();
+        $action = $request->query->get('action');
+        if ($action == 'reset-user') {
+            $this->get('automation_service')->resetUser();
+        }
 
-        // Create pin
-        //$this->container->get('automation_service')->createPin();
+        if ($action == 'force-request') {
+            $this->get('automation_service')->forceRequest();
+        }
 
-        // Create transaction
-        $this->container->get('automation_service')->createTransaction(1,4, '12345', 1, 5, '90000', 5000);
+        if ($action == 'tran-done') {
+            $this->get('automation_service')->testFinishRound();
+        }
 
-        return new JsonResponse(array('status' => 'DONE'));
+        echo "DONE";die;
     }
 }
