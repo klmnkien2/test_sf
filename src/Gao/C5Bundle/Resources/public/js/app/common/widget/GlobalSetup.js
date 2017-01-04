@@ -4,7 +4,7 @@
    * this widget manage global header
    */
   def(function () {
-    this.popupMessage = $('#popup-message');
+    //this.popupMessage = $('#prg-popup-message');
   }).as(
     'app.common.widget.GlobalSetup'
   ).it.provides({
@@ -15,9 +15,7 @@
        *  manage an event
        */
       initialize: function () {
-    	  this.popupMessage.dialog({
-		    autoOpen : false, modal : true, show : "blind", hide : "blind"
-		  });
+    	  //do something
       }
   });
 }(jQuery, require_joo()));

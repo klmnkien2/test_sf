@@ -15,18 +15,24 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $usr = $this->get('security.context')->getToken()->getUser();
-        return $this->render(
-            'GaoC5Bundle:Default:index.html.twig',
-            array(
-                'error' => 1,
-            )
-        );
+        $pdGdState = $usr->getPdGdState();
+        $allState = $this->container->getParameter('pd_gd_state');
+        if (in_array($pdGdState, [$allState['PD_Done'], $allState['GD_Requested'], $allState['GD_Matched']])) {
+            return $this->gdAction();
+        } else {
+            return $this->pdAction();
+        }
     }
 
     public function pdAction()
     {
         try {
             $usr = $this->get('security.context')->getToken()->getUser();
+            if (!empty($usr->getBlocked()) && $usr->getBlocked()) {
+                $session = $this->get('request')->getSession();
+                $session->getFlashBag()->add('unsuccess', 'Tai khoan dang bi khoa. Vui long tao bang chung cho cac giao dich duoi day.');
+                return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_pd=pd&tran_status=0');
+            }
             //Call biz logic
             $params = $this->get('pd_biz')->main($usr);
 
@@ -40,6 +46,11 @@ class DefaultController extends Controller
     {
         try {
             $usr = $this->get('security.context')->getToken()->getUser();
+            if (!empty($usr->getBlocked()) && $usr->getBlocked()) {
+                $session = $this->get('request')->getSession();
+                $session->getFlashBag()->add('unsuccess', 'Tai khoan dang bi khoa. Vui long tao bang chung cho cac giao dich duoi day.');
+                return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_pd=pd&tran_status=0');
+            }
             //Call biz logic
             $params = $this->get('gd_biz')->main($usr);
 

@@ -61,34 +61,33 @@ class PdBiz
         $firstPdDone = $usr->getFirstPdDone();
         $pdGdState = $usr->getPdGdState();
 
-        if (empty($firstPdDone) || !$firstPdDone) {
-            $mode = 'pin';
-            $message = 'Tai khoan chua tung thuc hien PD. Hay thuc hien PD dau tien.';
-            // need update pd_gd_state
-        } else {
-            $allState = $this->container->getParameter('pd_gd_state');
-            if (empty($pdGdState) || $pdGdState == $allState['Pending']) {
+        $allState = $this->container->getParameter('pd_gd_state');
+        if (empty($pdGdState) || $pdGdState == $allState['Pending']) {
+            if (empty($firstPdDone) || !$firstPdDone) {
+                $mode = 'pin';
+                $message = 'Tai khoan chua tung thuc hien PD. Hay thuc hien PD dau tien.';
+            } else {
                 $mode = 'error';
                 $message = 'Tai khoan chua den thoi gian thuc hien PD. Vui long cho';
-            } else if ($pdGdState == $allState['PD_Requested']) {
-                $mode = 'tran';
-                $message = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
-            } else if ($pdGdState == $allState['PD_Matched']) {
-                $mode = 'tran';
-                $message = 'Dang trong phien giao dich. Vui long hoan tat cac giao dich duoi day.';
-            } else if ($pdGdState == $allState['PD_Done']) {
-                $mode = 'error';
-                $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
-            } else if ($pdGdState == $allState['GD_Requested']) {
-                $mode = 'error';
-                $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
-            } else if ($pdGdState == $allState['GD_Matched']) {
-                $mode = 'error';
-                $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
-            } else if ($pdGdState == $allState['GD_Done']) {
-                $mode = 'pin';
-                $message = 'Tai khoan den luot PD. Vui long nhap ma pin de hoan tat.';
             }
+        } else if ($pdGdState == $allState['PD_Requested']) {
+            $mode = 'tran';
+            $message = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
+        } else if ($pdGdState == $allState['PD_Matched']) {
+            $mode = 'tran';
+            $message = 'Dang trong phien giao dich. Vui long hoan tat cac giao dich duoi day.';
+        } else if ($pdGdState == $allState['PD_Done']) {
+            $mode = 'error';
+            $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
+        } else if ($pdGdState == $allState['GD_Requested']) {
+            $mode = 'error';
+            $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
+        } else if ($pdGdState == $allState['GD_Matched']) {
+            $mode = 'error';
+            $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
+        } else if ($pdGdState == $allState['GD_Done']) {
+            $mode = 'pin';
+            $message = 'Tai khoan den luot PD. Vui long nhap ma pin de hoan tat.';
         }
 
         // current pd

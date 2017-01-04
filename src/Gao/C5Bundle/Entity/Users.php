@@ -846,7 +846,8 @@ class Users implements AdvancedUserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
-        return !($this->blocked);
+        return true;
+        //return !($this->blocked);
     }
 
     public function isCredentialsNonExpired()

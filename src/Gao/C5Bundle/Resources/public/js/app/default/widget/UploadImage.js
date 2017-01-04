@@ -105,8 +105,7 @@
      * showPopupMessage
      */
     showPopupMessage : function(message) {
-        $('#prg-modal-content').html(message);
-        $("#prg-popup-message").modal();
+      swal("Thông báo", message);
     },
     /**
      * Progress done
