@@ -45,7 +45,7 @@ class DetailBiz
             $user->setEmailVerified(1);
             $user->setBlocked(0);
         }
-        $form = $this->container->get('form.factory')->create(new UserType(), $user);
+        $form = $this->container->get('form.factory')->create($this->container->get('admin_bundle.form_type.user'), $user);
         $form->handleRequest($request);
 
         // process the form on POST

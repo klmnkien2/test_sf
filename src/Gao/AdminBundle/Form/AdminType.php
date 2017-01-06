@@ -37,7 +37,7 @@ class AdminType extends AbstractType
             'csrf_protection' => true,
             'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
-            'intention' => 'task_item',
+            'intention' => 'admin_item',
         ));
     }
 

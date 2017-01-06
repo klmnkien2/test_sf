@@ -31,7 +31,7 @@ class DefaultController extends Controller
             if (!empty($usr->getBlocked()) && $usr->getBlocked()) {
                 $session = $this->get('request')->getSession();
                 $session->getFlashBag()->add('unsuccess', 'Tai khoan dang bi khoa. Vui long tao bang chung cho cac giao dich duoi day.');
-                return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_pd=pd&tran_status=0');
+                return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_gd=pd&tran_status=0');
             }
             //Call biz logic
             $params = $this->get('pd_biz')->main($usr);
@@ -49,7 +49,7 @@ class DefaultController extends Controller
             if (!empty($usr->getBlocked()) && $usr->getBlocked()) {
                 $session = $this->get('request')->getSession();
                 $session->getFlashBag()->add('unsuccess', 'Tai khoan dang bi khoa. Vui long tao bang chung cho cac giao dich duoi day.');
-                return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_pd=pd&tran_status=0');
+                return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_gd=pd&tran_status=0');
             }
             //Call biz logic
             $params = $this->get('gd_biz')->main($usr);

@@ -22,6 +22,7 @@ services:
     admin.user_list_biz:
         class: Gao\AdminBundle\Biz\User\ListBiz
         arguments: [@service_container]
+
     #================================
     # SERVICES DEFINED
     #================================
@@ -31,3 +32,10 @@ services:
     admin.user_service:
         class: Gao\AdminBundle\Service\UserService
         arguments: [@doctrine.orm.entity_manager, @service_container]
+
+    #================================
+    # Form type
+    #================================
+    admin_bundle.form_type.user:
+        class: Gao\AdminBundle\Form\UserType
+        arguments: [@doctrine.orm.entity_manager]
