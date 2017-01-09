@@ -63,6 +63,82 @@ class UserService
         $this->em->flush();
     }
 
+    /**
+     * check if user refer to logined user or not
+     * 
+     * @param $user_id Id of refer user
+     * 
+     * @return boolean
+     */
+    public function isReferToLoginUser($user_id)
+    {
+        return true;
+    }
+
+    /**
+     * get refer user
+     *
+     * @param int $id The id of user
+     *
+     * @return array $userList Is an array of Transaction
+     */
+    public function getReferUser($id, $page, $itemsLimitPerPage, $sort)
+    {
+        try {
+            $query = <<<EOT
+SELECT
+    u.id, u.username, u.full_name, u.phone, u.c_level, u.pd_total
+FROM
+    users u
+WHERE
+    u.ref_id = :ref_id
+LIMIT 
+    :start_record, :limit_record
+EOT;
+            $stmt = $this->em->getConnection()->prepare($query);
+            $stmt->bindValue('ref_id', $id, \PDO::PARAM_INT);
+            $stmt->bindValue('start_record', ($page-1) * $itemsLimitPerPage, \PDO::PARAM_INT);
+            $stmt->bindValue('limit_record', $itemsLimitPerPage, \PDO::PARAM_INT);
+            $stmt->execute();
+    
+            $list = $stmt->fetchAll();
+    
+            return $list;
+            //None record found exception
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+    
+    /**
+     * count refer user
+     *
+     * @param int $id The id of user
+     *
+     * @return int $total
+     */
+    public function countReferUser($id)
+    {
+        $params = array('ref_id' => $id);
+        try {
+            $query = <<<EOT
+SELECT
+    count(u.id) AS total
+FROM
+    users u
+WHERE
+    u.ref_id = :ref_id
+EOT;
+            $conn = $this->em->getConnection()->prepare($query);
+            $conn->execute($params);
+            $result = $conn->fetchAll();
+
+            return $result[0]['total'];
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
     public function userFinishPd($user, $pd) {
         $user->setPdGdState($this->container->getParameter('pd_gd_state')['PD_Done']);
         $user->setLastStateUpdate(new \DateTime("now"));

@@ -254,6 +254,25 @@ class DefaultController extends Controller
         }
     }
 
+    public function referAction($user_id)
+    {
+        try {
+            // Get request object.
+            $request = $this->getRequest();
+
+            // Get query parameter.
+            $page = $request->query->get('page', 1);
+            $sort = $request->query->get('sort', 'non');
+
+            //Call biz logic
+            $params = $this->get('refer_user_biz')->mainList($user_id, $page, 10, $sort);
+
+            return $this->render('GaoC5Bundle:Default:refer_user_list.html.twig', $params);
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
     public function testAction()
     {
         $request = $this->getRequest();

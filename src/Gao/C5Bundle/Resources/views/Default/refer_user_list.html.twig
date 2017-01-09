@@ -1,0 +1,46 @@
+{% extends 'GaoC5Bundle::layout.html.twig' %}
+{% set menu_selected = 'refer_user' %}
+{% block contents_main %}
+    <div class="clearfix boxHead">
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Danh sách tài khoản giới thiệu</h1>
+    </div>
+
+    <div class="clearfix boxBody">
+        {#<a href="{{ path('gao_c5_dispute') }}" class="btn btn-orange">Thêm thông tin</a><br><br>#}
+        {% if pagination %}
+            <div class="clearfix tblWrap">
+                <table class="tbl">
+                    <thead>
+                        <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Username</th>
+                            <th scope="col">Tên đầy đủ</th>
+                            <th scope="col">Cấp bậc</th>
+                            <th scope="col">Tổng PD</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in pagination.getItemsInCurrentPage %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ item.username }} VND</td>
+                                <td>{{ item.full_name }}</td>
+                                <td>{{ item.c_level }}</td>
+                                <td>{{ item.pd_total }}</td>
+                                <td>
+                                    <a href="#">[Xem PD]</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    
+            {{ paginate(pagination, sort) }}
+        {% else %}
+            <strong>Không có bản ghi nào.</strong>
+        {% endif %}
+    </div>
+
+{% endblock contents_main %}

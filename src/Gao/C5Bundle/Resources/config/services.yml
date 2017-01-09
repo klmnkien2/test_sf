@@ -26,6 +26,9 @@ services:
     dispute_biz:
         class: Gao\C5Bundle\Biz\DisputeBiz
         arguments: [@service_container]
+    refer_user_biz:
+        class: Gao\C5Bundle\Biz\ReferUserBiz
+        arguments: [@service_container]
 
     #Service defined
     transaction_service:
