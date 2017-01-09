@@ -22,6 +22,10 @@
       id: 'admin_default',
       to: 'app.admin_default.mapping'
     });
+    map.go({
+      id: 'system',
+      to: 'app.system.mapping'
+    });
   }, function getId() {
     var root = $(document.documentElement);
     return root.data('pageid') || 'no-match';

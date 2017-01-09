@@ -23,6 +23,9 @@
 
         //Initialize Select2 Elements
         $(".select2").select2();
+
+        //To make Pace works on Ajax calls
+        $(document).ajaxStart(function() { Pace.restart(); });
       }
   });
 }(jQuery, require_joo()));

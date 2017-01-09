@@ -55,3 +55,27 @@ gao_admin_user_delete:
     path:     /user/delete
     defaults: { _controller: GaoAdminBundle:User:delete }
     requirements: { _method: POST }
+
+gao_admin_system_tool:
+    path:     /system/tool
+    defaults: { _controller: GaoAdminBundle:System:tool }
+
+gao_admin_system.create_pin:
+    path:     /system/create-pin
+    defaults: { _controller: GaoAdminBundle:System:createPin }
+
+gao_admin_system.reset_user:
+    path:     /system/reset-user
+    defaults: { _controller: GaoAdminBundle:System:resetUser }
+
+gao_admin_system.clean_up:
+    path:     /system/clean-up
+    defaults: { _controller: GaoAdminBundle:System:cleanUp }
+
+gao_admin_system.force_request:
+    path:     /system/force-request
+    defaults: { _controller: GaoAdminBundle:System:forceRequest }
+
+gao_admin_system.force_done:
+    path:     /system/force-done
+    defaults: { _controller: GaoAdminBundle:System:forceDone }

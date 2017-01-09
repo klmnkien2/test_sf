@@ -34,20 +34,6 @@
           <i class="fa fa-dashboard"></i> <span>Dashboard</span>
         </a>
       </li>
-      {% if is_granted('ROLE_SUPER_ADMIN') %}
-      <li class="treeview {{ _self.is_menu_active('admin', menus) }}">
-        <a href="#">
-          <i class="fa fa-user-secret"></i> <span>Admin Management</span>
-          <span class="pull-right-container">
-            <i class="fa fa-angle-left pull-right"></i>
-          </span>
-        </a>
-        <ul class="treeview-menu">
-          <li class="{{ _self.is_menu_active('admin-new', menus) }}"><a href="{{ path('gao_admin_account_new') }}"><i class="fa fa-circle-o"></i> New Admin</a></li>
-          <li class="{{ _self.is_menu_active('admin-list', menus) }}"><a href="{{ path('gao_admin_account_list') }}"><i class="fa fa-circle-o"></i> Admin's List</a></li>
-        </ul>
-      </li>
-      {% endif %}
       <li class="treeview {{ _self.is_menu_active('user', menus) }}">
         <a href="#">
           <i class="fa fa-user"></i> <span>User Management</span>
@@ -61,9 +47,26 @@
         </ul>
       </li>
       {% if is_granted('ROLE_SUPER_ADMIN') %}
+      <li class="treeview {{ _self.is_menu_active('admin', menus) }}">
+        <a href="#">
+          <i class="fa fa-user-secret"></i> <span>Admin Management</span>
+          <span class="pull-right-container">
+            <i class="fa fa-angle-left pull-right"></i>
+          </span>
+        </a>
+        <ul class="treeview-menu">
+          <li class="{{ _self.is_menu_active('admin-new', menus) }}"><a href="{{ path('gao_admin_account_new') }}"><i class="fa fa-circle-o"></i> New Admin</a></li>
+          <li class="{{ _self.is_menu_active('admin-list', menus) }}"><a href="{{ path('gao_admin_account_list') }}"><i class="fa fa-circle-o"></i> Admin's List</a></li>
+        </ul>
+      </li>
       <li class="{{ _self.is_menu_active('bank-log', menus) }}">
         <a href="{{ path('gao_admin_bank_log') }}">
           <i class="fa fa-usd"></i> <span>Bank account logs</span>
+        </a>
+      </li>
+      <li class="{{ _self.is_menu_active('system-tool', menus) }}">
+        <a href="{{ path('gao_admin_system_tool') }}">
+          <i class="fa fa-cog"></i> <span>System tool</span>
         </a>
       </li>
       {% endif %}
