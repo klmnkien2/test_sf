@@ -82,3 +82,14 @@ php app/console doctrine:generate:entities GaoAdminBundle --no-backup
 
 Update to database
 php bin/console doctrine:schema:update --force
+
+==================== spec =========================
+- thuat toan, chia (ko de so thap phan, bo tinh phan 000 phia sau)
+- admin dispute ( view, unlock/lock user ) -> chi super admin co quyen
+  unlock -> lock gd
+  lock lan 2 -> ko cho dispute -> lock lan 2 van cho undo 
+
+- user (them nut unlock) (giam bot thong tin, them nut detail)
+- bank log -> join user 
+
+- front-end -> tai khoan lock moi cho dispute
