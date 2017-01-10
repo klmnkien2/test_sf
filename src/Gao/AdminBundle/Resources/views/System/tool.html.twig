@@ -37,16 +37,31 @@
 
       <div class="box box-danger">
         <div class="box-header with-border">
+          <h3 class="box-title">Match Transaction</h3>
+        </div>
+        <form id="matchTransaction-frm" action="{{ path('gao_admin_system.matchTransaction') }}" method="post" class="form-group">
+          <div class="box-body">
+            <div id="matchTransaction-message"></div>
+            <div class="form-group">
+              <p class="help-block">Run tool for match transaction for all PD-GD (algorithm).</p>
+            </div>
+          </div>
+
+          <div class="box-footer">
+            <input type="submit" name="submit" class="btn btn-primary" value="Run me" />
+          </div>
+        </form>
+      </div>
+
+      <div class="box box-danger">
+        <div class="box-header with-border">
           <h3 class="box-title">Reset user (test only)</h3>
         </div>
-        <!-- /.box-header -->
-        <!-- form start -->
-        <form action="" method="post" class="form-group">
+        <form id="resetUser-frm" action="{{ path('gao_admin_system.reset_user') }}" method="post" class="form-group">
           <div class="box-body">
-            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
-
+            <div id="resetUser-message"></div>
             <div class="form-group">
-              <p class="help-block">All users will be reset to start time (just created)</p>
+              <p class="help-block">Run tool for finish a round of PD-GD.</p>
             </div>
           </div>
 
@@ -63,14 +78,11 @@
         <div class="box-header with-border">
           <h3 class="box-title">Clean up</h3>
         </div>
-        <!-- /.box-header -->
-        <!-- form start -->
-        <form action="" method="post" class="form-group">
+        <form id="cleanUp-frm" action="{{ path('gao_admin_system.clean_up') }}" method="post" class="form-group">
           <div class="box-body">
-            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
-
+            <div id="cleanUp-message"></div>
             <div class="form-group">
-              <p class="help-block">Run tool for finish a round of PD-GD.</p>
+              <p class="help-block">All users will be reset to start time (just created)</p>
             </div>
           </div>
 
@@ -86,10 +98,9 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form action="" method="post" class="form-group">
+        <form id="forceRequest-frm" action="{{ path('gao_admin_system.force_request') }}" method="post" class="form-group">
           <div class="box-body">
-            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
-
+            <div id="forceRequest-message"></div>
             <div class="form-group">
               <p class="help-block">After running. All users who haven't requested will request and create PD,GD</p>
             </div>
@@ -107,10 +118,9 @@
         </div>
         <!-- /.box-header -->
         <!-- form start -->
-        <form action="" method="post" class="form-group">
+        <form id="forceDone-frm" action="{{ path('gao_admin_system.force_done') }}" method="post" class="form-group">
           <div class="box-body">
-            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
-
+            <div id="forceDone-message"></div>
             <div class="form-group">
               <p class="help-block">After running. All transaction in this round will be done successfully.</p>
             </div>

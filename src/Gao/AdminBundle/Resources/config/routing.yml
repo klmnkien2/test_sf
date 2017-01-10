@@ -68,6 +68,10 @@ gao_admin_system.reset_user:
     path:     /system/reset-user
     defaults: { _controller: GaoAdminBundle:System:resetUser }
 
+gao_admin_system.matchTransaction:
+    path:     /system/match-tran
+    defaults: { _controller: GaoAdminBundle:System:matchTransaction }
+
 gao_admin_system.clean_up:
     path:     /system/clean-up
     defaults: { _controller: GaoAdminBundle:System:cleanUp }

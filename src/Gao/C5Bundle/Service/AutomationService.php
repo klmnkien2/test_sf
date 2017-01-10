@@ -287,7 +287,6 @@ class AutomationService
     {
         $q = $this->em->createQuery('update GaoC5Bundle:Users u set u.blocked = 0, u.pdGdState = NULL, u.firstPdDone = NULL, u.outstandingPd = NULL, u.outstandingGd = NULL');
         $numUpdated = $q->execute();
-        echo "User updated: ", $numUpdated, PHP_EOL;
     }
 
     public function forceRequest() {

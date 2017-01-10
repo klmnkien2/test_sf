@@ -32,6 +32,9 @@ services:
     admin.user_service:
         class: Gao\AdminBundle\Service\UserService
         arguments: [@doctrine.orm.entity_manager, @service_container]
+    admin.system_service:
+        class: Gao\AdminBundle\Service\SystemService
+        arguments: [@doctrine.orm.entity_manager, @service_container]
 
     #================================
     # Form type

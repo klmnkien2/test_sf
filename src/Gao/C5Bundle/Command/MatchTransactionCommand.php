@@ -243,7 +243,7 @@ class MatchTransactionCommand extends ContainerAwareCommand
             if ($this->send_amounts[$id] == 0)
                 continue;
             while ($this->send_amounts[$id] >= $this->receive_amounts[$receive_keys[$send_full_to + 1]]) {
-                "Send remaining $id\r\n";
+                echo "Send remaining $id\r\n";
                 $send_full_to ++;
                 $this->send_money($id, $receive_keys[$send_full_to], $this->receive_amounts[$receive_keys[$send_full_to]]);
                 if ($send_full_to == count($this->receive_amounts) - 1) {
@@ -253,6 +253,7 @@ class MatchTransactionCommand extends ContainerAwareCommand
             }
             if ($this->send_amounts[$id] == 0)
                 continue;
+            var_dump($id, $receive_keys[$send_full_to + 1], $this->send_amounts[$id]);
             $this->send_money($id, $receive_keys[$send_full_to + 1], $this->send_amounts[$id]);
         }
     }
