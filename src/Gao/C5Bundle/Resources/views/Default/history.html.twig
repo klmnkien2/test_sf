@@ -64,10 +64,10 @@
                                 <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'N/A' }}</td>
                                 <td>
                                     {% if transaction.pd_id %}
-                                        GD
+                                        GD-Nhận
                                     {% else %}
-                                        PD<br>
-                                        {% if transaction.status != 1 %} 
+                                        PD-Gửi<br>
+                                        {% if transaction.status != 1 and app.user.blocked == 1 %} 
                                             [ <a href="{{ path('gao_c5_dispute', { transaction_id: transaction.id }) }}">Tao bang chung</a> ]
                                         {% endif %}
                                     {% endif %}

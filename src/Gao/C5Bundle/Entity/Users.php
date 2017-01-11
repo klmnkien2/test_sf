@@ -171,9 +171,9 @@ class Users implements AdvancedUserInterface, \Serializable
     private $outstandingGd;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="blocked", type="boolean", nullable=false)
+     * @ORM\Column(name="blocked", type="integer", nullable=false)
      */
     private $blocked;
 
@@ -696,7 +696,7 @@ class Users implements AdvancedUserInterface, \Serializable
     /**
      * Set blocked
      *
-     * @param boolean $blocked
+     * @param integer $blocked
      * @return Users
      */
     public function setBlocked($blocked)
@@ -709,7 +709,7 @@ class Users implements AdvancedUserInterface, \Serializable
     /**
      * Get blocked
      *
-     * @return boolean 
+     * @return integer 
      */
     public function getBlocked()
     {

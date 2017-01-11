@@ -93,8 +93,10 @@ class AutomationService
             ->getQuery()
             ->getResult();
 
-            $gdAmount = $wantedAmount / count($bot_users);
+            $surplus = $wantedAmount % count($bot_users);
+            $gdAmount = ($wantedAmount - $surplus) / count($bot_users);
 
+            $first_bot_user = true;
             foreach ($bot_users as $gd_user) {
                 $gd = new Gd;
                 $gd->setUserId($gd_user->getId());
@@ -105,7 +107,12 @@ class AutomationService
                 $gd->setPdId(0);
                 $gd->setPdAmount(0);
                 $gd->setRefAmount(0);
-                $gd->setGdAmount($gdAmount);
+                if ($first_bot_user) {
+                    $gd->setGdAmount($gdAmount + $surplus);
+                    $first_bot_user = false;
+                } else {
+                    $gd->setGdAmount($gdAmount);
+                }
                 $gd->setStatus($this->container->getParameter('gd_status')['waiting']);
                 $this->em->persist($gd);
 

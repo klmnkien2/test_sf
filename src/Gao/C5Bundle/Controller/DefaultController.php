@@ -222,6 +222,11 @@ class DefaultController extends Controller
         try {
             // Get request object.
             $request = $this->getRequest();
+            $user = $this->get('security.context')->getToken()->getUser();
+
+            if (!empty($user->getBlocked()) && $user->getBlocked() == 2) {
+                throw new BizException('Tài khoản bị khóa hoàn toàn, không thực hiện được chức năng này');
+            }
 
             //Call biz logic
             $transaction_id = $request->query->get('transaction_id');

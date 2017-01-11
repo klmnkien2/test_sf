@@ -118,8 +118,10 @@ Gao\C5Bundle\Entity\Users:
             unsigned: false
             column: outstanding_gd
         blocked:
-            type: boolean
+            type: integer
             nullable: false
+            unsigned: false
+            column: blocked
         currentInterestRate:
             type: integer
             nullable: false
