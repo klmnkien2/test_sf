@@ -87,7 +87,7 @@ class UserService
         try {
             $query = <<<EOT
 SELECT
-    u.id, u.username, u.full_name, u.phone, u.c_level, u.pd_total
+    u.id, u.username, u.full_name, u.phone, u.c_level, u.pd_total, u.pd_count
 FROM
     users u
 WHERE

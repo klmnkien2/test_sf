@@ -14,7 +14,6 @@
                     <thead>
                         <tr>
                             <th scope="col">STT</th>
-                            <th scope="col">?</th>
                             <th scope="col">Message</th>
                             <th scope="col">Trạng thái</th>
                             <th scope="col">Ngày tạo</th>
@@ -25,18 +24,11 @@
                         {% for dispute in pagination.getItemsInCurrentPage %}
                             <tr>
                                 <td>{{ loop.index }}</td>
-                                <td>?</td>
                                 <td>{{ dispute.message }} VND</td>
-                                <td>{{ dispute.status == 1 ? 'Được chấp nhận' : (dispute.status == 2 ? 'Bị từ chối' : 'Pending') }}</td>
+                                <td>{{ dispute.status == 1 ? 'Được chấp nhận' : (dispute.status == 2 ? 'Bị từ chối' : 'Chờ phản hồi') }}</td>
                                 <td>{{ dispute.created ? dispute.created|date('d/m/Y H:i:s') : 'N/A' }}</td>
                                 <td>
-                                    {% if app.security.getToken().getUser().getId() == dispute.gd_user_id %}
-                                        GD
-                                    {% elseif app.security.getToken().getUser().getId() == dispute.pd_user_id %}
-                                        PD
-                                    {% else %}
-                                        -
-                                    {% endif %}
+                                    [<a href="#">Giao dịch liên quan</a>]
                                 </td>
                             </tr>
                         {% endfor %}
