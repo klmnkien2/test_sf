@@ -51,8 +51,9 @@ Gao\C5Bundle\Entity\BankAccLog:
             nullable: false
             default: CURRENT_TIMESTAMP
         status:
-            type: boolean
+            type: integer
             nullable: false
+            unsigned: false
             comment: '0 normal, 1 blocked'
             default: '0'
     lifecycleCallbacks: {  }

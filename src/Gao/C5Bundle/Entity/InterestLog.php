@@ -6,38 +6,56 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * InterestLog
+ *
+ * @ORM\Table(name="interest_log")
+ * @ORM\Entity
  */
 class InterestLog
 {
     /**
      * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="from_user_id", type="integer", nullable=false)
      */
     private $fromUserId;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="pd_amount", type="integer", nullable=false)
      */
     private $pdAmount;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="interest_amount", type="integer", nullable=false)
      */
     private $interestAmount;
 
     /**
      * @var integer
+     *
+     * @ORM\Column(name="from_user_level", type="integer", nullable=false)
      */
     private $fromUserLevel;
 
     /**
      * @var \DateTime
+     *
+     * @ORM\Column(name="created", type="datetime", nullable=true)
      */
     private $created;
+
 
 
     /**

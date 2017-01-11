@@ -38,8 +38,9 @@ Gao\C5Bundle\Entity\Pd:
             fixed: false
             column: pin_number
         status:
-            type: boolean
+            type: integer
             nullable: false
+            unsigned: false
             comment: 'status: 0 waiting, 1 sending, 2 done'
             default: '0'
         created:

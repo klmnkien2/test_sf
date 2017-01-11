@@ -78,9 +78,9 @@ class BankAccLog
     private $created;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status;
 
@@ -283,7 +283,7 @@ class BankAccLog
     /**
      * Set status
      *
-     * @param boolean $status
+     * @param integer $status
      * @return BankAccLog
      */
     public function setStatus($status)
@@ -296,7 +296,7 @@ class BankAccLog
     /**
      * Get status
      *
-     * @return boolean 
+     * @return integer 
      */
     public function getStatus()
     {

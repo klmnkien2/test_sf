@@ -25,8 +25,9 @@ Gao\C5Bundle\Entity\Dispute:
             unsigned: false
             column: transaction_id
         status:
-            type: boolean
+            type: integer
             nullable: false
+            unsigned: false
             comment: '0-waiting 1-approved 2-unapproved'
             default: '0'
         created:

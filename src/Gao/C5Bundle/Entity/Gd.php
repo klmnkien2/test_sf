@@ -71,9 +71,9 @@ class Gd
     private $pinNumber;
 
     /**
-     * @var boolean
+     * @var integer
      *
-     * @ORM\Column(name="status", type="boolean", nullable=false)
+     * @ORM\Column(name="status", type="integer", nullable=false)
      */
     private $status;
 
@@ -260,7 +260,7 @@ class Gd
     /**
      * Set status
      *
-     * @param boolean $status
+     * @param integer $status
      * @return Gd
      */
     public function setStatus($status)
@@ -273,7 +273,7 @@ class Gd
     /**
      * Get status
      *
-     * @return boolean 
+     * @return integer 
      */
     public function getStatus()
     {
