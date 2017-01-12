@@ -79,7 +79,7 @@ class AttachmentController extends Controller
 
             return new JsonResponse(array(
                 'error' => $error,
-                'attachment' => array(
+                'attachment' => $error? null : array(
                     'id' => $attachment->getId(),
                     'name' => $attachment->getName(),
                     'url' => $attachment->getUrl()

@@ -57,25 +57,39 @@ class DisputeController extends Controller
         try {
             // Update dispute
             $dispute = $this->get('dispute_service')->getById($id);
+            if (empty($dispute)) {
+                throw new BizException('Dispute not exsit.');
+            }
             $dispute->setStatus($status);
             $this->get('dispute_service')->updateDispute($dispute);
             // Update transaction
             $transaction = $this->container->get('transaction_service')->getEntity($dispute->getTransactionId());
+            if (empty($transaction)) {
+                throw new BizException('transaction not exsit.');
+            }
             $transaction->setStatus(1);
             $transaction->setApprovedDate(new \DateTime());
             $this->container->get('transaction_service')->updateEntity($transaction);
             // update pd user
             $userPd = $this->container->get('security_user_service')->getEntity($transaction->getPdUserId());
+            if (empty($userPd)) {
+                throw new BizException('User PD not exsit.');
+            }
             if ($status == 1) {
                 $userPd->setBlocked(0);
             } else {
                 $userPd->setBlocked(2);
             }
+            $this->container->get('security_user_service')->updateUser($userPd);
             // update gd user if approve (block)
             if ($status == 1) {
                 $userGd = $this->container->get('security_user_service')->getEntity($transaction->getGdUserId());
+                if (empty($userGd)) {
+                    throw new BizException('User gd not exsit.');
+                }
                 $userGd->setBlocked(1);
             }
+            $this->container->get('security_user_service')->updateUser($userGd);
             // Notify success
             $this->container->get('transaction_service')->commitTransaction();
             $this->get('session')->getFlashBag()->add('success', 'Thong tin da duoc update thanh cong.');

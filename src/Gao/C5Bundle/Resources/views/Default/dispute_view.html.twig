@@ -1,35 +1,27 @@
-{% extends 'GaoAdminBundle::layout.html.twig' %}
+{% extends 'GaoC5Bundle::layout.html.twig' %}
 
-{% block content_header %}
-  Dispute details
-{% endblock content_header %}
-
-{% block content_sidebar %}
-  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['dispute_list'] } only %}
-{% endblock content_sidebar %}
+{% set menu_selected = 'dispute' %}
 
 {% block contents_main %}
-  <div class="row">
-    <div class="col-md-6">
-      <div class="box box-primary">
-          <div class="box-body">
-            <div class="form-group">
-                <label>Username</label>
-                <p>{{ dispute.username }}</p>
-            </div>
+    <div class="clearfix boxHead">
+        <h1 class="title"><i class="glyphicon glyphicon-screenshot"></i> Chi tiết bằng chứng
+        </h1>
+    </div>
+
+    <div class="clearfix boxEnter">
             <div class="form-group">
                 <label>Ngày tạo</label>
                 <p>{{ dispute.created|date('d/m/Y') }}</p>
             </div>
             <div class="form-group">
-                <label>Message</label>
+                <label>Giải trình</label>
                 <p>{{ dispute.message }}</p>
             </div>
             <div class="form-group">
-                <label>Attachment</label>
+                <label>File đính kèm</label>
                 {% if attachment_array and attachment_array is not empty %}
                     {% for attach in attachment_array %}
-                        <p style="color: blue;">{{ attach.name }} <a href="{{ attach.id }}" class="fa fa-download">View</a></p>
+                        <p style="color: blue;">{{ attach.name }} <a href="{{ attach.id }}" class="fa fa-download">[Xem]</a></p>
                     {% endfor %}
                 {% else %}
                     <p>Khong co ban ghi nao.</p>
@@ -50,7 +42,7 @@
             <div class="form-group">
                 <label>Reference Transaction</label>
                 {% if transactionList and transactionList is not empty %}
-                <table class="table table-bordered table-hover">
+                <table class="tbl">
                     <thead>
                       <tr>
                         <th>STT</th>
@@ -84,12 +76,6 @@
                     <p>Khong co ban ghi nao.</p>
                 {% endif %}
             </div>
-          </div>
-          <div class="box-footer">
-            <a href="{{ path('gao_admin.dispute.update_status') }}?id={{ dispute.id }}&status=1" class="btn btn-primary">Approve</a>
-            <a href="{{ path('gao_admin.dispute.update_status') }}?id={{ dispute.id }}&status=2" class="btn btn-danger">Reject</a>
-          </div>
-      </div>
     </div>
   </div>
 {% endblock contents_main %}

@@ -253,7 +253,38 @@ class DefaultController extends Controller
             //Call biz logic
             $params = $this->get('dispute_biz')->mainList($usr, $page, 10, $sort);
 
-            return $this->render('GaoC5Bundle:Default:list_dispute.html.twig', $params);
+            return $this->render('GaoC5Bundle:Default:dispute_list.html.twig', $params);
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
+    public function disputeViewAction()
+    {
+        try {
+            // Get request object.
+            $request = $this->getRequest();
+
+            $id = $request->query->get('id');
+
+            $dispute = null;
+            $attachment_array = [];
+            $transactionList = null;
+            if (!empty($id)) {
+                $dispute = $this->container->get('dispute_service')->getDisputeById($id);
+            }
+            if (!empty($dispute)) {
+                $attachment_array = $this->container->get('attachment_service')->getAttachmentByRefer($dispute['id'], $dispute['user_id']);
+                $transactionList = $this->container->get('transaction_service')->getTransactionByPd($dispute['pd_id']);
+            }
+
+            $params = array(
+                'dispute' => $dispute,
+                'attachment_array' => $attachment_array,
+                'transactionList' => $transactionList
+            );
+
+            return $this->render('GaoC5Bundle:Default:dispute_view.html.twig', $params);
         } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }

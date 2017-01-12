@@ -28,7 +28,7 @@
                                 <td>{{ dispute.status == 1 ? 'Được chấp nhận' : (dispute.status == 2 ? 'Bị từ chối' : 'Chờ phản hồi') }}</td>
                                 <td>{{ dispute.created ? dispute.created|date('d/m/Y H:i:s') : 'N/A' }}</td>
                                 <td>
-                                    [<a href="#">Giao dịch liên quan</a>]
+                                    [<a href="{{ path('gao_c5_dispute_view') }}?id={{ dispute.id }}">Xem chi tiết</a>]
                                 </td>
                             </tr>
                         {% endfor %}

@@ -1,8 +1,8 @@
 parameters:
     system_bot_users: [bot1, bot2, bot3, bot4, bot5]
-    default_interest_rate: 30#%
-    default_pd_amount: 220#don vi 10000VND
-    default_tran_base_amount: 70#don vi 10000VND
+    default_interest_rate: 30
+    default_pd_amount: 220
+    default_tran_base_amount: 70
     pd_gd_state:
         Pending: Pending
         PD_Requested: PD_Requested
