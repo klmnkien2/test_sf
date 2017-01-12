@@ -83,3 +83,19 @@ gao_admin_system.force_request:
 gao_admin_system.force_done:
     path:     /system/force-done
     defaults: { _controller: GaoAdminBundle:System:forceDone }
+
+gao_admin.dispute.list:
+    path:     /dispute/list
+    defaults: { _controller: GaoAdminBundle:Dispute:list }
+
+gao_admin.dispute.list_ajax:
+    path:     /dispute/ajax_list
+    defaults: { _controller: GaoAdminBundle:Dispute:ajaxList }
+
+gao_admin.dispute.update_status:
+    path:     /dispute/update_status
+    defaults: { _controller: GaoAdminBundle:Dispute:updateStatus }
+
+gao_admin.dispute.detail:
+    path:     /dispute/detail
+    defaults: { _controller: GaoAdminBundle:Dispute:detail }

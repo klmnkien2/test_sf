@@ -480,11 +480,32 @@ EOT;
 
     public function getBankLogTable()
     {
-        // DB table to use
-        $table = 'bank_acc_log';
+        $total_field = DataTableService::TOTAL_FIELD;
+        $where_more = DataTableService::WHERE_MORE;
 
-        // Table's primary key
-        $primaryKey = 'id';
+        $sql = <<<SQL
+SELECT 
+    vcb_acc_number,
+    count(id) as number_of_users,
+    sum(pd_count) as pd_count,
+    sum(pd_total) as pd_total,
+    sum(gd_count) as gd_count,
+    sum(gd_total) as gd_total
+FROM 
+    users 
+WHERE 
+    vcb_acc_number is not null AND $where_more
+GROUP BY vcb_acc_number
+SQL;
+
+        $count_sql = <<<SQL
+SELECT 
+    COUNT(DISTINCT vcb_acc_number) AS $total_field
+FROM 
+    users 
+WHERE 
+    vcb_acc_number is not null AND $where_more
+SQL;
 
         // Array of database columns which should be read and sent back to DataTables.
         // The `db` parameter represents the column name in the database, while the `dt`
@@ -492,18 +513,19 @@ EOT;
         // indexes
         $columns = array(
             array( 'db' => 'vcb_acc_number',  'dt' => 0 ),
-            array( 'db' => 'count_gd',        'dt' => 1 ),
-            array( 'db' => 'count_pd',        'dt' => 2 ),
-            array( 'db' => 'total_gd_amount', 'dt' => 3 ),
-            array( 'db' => 'total_pd_amount', 'dt' => 4 ),
+            array( 'db' => 'number_of_users', 'dt' => 1, ),
+            array( 'db' => 'pd_count',        'dt' => 2, ),
+            array( 'db' => 'pd_total',        'dt' => 3, ),
+            array( 'db' => 'gd_count',        'dt' => 4, ),
+            array( 'db' => 'gd_total',        'dt' => 5, ),
             array( 
-                'db' => 'status',
-                'dt' => 5,
+                'db' => 'vcb_acc_number',
+                'dt' => 6,
                 'formatter' => function( $d, $row ) {
-                    return $d == 0 ? 'Active' : 'Block';
+                    return 'View users';
                 }
             )
         );
-        return DataTableService::getData( $_GET, $this->em->getConnection(), $table, $primaryKey, $columns );
+        return DataTableService::getCustomData( $_GET, $this->em->getConnection(), $sql, $count_sql, $columns );
     }
 }

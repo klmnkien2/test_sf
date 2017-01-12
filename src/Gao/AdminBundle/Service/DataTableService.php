@@ -195,6 +195,61 @@ class DataTableService {
     }
 
 
+    static function filterToSql ( $request, $columns, &$bindings )
+    {
+        $globalSearch = array();
+        $columnSearch = array();
+        $dtColumns = self::pluck( $columns, 'dt' );
+
+        if ( isset($request['search']) && $request['search']['value'] != '' ) {
+            $str = $request['search']['value'];
+
+            for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
+                $requestColumn = $request['columns'][$i];
+                $columnIdx = array_search( $requestColumn['data'], $dtColumns );
+                $column = $columns[ $columnIdx ];
+
+                if ( $requestColumn['searchable'] == 'true' ) {
+                    $binding = self::bind( $bindings, '%'.$str.'%', \PDO::PARAM_STR );
+                    $globalSearch[] = "`".$column['db']."` LIKE ".$binding;
+                }
+            }
+        }
+
+        // Individual column filtering
+        if ( isset( $request['columns'] ) ) {
+            for ( $i=0, $ien=count($request['columns']) ; $i<$ien ; $i++ ) {
+                $requestColumn = $request['columns'][$i];
+                $columnIdx = array_search( $requestColumn['data'], $dtColumns );
+                $column = $columns[ $columnIdx ];
+
+                $str = $requestColumn['search']['value'];
+
+                if ( $requestColumn['searchable'] == 'true' &&
+                    $str != '' ) {
+                        $binding = self::bind( $bindings, '%'.$str.'%', \PDO::PARAM_STR );
+                        $columnSearch[] = "`".$column['db']."` LIKE ".$binding;
+                    }
+            }
+        }
+
+        // Combine the filters into a single string
+        $where = '';
+
+        if ( count( $globalSearch ) ) {
+            $where = '('.implode(' OR ', $globalSearch).')';
+        }
+
+        if ( count( $columnSearch ) ) {
+            $where = $where === '' ?
+            implode(' AND ', $columnSearch) :
+            $where .' AND '. implode(' AND ', $columnSearch);
+        }
+
+        return $where;
+    }
+
+
     /**
      * Perform the SQL queries needed for an server-side processing requested,
      * utilising the helper functions of this class, limit(), order() and
@@ -349,58 +404,28 @@ class DataTableService {
     }
 
 
-    static function getData ( $request, $db, $table, $primaryKey, $columns, $whereResult=null, $whereAll=null )
+    const WHERE_MORE = '###WHERE_MORE_HERE###';
+    const TOTAL_FIELD = 'TOTAL';
+    static function getCustomData ( $request, $db, $sql, $countsql, $columns )
     {
         $bindings = array();
-        $whereAllSql = '';
-
+        $where = '';
+    
         // Build the SQL query string from the request
         $limit = self::limit( $request, $columns );
         $order = self::order( $request, $columns );
-        $where = self::filter( $request, $columns, $bindings );
-
-        $whereResult = self::_flatten( $whereResult );
-        $whereAll = self::_flatten( $whereAll );
-
-        if ( $whereResult ) {
-            $where = $where ?
-            $where .' AND '.$whereResult :
-            'WHERE '.$whereResult;
+        $filter = self::filterToSql( $request, $columns, $bindings );
+        if (!$filter) {
+            $filter = '1=1';
         }
-
-        if ( $whereAll ) {
-            $where = $where ?
-            $where .' AND '.$whereAll :
-            'WHERE '.$whereAll;
-
-            $whereAllSql = 'WHERE '.$whereAll;
-        }
-
+    
         // Main query to actually get the data
-        $data = self::sql_exec( $db, $bindings,
-            "SELECT `".implode("`, `", self::pluck($columns, 'db'))."`
-            FROM `$table`
-            $where
-            $order
-            $limit"
-        );
-
-        // Data set length after filtering
-        $resFilterLength = self::sql_exec( $db, $bindings,
-            "SELECT COUNT(`{$primaryKey}`) AS TOTAL
-            FROM   `$table`
-            $where"
-        );
-        $recordsFiltered = $resFilterLength[0]['TOTAL'];
-
+        $data = self::sql_exec( $db, $bindings, str_replace( self::WHERE_MORE, $filter, $sql ) );
+    
         // Total data set length
-        $resTotalLength = self::sql_exec( $db, $bindings,
-            "SELECT COUNT(`{$primaryKey}`) AS TOTAL
-            FROM   `$table` ".
-            $whereAllSql
-        );
-        $recordsTotal = $resTotalLength[0]['TOTAL'];
-
+        $resTotalLength = self::sql_exec( $db, $bindings, str_replace( self::WHERE_MORE, $filter, $countsql ) );
+        $recordsTotal = $resTotalLength[0][self::TOTAL_FIELD];
+    
         /*
          * Output
         */
@@ -409,7 +434,7 @@ class DataTableService {
             intval( $request['draw'] ) :
             0,
             "recordsTotal"    => intval( $recordsTotal ),
-            "recordsFiltered" => intval( $recordsFiltered ),
+            "recordsFiltered" => intval( $recordsTotal ),
             "data"            => self::data_output( $columns, $data )
         );
     }

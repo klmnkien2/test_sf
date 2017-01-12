@@ -26,6 +26,10 @@
       id: 'system',
       to: 'app.system.mapping'
     });
+    map.go({
+      id: 'dispute',
+      to: 'app.admin.dispute.mapping'
+    });
   }, function getId() {
     var root = $(document.documentElement);
     return root.data('pageid') || 'no-match';

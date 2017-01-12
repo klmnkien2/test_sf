@@ -15,6 +15,7 @@ use Doctrine\ORM\Query\ResultSetMapping;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 use Gao\C5Bundle\Entity\Dispute;
 use Gao\C5Bundle\Biz\BizException;
+use Gao\AdminBundle\Service\DataTableService;
 
 /**
  * DisputeService class.
@@ -129,5 +130,87 @@ EOT;
             throw new BizException('can not count dispute ...');
             //return false
         }
+    }
+
+
+
+    /**
+     * get transaction from user
+     *
+     * @param int     $accountId The id of admin user
+     * @param string  $token     Token to do action
+     *
+     * @return Array results
+     */
+    public function getDataTable($accountId, $token)
+    {
+        $total_field = DataTableService::TOTAL_FIELD;
+        $where_more = DataTableService::WHERE_MORE;
+
+        $sql = <<<SQL
+SELECT
+    d.id,
+    u.username,
+    d.created,
+    d.status
+FROM 
+    dispute d
+LEFT JOIN users u ON u.id = d.user_id 
+WHERE 
+    $where_more
+SQL;
+
+        $count_sql = <<<SQL
+SELECT 
+    COUNT(id) AS $total_field
+FROM 
+    dispute 
+WHERE 
+    $where_more
+SQL;
+
+        // Array of database columns which should be read and sent back to DataTables.
+        // The `db` parameter represents the column name in the database, while the `dt`
+        // parameter represents the DataTables column identifier. In this case simple
+        // indexes
+        $columns = array(
+            array( 'db' => 'id',        'dt' => 0 ),
+            array( 'db' => 'username',  'dt' => 1 ),
+            array(
+                'db'        => 'created',
+                'dt'        => 2,
+                'formatter' => function( $d, $row ) {
+                    return date( 'jS M y', strtotime($d));
+                }
+            ),
+            array(
+                'db'        => 'status',
+                'dt'        => 3,
+                'formatter' => function( $d, $row ) {
+                    if ($d == 0) return '<span style="background-color:yellow">Waiting</span>';
+                    else if ($d == 0) return '<span style="background-color:green">Approved</span>';
+                    else if ($d == 0) return '<span style="background-color:red">Rejected</span>';
+                    else return 'N/A';
+                }
+            ),
+            array(
+                'db'        => 'id',
+                'dt'        => 4,
+                'formatter' => function( $d, $row ) use ($token) {
+                    return $this->actionFormatter($d, $token);
+                }
+            )
+        );
+        return DataTableService::getCustomData( $_GET, $this->em->getConnection(), $sql, $count_sql, $columns );
+    }
+
+    public function actionFormatter($id, $token)
+    {
+        $detaillink = $this->container->get('router')->generate('gao_admin.dispute.detail') . "?id=$id";
+        $approvelink = $this->container->get('router')->generate('gao_admin.dispute.update_status') . "?id=$id&status=1&token=$token";
+        $rejectlink = $this->container->get('router')->generate('gao_admin.dispute.update_status') . "?id=$id&status=2&token=$token";
+        return "<a href='$detaillink' class='editlink'>[Detail]</a> " .
+            "<a href='$approvelink' style='color:green'>[Approve]</a> " .
+            "<a href='$rejectlink' class='deletelink'>[Reject]</a> ";
     }
 }

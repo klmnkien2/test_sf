@@ -98,14 +98,33 @@ class AdminService
      */
     public function getAdminTable($accountId, $token)
     {
-        // DB table to use
-        $table = 'admin';
+        $total_field = DataTableService::TOTAL_FIELD;
+        $where_more = DataTableService::WHERE_MORE;
 
-        // Table's primary key
-        $primaryKey = 'id';
+        $sql = <<<SQL
+SELECT
+    id,
+    username,
+    full_name,
+    phone,
+    email,
+    last_login
+FROM
+    admin
+WHERE
+    creator_id = $accountId AND
+    $where_more
+SQL;
 
-        // Where all
-        $whereResult = array("creator_id=$accountId");
+        $count_sql = <<<SQL
+SELECT
+    COUNT(id) AS $total_field
+FROM
+    admin
+WHERE
+    creator_id = $accountId AND
+    $where_more
+SQL;
 
         // Array of database columns which should be read and sent back to DataTables.
         // The `db` parameter represents the column name in the database, while the `dt`
@@ -132,7 +151,7 @@ class AdminService
                 }
             )
         );
-        return DataTableService::getData( $_GET, $this->em->getConnection(), $table, $primaryKey, $columns, $whereResult );
+        return DataTableService::getCustomData( $_GET, $this->em->getConnection(), $sql, $count_sql, $columns );
     }
 
     public function actionFormatter($id, $token)

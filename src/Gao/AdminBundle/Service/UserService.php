@@ -98,14 +98,32 @@ class UserService
      */
     public function getDataTable($userId, $token)
     {
-        // DB table to use
-        $table = 'users';
+        $total_field = DataTableService::TOTAL_FIELD;
+        $where_more = DataTableService::WHERE_MORE;
 
-        // Table's primary key
-        $primaryKey = 'id';
+        $sql = <<<SQL
+SELECT
+    id,
+    username,
+    full_name,
+    phone,
+    c_level
+FROM
+    users
+WHERE
+    creator_id = $userId AND
+    $where_more
+SQL;
 
-        // Where all
-        $whereResult = array("creator_id=$userId");
+        $count_sql = <<<SQL
+SELECT
+    COUNT(id) AS $total_field
+FROM
+    users
+WHERE
+    creator_id = $userId AND
+    $where_more
+SQL;
 
         // Array of database columns which should be read and sent back to DataTables.
         // The `db` parameter represents the column name in the database, while the `dt`
@@ -117,25 +135,23 @@ class UserService
             array( 'db' => 'full_name', 'dt' => 2 ),
             array( 'db' => 'phone',     'dt' => 3 ),
             array( 'db' => 'c_level',   'dt' => 4 ),
-            array( 'db' => 'pd_count',  'dt' => 5 ),
-            array( 'db' => 'pd_total',  'dt' => 6 ),
-            array( 'db' => 'gd_count',  'dt' => 7 ),
-            array( 'db' => 'gd_total',  'dt' => 8 ),
             array(
                 'db'        => 'id',
-                'dt'        => 9,
+                'dt'        => 5,
                 'formatter' => function( $d, $row ) use ($token) {
                     return $this->actionFormatter($d, $token);
                 }
             )
         );
-        return DataTableService::getData( $_GET, $this->em->getConnection(), $table, $primaryKey, $columns, $whereResult );
+        return DataTableService::getCustomData( $_GET, $this->em->getConnection(), $sql, $count_sql, $columns );
     }
 
     public function actionFormatter($id, $token)
     {
         $editlink = $this->container->get('router')->generate('gao_admin_user_edit') . "?id=$id";
         $deletelink = $this->container->get('router')->generate('gao_admin_user_delete') . "?id=$id&token=$token";
-        return "<a href='$editlink' class='editlink'>Edit</a> <a href='$deletelink' class='deletelink'>Delete</a>";
+        return "<a href='#' class='prg-detailView editlink'>Detail</a> " .
+            "<a href='$editlink' class='editlink'>Edit</a> " . 
+            "<a href='$deletelink' class='deletelink'>Delete</a>";
     }
 }
