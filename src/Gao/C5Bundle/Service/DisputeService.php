@@ -66,6 +66,32 @@ class DisputeService
 
     }
 
+    public function getDisputeById($id)
+    {
+        try {
+            $query = <<<SQL
+SELECT
+    d.id, d.message, d.transaction_id, d.created, d.user_id, d.status, u.username, t.pd_id, t.gd_id
+FROM
+    dispute d
+LEFT JOIN users u ON u.id = d.user_id
+LEFT JOIN transaction t ON t.id = d.transaction_id
+WHERE
+    d.id = ?
+SQL;
+            $stmt = $this->em->getConnection()->prepare($query);
+            $stmt->bindValue(1, $id, \PDO::PARAM_INT);
+            $stmt->execute();
+
+            $result = $stmt->fetchAll();
+
+            return empty($result)?null:$result[0];
+        } catch (\Exception $e) {
+            //throw $e;
+            throw new BizException('No record found...');
+        }
+    }
+
     /**
      * get transaction from user
      *
@@ -101,7 +127,7 @@ EOT;
             throw new BizException('No record found...');
         }
     }
-    
+
     /**
      * count transaction from user
      *
@@ -209,8 +235,8 @@ SQL;
         $detaillink = $this->container->get('router')->generate('gao_admin.dispute.detail') . "?id=$id";
         $approvelink = $this->container->get('router')->generate('gao_admin.dispute.update_status') . "?id=$id&status=1&token=$token";
         $rejectlink = $this->container->get('router')->generate('gao_admin.dispute.update_status') . "?id=$id&status=2&token=$token";
-        return "<a href='$detaillink' class='editlink'>[Detail]</a> " .
-            "<a href='$approvelink' style='color:green'>[Approve]</a> " .
-            "<a href='$rejectlink' class='deletelink'>[Reject]</a> ";
+        return "<a href='$detaillink' class='editlink'>[Detail]</a> ";
+//             "<a href='$approvelink' style='color:green'>[Approve]</a> " .
+//             "<a href='$rejectlink' class='deletelink'>[Reject]</a> ";
     }
 }

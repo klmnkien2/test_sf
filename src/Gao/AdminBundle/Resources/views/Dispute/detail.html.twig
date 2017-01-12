@@ -1,51 +1,79 @@
 {% extends 'GaoAdminBundle::layout.html.twig' %}
 
-{% block datapage %}data-pageId="user_manage"{% endblock %}
-
 {% block content_header %}
-  New User
-  <small>User's details</small>
+  Dispute details
 {% endblock content_header %}
 
 {% block content_sidebar %}
-  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['user', 'user-new'] } only %}
+  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': ['dispute_list'] } only %}
 {% endblock content_sidebar %}
 
 {% block contents_main %}
   <div class="row">
     <div class="col-md-6">
-      <!-- general form elements -->
       <div class="box box-primary">
-        <div class="box-header with-border">
-          <h3 class="box-title">User's form</h3>
-        </div>
-        <!-- /.box-header -->
-        <!-- form start -->
-        {{ form_start(form, { 'attr': {'class': 'form-group' }}) }}
           <div class="box-body">
-            {% if form_errors(form) %}
-              <div class="alert alert-danger alert-dismissible">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                {{ form_errors(form) }}
-              </div>
-            {% endif %}
-            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
-            {{ form_row(form.username, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.password, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.fullName, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.email, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.phone, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.vcbAccNumber, { 'attr': {'class': 'form-control' } }) }}
-            {{ form_row(form.referUsername, { 'attr': {'class': 'form-control' } }) }}
+            <div class="form-group">
+                <label>Username</label>
+                <p>{{ dispute.username }}</p>
+            </div>
+            <div class="form-group">
+                <label>Message</label>
+                <p>{{ dispute.message }}</p>
+            </div>
+            <div class="form-group">
+                <label>Attachment</label>
+                {% if attachment_array and attachment_array is not empty %}
+                    {% for attach in attachment_array %}
+                        <p style="color: blue;">{{ attach.name }} <a href="{{ attach.id }}" class="fa fa-download">View</a></p>
+                    {% endfor %}
+                {% else %}
+                    <p>Khong co ban ghi nao.</p>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label>Reference Transaction</label>
+                {% if transactionList and transactionList is not empty %}
+                <table class="table table-bordered table-hover">
+                    <thead>
+                      <tr>
+                        <th>STT</th>
+                        <th>Tên</th>
+                        <th>Số tài khoản</th>
+                        <th>Số tiền</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày phản hồi</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactionList %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>{{ transaction.full_name | default('N/A') }}</td>
+                                <td>{{ transaction.gd_acc_number | default('N/A') }}</td>
+                                <td>{{ transaction.amount }} VND</td>
+                                <td>
+                                    {% if transaction.status == 1 %}
+                                        <span style="color: blue; font-weight: bold;">Đã xác nhận</span>
+                                    {% else %}
+                                        <span style="color: red;">Đang chờ</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ transaction.approved_date ? transaction.approved_date|date('d/m/Y H:i:s') : 'Chưa phản hồi' }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                  </table>
+                {% else %}
+                    <p>Khong co ban ghi nao.</p>
+                {% endif %}
+            </div>
           </div>
-          <!-- /.box-body -->
-    
           <div class="box-footer">
-            {{ form_row(form.submit, { 'label': 'Save','attr': {'class': 'btn btn-primary'} }) }}
+            <a href="{{ path('gao_admin.dispute.update_status') }}?id={{ dispute.id }}&status=1" class="btn btn-primary">Approve</a>
+            <a href="{{ path('gao_admin.dispute.update_status') }}?id={{ dispute.id }}&status=2" class="btn btn-danger">Reject</a>
           </div>
-        {{ form_end(form) }}
       </div>
-      <!-- /.box -->
     </div>
   </div>
 {% endblock contents_main %}
