@@ -55,7 +55,7 @@
       <!-- Main content -->
       <section class="content">
         {% block contents_main %}{% endblock contents_main %}
-        {% block popup_bottom %}{% endblock popup_bottom %}
+        {% block popup_bottom %}{% include "GaoAdminBundle:mod:modal.html.twig" %}{% endblock popup_bottom %}
       </section>
     </div>
     {% include "GaoAdminBundle:mod:footer.html.twig" %}

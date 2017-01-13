@@ -7,13 +7,30 @@
 a.deletelink {
   color: #dd4b39
 }
+
+.modal {
+  text-align: center;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
 /*!
  ***********************************
  * Media Queries
  ***********************************
  */
 
-@media (min-width: 768px) {
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
 }
 
 @media (max-width: 767px) {

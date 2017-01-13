@@ -46,9 +46,9 @@ class SystemController extends Controller
         try {
             $request = $this->getRequest();
             if ($request->isXmlHttpRequest()) {
-                $this->get('admin.system_service')->matchTransaction();
+                $output = $this->get('admin.system_service')->matchTransaction();
                 return new JsonResponse(array(
-                    'error' => false
+                    'output' => $output
                 ));
             }
         } catch (BizException $ex) {

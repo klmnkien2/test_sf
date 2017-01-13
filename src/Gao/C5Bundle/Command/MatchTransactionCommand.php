@@ -253,7 +253,6 @@ class MatchTransactionCommand extends ContainerAwareCommand
             }
             if ($this->send_amounts[$id] == 0)
                 continue;
-            var_dump($id, $receive_keys[$send_full_to + 1], $this->send_amounts[$id]);
             $this->send_money($id, $receive_keys[$send_full_to + 1], $this->send_amounts[$id]);
         }
     }
