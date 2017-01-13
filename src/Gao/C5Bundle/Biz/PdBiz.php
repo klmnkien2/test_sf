@@ -65,29 +65,29 @@ class PdBiz
         if (empty($pdGdState) || $pdGdState == $allState['Pending']) {
             if (empty($firstPdDone) || !$firstPdDone) {
                 $mode = 'pin';
-                $message = 'Tai khoan chua tung thuc hien PD. Hay thuc hien PD dau tien.';
+                $message = 'Chào mừng bạn đến với hệ thống. Vui lòng nhập mã PIN để thực hiện PD đầu tiên.';
             } else {
                 $mode = 'error';
-                $message = 'Tai khoan chua den thoi gian thuc hien PD. Vui long cho';
+                $message = 'Chưa đến thời gian thực hiện PD. Vui lòng đợi.';
             }
         } else if ($pdGdState == $allState['PD_Requested']) {
             $mode = 'tran';
-            $message = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
+            $message = 'Đã xác nhận mã PIN. Vui lòng đợi để hệ thống sắp xếp giao dịch cho bạn CHUYỂN TIỀN.';
         } else if ($pdGdState == $allState['PD_Matched']) {
             $mode = 'tran';
-            $message = 'Dang trong phien giao dich. Vui long hoan tat cac giao dich duoi day.';
+            $message = 'Đang trong thời gian giao dịch. Vui lòng hoàn tất các giao dịch dưới đây.';
         } else if ($pdGdState == $allState['PD_Done']) {
             $mode = 'error';
-            $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
+            $message = 'Đang trong quá trình thực hiện GD - Nhận tiền.';
         } else if ($pdGdState == $allState['GD_Requested']) {
             $mode = 'error';
-            $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
+            $message = 'Đang trong quá trình thực hiện GD - Nhận tiền.';
         } else if ($pdGdState == $allState['GD_Matched']) {
             $mode = 'error';
-            $message = 'Da thuc hien xong giao dich PD. Vui long kiem tra giao dich GD.';
+            $message = 'Đang trong quá trình thực hiện GD - Nhận tiền.';
         } else if ($pdGdState == $allState['GD_Done']) {
             $mode = 'pin';
-            $message = 'Tai khoan den luot PD. Vui long nhap ma pin de hoan tat.';
+            $message = 'Đến lượt PD - Chuyển tiền. Vui lòng nhập mã PIN để hoàn tất.';
         }
 
         // current pd
@@ -114,7 +114,7 @@ class PdBiz
         if (!$check['error']) {
             $params['mode'] = 'tran';
             $params['current_pd'] = $check['pd'];
-            $params['message'] = 'Da xac nhan ma PIN. Vui long cho de he thong sap xep giao dich cho ban.';
+            $params['message'] = 'Đã xác nhận mã PIN đúng.';
             $session->getFlashBag()->add('success', $check['message']);
         } else {
             $session->getFlashBag()->add('unsuccess', $check['error']);

@@ -37,6 +37,8 @@ class DisputeBiz
         }
 
         $params = $this->prepareData($user, $transaction_id);
+        $dispute = $params['dispute'];
+        $attachment_array = $params['attachment_array'];
 
         $post = Request::createFromGlobals();
         if ($post->request->has('submit')) {
@@ -48,8 +50,6 @@ class DisputeBiz
             $this->formProcess($user, $data, $params);
         }
 
-        $dispute = $params['dispute'];
-        $attachment_array = $params['attachment_array'];
         return array(
             'message' => $dispute?$dispute->getMessage():null,
             'attachment_array' => $attachment_array,
@@ -108,12 +108,12 @@ class DisputeBiz
 
         // Validate
         if (empty($data['message']) || !$data['message']) {
-            $session->getFlashBag()->add('unsuccess', 'Chua nhap thong tin Giai trinh.');
+            $session->getFlashBag()->add('unsuccess', 'Thông tin Giải trình chưa được nhập.');
             return;
         }
 
         if (empty($data['transaction_id'])) {
-            $session->getFlashBag()->add('unsuccess', 'Hien tai ban khong the thuc hien chuc nang nay');
+            $session->getFlashBag()->add('unsuccess', 'Giao dịch không tồn tại. Vui lòng kiểm tra lại.');
             return;
         }
 
@@ -129,16 +129,16 @@ class DisputeBiz
         $this->container->get('dispute_service')->updateDispute($dispute);
 
         if (empty($dispute) || empty($dispute->getId())) {
-            $session->getFlashBag()->add('unsuccess', 'Khong the tao phan hoi cho giao dich nay. Vui long thu lai');
+            $session->getFlashBag()->add('unsuccess', 'Không thể tạo bằng chứng cho giao dịch này. Vui lòng thực hiện lại');
             return;
         }
 
         $referId = $dispute->getId();
         $attachment_array = $this->container->get('attachment_service')->updateAttachment($user->getId(), $referId, $data['attachment']);
 
-        $session->getFlashBag()->add('success', 'Cap nhat thanh cong.');
-
-        $params['dispute'] = $dispute;
-        $params['attachment_array'] = $attachment_array;
+        $session->getFlashBag()->add('success', 'Yêu cầu đã được thực hiện thành công.');
+        $exception = new BizException();
+        $exception->redirect = $this->container->get('router')->generate('gao_c5_dispute_view') . '?id=' . $referId;
+        throw $exception;
     }
 }
