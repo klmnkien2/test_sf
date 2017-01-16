@@ -76,6 +76,7 @@ class DisputeController extends Controller
                 throw new BizException('User PD not exsit.');
             }
             if ($status == 1) {
+                // Check if all other transactions done then setblock
                 $userPd->setBlocked(0);
             } else {
                 $userPd->setBlocked(2);
@@ -88,8 +89,8 @@ class DisputeController extends Controller
                     throw new BizException('User gd not exsit.');
                 }
                 $userGd->setBlocked(1);
+                $this->container->get('security_user_service')->updateUser($userGd);
             }
-            $this->container->get('security_user_service')->updateUser($userGd);
             // Notify success
             $this->container->get('transaction_service')->commitTransaction();
             $this->get('session')->getFlashBag()->add('success', 'Thong tin da duoc update thanh cong.');

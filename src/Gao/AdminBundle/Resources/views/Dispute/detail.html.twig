@@ -13,6 +13,7 @@
     <div class="col-md-6">
       <div class="box box-primary">
           <div class="box-body">
+            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
             <div class="form-group">
                 <label>Username</label>
                 <p>{{ dispute.username }}</p>
@@ -29,7 +30,8 @@
                 <label>Attachment</label>
                 {% if attachment_array and attachment_array is not empty %}
                     {% for attach in attachment_array %}
-                        <p style="color: blue;">{{ attach.name }} <a href="{{ attach.id }}" class="fa fa-download">View</a></p>
+                        <p style="color: blue;">{{ attach.name }}</p>
+                        <p><a href="{{ attach.url }}" target="_blank"><img src="{{ attach.url }}" style="max-height:50px;max-width:50px;" /></a></p>
                     {% endfor %}
                 {% else %}
                     <p>Khong co ban ghi nao.</p>
@@ -53,7 +55,7 @@
                 <table class="table table-bordered table-hover">
                     <thead>
                       <tr>
-                        <th>STT</th>
+                        <th>Username</th>
                         <th>Tên</th>
                         <th>Số tài khoản</th>
                         <th>Số tiền</th>
@@ -62,9 +64,9 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {% for transaction in transactionList %}
+                        {% for transaction in transactionList if transaction.id == dispute.transaction_id %}
                             <tr>
-                                <td>{{ loop.index }}</td>
+                                <td>{{ transaction.username }}</td>
                                 <td>{{ transaction.full_name | default('N/A') }}</td>
                                 <td>{{ transaction.gd_acc_number | default('N/A') }}</td>
                                 <td>{{ transaction.amount }} VND</td>
@@ -85,10 +87,12 @@
                 {% endif %}
             </div>
           </div>
+          {% if dispute.status == 0 %}
           <div class="box-footer">
             <a href="{{ path('gao_admin.dispute.update_status') }}?id={{ dispute.id }}&status=1" class="btn btn-primary">Approve</a>
             <a href="{{ path('gao_admin.dispute.update_status') }}?id={{ dispute.id }}&status=2" class="btn btn-danger">Reject</a>
           </div>
+          {% endif %}
       </div>
     </div>
   </div>

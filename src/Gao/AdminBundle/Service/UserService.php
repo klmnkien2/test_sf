@@ -107,6 +107,7 @@ SELECT
     username,
     full_name,
     phone,
+    blocked,
     c_level
 FROM
     users
@@ -139,6 +140,13 @@ SQL;
                 'db'        => 'id',
                 'dt'        => 5,
                 'formatter' => function( $d, $row ) use ($token) {
+                    return $this->statusFormatter($d, $row, $token);
+                }
+            ),
+            array(
+                'db'        => 'id',
+                'dt'        => 6,
+                'formatter' => function( $d, $row ) use ($token) {
                     return $this->actionFormatter($d, $token);
                 }
             )
@@ -146,11 +154,23 @@ SQL;
         return DataTableService::getCustomData( $_GET, $this->em->getConnection(), $sql, $count_sql, $columns );
     }
 
+    public function statusFormatter($id, $row, $token)
+    {
+        $statusSelect = '
+          <select class="prg-userBlock" data-id="'.$id.'">
+            <option value="0" '. ($row['blocked'] == 0?" selected":"") . ' >Non-Block</option>
+            <option value="1" '. ($row['blocked'] == 1?" selected":"") . ' >Soft-Block</option>
+            <option value="2" '. ($row['blocked'] == 2?" selected":"") . ' >Hard-Block</option>
+          </select>';
+
+        return $statusSelect;
+    }
+
     public function actionFormatter($id, $token)
     {
         $editlink = $this->container->get('router')->generate('gao_admin_user_edit') . "?id=$id";
         $deletelink = $this->container->get('router')->generate('gao_admin_user_delete') . "?id=$id&token=$token";
-        return "<a href='#' class='prg-detailView editlink'>Detail</a> " .
+        return 
             "<a href='$editlink' class='editlink'>Edit</a> " . 
             "<a href='$deletelink' class='deletelink'>Delete</a>";
     }

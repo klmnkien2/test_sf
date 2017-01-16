@@ -66,6 +66,30 @@ class UserController extends Controller
         }
     }
 
+    public function blockStatusAction()
+    {
+        try {
+            $request = $this->getRequest();
+            $token = $request->query->get('token');
+            $id = $request->query->get('id');
+            $blocked = $request->query->get('blocked');
+
+//             if (!$this->get('form.csrf_provider')->isCsrfTokenValid('user_list', $token)) {
+//                 $this->get('session')->getFlashBag()->add('unsuccess', 'Woops! Token invalid!');
+//             } else {
+            $user = $this->get('admin.user_service')->getEntity($id);
+            $user->setBlocked($blocked);
+            $this->get('security_user_service')->updateUser($user);
+            $this->get('session')->getFlashBag()->add('success', 'An user have been updated.');
+//             }
+    
+            $listPath = $this->container->get('router')->generate('gao_admin_user_list');
+            return $this->redirect($listPath);
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
     public function listAction()
     {
         try {

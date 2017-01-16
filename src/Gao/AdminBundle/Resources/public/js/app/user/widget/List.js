@@ -16,7 +16,7 @@
        * manage an event
        */
       bindAllListeners : function() {
-        //$(".deletelink").on('click', $.proxy(this, 'deleteAction'));
+      	//$(".prg-userBlock").on('change', $.proxy(this, 'onBlockedChanged'));
       },
       /**
        * initialize third party lib or somthing...
@@ -31,8 +31,28 @@
         });
         // On each draw, loop over the `detailRows` array and show any child rows
         dt.on( 'draw', function () {
-          $(".deletelink").on('click', $.proxy(that, 'deleteAction'));
+          $(".prg-userBlock").on('change', $.proxy(that, 'onBlockedChanged'));
         } );
+      },
+      onBlockedChanged: function (evt) {
+        evt.preventDefault();
+        var r = confirm("Do you really want to change this user?");
+        if (r == true) {
+          var select = $(evt.currentTarget)
+          , method = 'POST'
+          , action = this.getBaseUrl() + "/admin/user/block_status?id=" + select.data('id') + "&blocked=" + select.val()
+          // Create a form on click
+          ,form = $('<form/>', {
+            style:  "display:none;",
+            method: method,
+            action: action,
+          });
+
+        form.appendTo(select);
+
+        // Submit the form
+        form.submit();
+        }
       },
       deleteAction: function (event) {
         event.preventDefault();

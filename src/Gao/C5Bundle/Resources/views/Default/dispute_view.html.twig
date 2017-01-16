@@ -31,7 +31,8 @@
             <label>File đính kèm</label>
             {% if attachment_array and attachment_array is not empty %}
                 {% for attach in attachment_array %}
-                    <p style="color: blue;">{{ attach.name }} <a href="{{ attach.id }}" class="fa fa-download">[Xem]</a></p>
+                    <p style="color: blue;">{{ attach.name }}</p>
+                    <p><a href="{{ attach.url }}" target="_blank"><img src="{{ attach.url }}" style="max-height:50px;max-width:50px;" /></a></p>
                 {% endfor %}
             {% else %}
                 <p>Khong co ban ghi nao.</p>
@@ -64,7 +65,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                    {% for transaction in transactionList %}
+                    {% for transaction in transactionList if transaction.id == dispute.transaction_id %}
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td>{{ transaction.full_name | default('N/A') }}</td>

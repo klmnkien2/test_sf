@@ -56,6 +56,11 @@ gao_admin_user_delete:
     defaults: { _controller: GaoAdminBundle:User:delete }
     requirements: { _method: POST }
 
+gao_admin_user_update_status:
+    path:     /user/block_status
+    defaults: { _controller: GaoAdminBundle:User:blockStatus }
+    requirements: { _method: POST }
+
 gao_admin_system_tool:
     path:     /system/tool
     defaults: { _controller: GaoAdminBundle:System:tool }
