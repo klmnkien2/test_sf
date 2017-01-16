@@ -235,8 +235,8 @@ class DefaultController extends Controller
 
             return $this->render('GaoC5Bundle:Default:dispute.html.twig', $params);
         } catch (BizException $ex) {
-            if ($ex->redirect) {
-                return $this->redirect($ex->redirect);
+            if ($ex->redirectResponse) {
+                return $this->redirect($ex->redirectResponse);
             }
             throw new NotFoundHttpException($ex->getMessage());
         }

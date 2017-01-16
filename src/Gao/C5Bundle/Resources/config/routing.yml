@@ -1,6 +1,9 @@
 gao_c5_homepage:
     path:     /
     defaults: { _controller: GaoC5Bundle:Default:index }
+gao_c5_about:
+    path:     /
+    defaults: { _controller: GaoC5Bundle:Default:about }
 gao_c5_pd:
     path:     /pd
     defaults: { _controller: GaoC5Bundle:Default:pd }
