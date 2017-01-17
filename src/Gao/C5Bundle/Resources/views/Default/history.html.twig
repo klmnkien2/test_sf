@@ -68,7 +68,7 @@
                                     {% else %}
                                         PD-Gửi<br>
                                         {% if transaction.status != 1 and app.user.blocked == 1 %} 
-                                            [ <a href="{{ path('gao_c5_dispute', { transaction_id: transaction.id }) }}">Tao bang chung</a> ]
+                                            [ <a href="{{ path('gao_c5_dispute', { transaction_id: transaction.id }) }}">Tạo bằng chứng</a> ]
                                         {% endif %}
                                     {% endif %}
                                 </td>

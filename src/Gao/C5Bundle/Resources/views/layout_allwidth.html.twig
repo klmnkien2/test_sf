@@ -15,8 +15,7 @@
   'bundles/gaoc5/css/theme.css'
   'bundles/gaoc5/css/layout.css'
   'bundles/gaoc5/css/style.css'
-  'bundles/gaoc5/plugin/sweetalert/sweetalert.css'
-  'bundles/gaoc5/plugin/jQueryLoadingIndicator/jquery.loading-indicator.css'%}
+  'bundles/gaoc5/plugin/sweetalert/sweetalert.css'%}
   <link rel="stylesheet" type="text/css" href="{{ asset_url }}"/>
   {% endstylesheets %}
 {% endblock stylesheets %}
@@ -38,14 +37,15 @@
               </button>
               <a class="navbar-brand" href="{{ path('gao_c5_about') }}" title="C5">C5</a>
             </div>
-            {% if is_granted('ROLE_USER') %}
-            <div class="userInfo pull-right">
-              <div class="user"><strong>{{ app.user.username }}</strong></div>
-              <ul class="nav nav-pills">
-                <li class="active pull-right"><a href="{{ path('logout') }}">Đăng xuất</a></li>
-              </ul>
-            </div>
-            {% endif %}
+
+            <div class="btnList pull-right">
+                {% if not is_granted('ROLE_USER') %}
+				  <a class="btn btn-default" href="{{ path('login') }}" title="Login">Đăng nhập</a>
+				{% else %}
+				<a class="btn btn-orange" href="{{ path('gao_c5_homepage') }}" title="Login">Giao dịch</a>
+				{% endif %}
+			</div>
+
           </div>
         </div>
       </div>
@@ -66,38 +66,8 @@
 
 {% block contents %}
   <div id="UIcont" class="UIcont">
-    <div class="dashboardCont">
-      <div class="container">
-        <div class="row">
-          {% if is_granted('ROLE_USER') %}
-            {% block contents_aside %}
-            <div class="col-md-2 col-sm-3">
-              <div class="dashboardSidebar">
-                <h2 class="title">Menu <i class="glyphicon glyphicon-hand-down"></i></h2>
-                <ul class="dashboardNav">
-                  <li {% if menu_selected|default('index') == 'index' or menu_selected == 'pd' or menu_selected == 'gd' %}class="active"{% endif %}><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-eye-open"></i>Trang chủ</a></li>
-                  {#<li {% if menu_selected == 'pd' %}class="active"{% endif %}><a href="{{ path('gao_c5_pd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý PD</a></li>
-                  <li {% if menu_selected == 'gd' %}class="active"{% endif %}><a href="{{ path('gao_c5_gd') }}"><i class="glyphicon glyphicon-random"></i>Quản lý GD</a></li>#}
-                  <li {% if menu_selected == 'history' %}class="active"{% endif %}><a href="{{ path('gao_c5_history') }}"><i class="glyphicon glyphicon-list-alt"></i>Lịch sử giao dịch</a></li>
-                  <li {% if menu_selected == 'dispute' %}class="active"{% endif %}><a href="{{ path('gao_c5_list_dispute') }}"><i class="glyphicon glyphicon-facetime-video"></i>Bằng chứng</a></li>
-                  <li {% if menu_selected == 'account' %}class="active"{% endif %}><a href="{{ path('gao_c5_account') }}"><i class="glyphicon glyphicon-user"></i>Tài khoản của bạn</a></li>
-                  <li {% if menu_selected == 'refer_user' %}class="active"{% endif %}><a href="{{ path('gao_c5_refer_user', {user_id: app.user.id}) }}"><i class="glyphicon glyphicon-briefcase"></i>Tài khoản giới thiệu</a></li>
-                  {#<li><a href="{{ path('gao_c5_homepage') }}"><i class="glyphicon glyphicon-cog"></i>Cài đặt khác</a></li>#}
-                  <li><a href="{{ path('logout') }}"><i class="glyphicon glyphicon-log-out"></i>Đăng xuất</a></li>
-                </ul>
-              </div>
-            </div>
-            {% endblock contents_aside %}
-          {% endif %}
-          <div class="{% if is_granted('ROLE_USER') %}col-md-10 col-sm-9{% else %}col-md-12 col-sm-12{% endif %}">
-            <div class="mainCont">
-              {% block contents_main %}
-              {% endblock contents_main %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+      {% block contents_main %}
+      {% endblock contents_main %}
   </div>
 
 {% endblock contents %}

@@ -25,20 +25,20 @@
         <form class="form" role="form" action="" method="post">
             <div class="form-group">
                 <div class="row">
-                    <div class="col-md-6 col-sm-3">
+                    <div class="col-md-6">
                         <label for="">PIN</label>
                         <input type="text" class="form-control" id="" name="pin_number" placeholder="Mã Pin" 
                         {% if mode == 'tran' and current_gd %} disabled value="{{ current_gd.pinNumber }}" {% endif %} />
                     </div>
-                    <div class="col-md-6 col-sm-3">
+                    <div class="col-md-6">
                         <label for="">Thời điểm yêu cầu</label>
                         <input type="text" class="form-control" disabled 
-                        {% if mode == 'tran' and current_gd %} value="{{ current_gd.created |date('d/m/Y H:i:s') }}" {% else %} value="Chua tao PIN" {% endif %} />
+                        {% if mode == 'tran' and current_gd %} value="{{ current_gd.created |date('d/m/Y H:i:s') }}" {% else %} value="Chưa nhập PIN" {% endif %} />
                     </div>
                 </div>
             </div>
             {% if mode == 'pin' %}
-                <div class="btnWrap"><button type="submit" name="submit" class="btn btn-orange">Gui ma pin</button></div>
+                <div class="btnWrap"><button type="submit" name="submit" class="btn btn-orange">Gửi mã PIN</button></div>
             {% endif %}
         </form>
         {% endif %}
@@ -112,12 +112,12 @@
                     </tfoot>
                 </table>
                 <div class="btnWrap" style="text-align: right;">
-                    <button type="submit" name="submit" class="btn btn-orange">Da nhan tien</button>
+                    <button type="submit" name="submit" class="btn btn-orange">Đã nhận tiền</button>
                 </div>
             </form>
         </div>
         {% else %}
-        <strong>Khong co ban ghi nao.</strong>
+        <strong>Không có bản ghi nào.</strong>
         {% endif %}
     </div>
     {% endif %}

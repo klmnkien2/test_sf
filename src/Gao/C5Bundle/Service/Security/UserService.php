@@ -63,6 +63,11 @@ class UserService
         $this->em->flush();
     }
 
+    public function getUserByUsername($username)
+    {
+        return $this->em->getRepository('GaoC5Bundle:Users')->findOneBy(array('username' => $username));
+    }
+
     /**
      * check if user refer to logined user or not
      * 

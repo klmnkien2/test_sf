@@ -59,6 +59,13 @@ services:
             - [setItemsLimitPerPage, [%paging.defaults.items_limit_per_page%]]
             - [setPagesLimitInRange, [%paging.defaults.pages_limit_in_range%]]
 
+    # Listener
+    kernel.listener.logged_in_user_listener:
+        class: Gao\C5Bundle\Listener\LoggedInUserListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+        arguments: [ @router, @service_container ]
+
     # Command
     app.command.match_transaction_command:
         class: Gao\C5Bundle\Command\MatchTransactionCommand

@@ -1,4 +1,4 @@
-{% extends 'GaoC5Bundle::layout.html.twig' %}
+{% extends 'GaoC5Bundle::layout_allwidth.html.twig' %}
 {% set menu_selected = 'login' %}
 {% block contents_main %}
     <div id="login" class="fancyCommon">
@@ -6,8 +6,13 @@
             <h2 class="title">ĐĂNG NHẬP</h2>
         </div>
         {% if error %}
-            <div class="fcDesc">{{ error.message }}</div>
+            <div class="alert alert-danger">{{ error.message }}</div>
         {% endif %}
+        {% for flashMessage in app.session.flashbag.get('unsuccess') %}
+            <div class="alert alert-danger">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
         <form action="{{ path('login_check') }}" method="post" class="formLogin" role="form">
             <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
             <div class="form-group">

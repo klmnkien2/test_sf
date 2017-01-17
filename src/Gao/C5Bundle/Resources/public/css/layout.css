@@ -18,7 +18,7 @@ a:hover{color:#f36523;text-decoration:none;}
 #UIhead .primary{height:80px;background-color:#fff;/*background-color:rgba(255,255,255,.75);*/}
 #UIhead .primary .container{padding-top:8px;padding-bottom:7px;}
 #UIhead .primary .col-xs-12{height:65px;}
-#UIhead .navbar-brand{width:250px;height:65px;padding:0;line-height:65px;background:url(../images/causeflix_logo.png) no-repeat 50% 50%;text-indent:-9999em;}
+#UIhead .navbar-brand{width:250px;height:65px;padding:0;line-height:65px;background:url(../images/c5.png) no-repeat top left;text-indent:-9999em;}
 #UIhead .navMain{background-color:#f36523;}
 #UIhead .navMain .navbar-nav li{font-weight:700;text-transform:uppercase;}
 #UIhead .navMain .navbar-nav a{color:#fff;}

@@ -48,4 +48,4 @@ attachment_download:
 
 gao_c5:
     resource: "@GaoC5Bundle/Resources/config/routing.yml"
-    prefix:   /c5
+    prefix:   /

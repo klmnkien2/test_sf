@@ -65,6 +65,7 @@ security:
       - { path: /admin/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+      - { path: /, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /c5/test, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoc5/js/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
       - { path: /bundles/gaoc5/css/.*, roles: IS_AUTHENTICATED_ANONYMOUSLY }

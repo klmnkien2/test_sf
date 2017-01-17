@@ -12,6 +12,15 @@ use Symfony\Component\Validator\Constraints;
 
 class DefaultController extends Controller
 {
+    public function aboutAction()
+    {
+        try {
+            return $this->render('GaoC5Bundle:Default:about.html.twig');
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
     public function indexAction()
     {
         $usr = $this->get('security.context')->getToken()->getUser();
@@ -30,7 +39,7 @@ class DefaultController extends Controller
             $usr = $this->get('security.context')->getToken()->getUser();
             if (!empty($usr->getBlocked()) && $usr->getBlocked()) {
                 $session = $this->get('request')->getSession();
-                $session->getFlashBag()->add('unsuccess', 'Tai khoan dang bi khoa. Vui long tao bang chung cho cac giao dich duoi day.');
+                $session->getFlashBag()->add('unsuccess', 'Tài khoản đang bị tạm khóa. Vui lòng tạo bằng chứng cho các giao dịch dưới đây.');
                 return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_gd=pd&tran_status=0');
             }
             //Call biz logic
@@ -48,7 +57,7 @@ class DefaultController extends Controller
             $usr = $this->get('security.context')->getToken()->getUser();
             if (!empty($usr->getBlocked()) && $usr->getBlocked()) {
                 $session = $this->get('request')->getSession();
-                $session->getFlashBag()->add('unsuccess', 'Tai khoan dang bi khoa. Vui long tao bang chung cho cac giao dich duoi day.');
+                $session->getFlashBag()->add('unsuccess', 'Tài khoản đang bị tạm khóa. Vui lòng tạo bằng chứng cho các giao dịch dưới đây.');
                 return $this->redirect($this->generateUrl('gao_c5_history') . '?pd_or_gd=pd&tran_status=0');
             }
             //Call biz logic

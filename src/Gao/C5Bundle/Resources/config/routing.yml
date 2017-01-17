@@ -1,36 +1,36 @@
 gao_c5_homepage:
-    path:     /
+    path:     /c5/
     defaults: { _controller: GaoC5Bundle:Default:index }
 gao_c5_about:
     path:     /
     defaults: { _controller: GaoC5Bundle:Default:about }
 gao_c5_pd:
-    path:     /pd
+    path:     /c5/pd
     defaults: { _controller: GaoC5Bundle:Default:pd }
 gao_c5_gd:
-    path:     /gd
+    path:     /c5/gd
     defaults: { _controller: GaoC5Bundle:Default:gd }
 gao_c5_history:
-    path:     /his
+    path:     /c5/his
     defaults: { _controller: GaoC5Bundle:Default:history }
 gao_c5_account:
-    path:     /acc
+    path:     /c5/acc
     defaults: { _controller: GaoC5Bundle:Default:account }
 gao_c5_dispute:
-    path:     /dis
+    path:     /c5/dis
     defaults: { _controller: GaoC5Bundle:Default:dispute }
 gao_c5_list_dispute:
-    path:     /list/dis
+    path:     /c5/list/dis
     defaults: { _controller: GaoC5Bundle:Default:listDispute }
 gao_c5_dispute_view:
-    path:     /dispute/view
+    path:     /c5/dispute/view
     defaults: { _controller: GaoC5Bundle:Default:disputeView }
 gao_c5_transaction_approve:
-    path:     /transaction/approve
+    path:     /c5/transaction/approve
     defaults: { _controller: GaoC5Bundle:Default:tranApprove }
 gao_c5_test:
-    path:     /test
+    path:     /c5/test
     defaults: { _controller: GaoC5Bundle:Default:test }
 gao_c5_refer_user:
-    path:     /refer/{user_id}
+    path:     /c5/refer/{user_id}
     defaults: { _controller: GaoC5Bundle:Default:refer }

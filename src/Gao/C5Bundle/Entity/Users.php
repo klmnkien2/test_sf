@@ -4,6 +4,7 @@ namespace Gao\C5Bundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\AdvancedUserInterface;
+use Symfony\Component\Security\Core\Exception\LockedException;
 
 /**
  * Users
@@ -846,8 +847,10 @@ class Users implements AdvancedUserInterface, \Serializable
 
     public function isAccountNonLocked()
     {
+        if (!empty($this->blocked) && $this->blocked == 2) {
+            throw new LockedException("Tài khoản đang bị khóa. Vui lòng liên hệ quản trị hệ thống.");
+        }
         return true;
-        //return !($this->blocked);
     }
 
     public function isCredentialsNonExpired()
