@@ -197,9 +197,22 @@ class DataTableService {
 
     static function filterToSql ( $request, $columns, &$bindings )
     {
+        $globalCondition = array();
         $globalSearch = array();
         $columnSearch = array();
         $dtColumns = self::pluck( $columns, 'dt' );
+
+        if ( !empty($request['q']) ) {
+            $search_query = $request['q'];
+            $search_conditions = explode(",", $search_query);
+            foreach ($search_conditions as $condition) {
+                list($key, $value) = array_pad(explode(':', $condition), 2, '');
+                if (!empty($key) && !empty($value)) {
+                    $binding = self::bind( $bindings, $value, \PDO::PARAM_STR );
+                    $globalCondition[] = "`".$key."` = ".$binding;
+                }
+            }
+        }
 
         if ( isset($request['search']) && $request['search']['value'] != '' ) {
             $str = $request['search']['value'];
@@ -244,6 +257,12 @@ class DataTableService {
             $where = $where === '' ?
             implode(' AND ', $columnSearch) :
             $where .' AND '. implode(' AND ', $columnSearch);
+        }
+
+        if ( count( $globalCondition ) ) {
+            $where = $where === '' ?
+            implode(' AND ', $globalCondition) :
+            $where .' AND '. implode(' AND ', $globalCondition);
         }
 
         return $where;

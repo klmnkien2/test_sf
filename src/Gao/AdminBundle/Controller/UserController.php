@@ -123,14 +123,8 @@ class UserController extends Controller
             // Get request object.
             $request = $this->getRequest();
             $search_query = $request->query->get('q');
-            $search_conditions = explode(",", $search_query);
-            $global_filters = array();
-            foreach ($search_conditions as $condition) {
-                list($key, $value) = explode(':', $condition);
-                $global_filters[] = array('key' => $key, 'value' => $value);
-            }
             $this->get('form.csrf_provider')->generateCsrfToken('user_list_action');
-            return $this->render('GaoAdminBundle:User:list.html.twig', array('global_filters' => $global_filters));
+            return $this->render('GaoAdminBundle:User:list.html.twig', array('search_query' => $search_query?:''));
         } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
@@ -141,6 +135,7 @@ class UserController extends Controller
         try {
             $adminUser = $this->container->get('security.context')->getToken()->getUser();
             $token = $this->get('form.csrf_provider')->generateCsrfToken('user_list');
+
             $response = $this->get('admin.user_service')->getDataTable($adminUser->getId(), $token);
 
             return new JsonResponse($response);

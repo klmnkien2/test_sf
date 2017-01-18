@@ -23,23 +23,13 @@
        * initialize third party lib or somthing...
        */
       initialize: function () {
-        var url = this.getBaseUrl() + "/admin/user/ajax_list";
+        var url = $('#prg-userTable').data('loadUrl');
         var that = this;
         var dt = $('#prg-userTable').DataTable({
           "processing": true,
           "serverSide": true,
           "ajax": url,
           "order": [],
-          "searchCols": [
-             null,
-             null,
-             { "search": "user" },
-             null,
-             null,
-             null,
-             null,
-             null
-           ],
           "aoColumns": [
             { "sTitle": "ID", "sWidth": "40px", "bSearchable": false, "bSortable": false },
             { "sTitle": "Username" },

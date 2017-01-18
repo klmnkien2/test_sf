@@ -28,10 +28,7 @@
           {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
 
           <form id="prg-userListForm">
-            {% for filter in global_filters %}
-              <input class="global_filter" type="hidden" name="{{ filter.key }}" value="{{ filter.value }}">
-            {% endfor %}
-            <table id="prg-userTable" class="table table-bordered table-hover">
+            <table id="prg-userTable" data-load-url="{{ path('gao_admin_user_list_ajax') }}?q={{ search_query }}" class="table table-bordered table-hover">
             </table>
           </form>
       </div>

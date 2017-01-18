@@ -522,7 +522,8 @@ SQL;
                 'db' => 'vcb_acc_number',
                 'dt' => 6,
                 'formatter' => function( $d, $row ) {
-                    return 'View users';
+                    $link = $this->container->get('router')->generate('gao_admin_user_list') . "?q=vcb_acc_number:$d";
+                    return "<a href='$link'>[View users]</a>";
                 }
             )
         );
