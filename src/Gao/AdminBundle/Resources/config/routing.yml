@@ -43,6 +43,11 @@ gao_admin_user_list_ajax:
     path:     /user/ajax_list
     defaults: { _controller: GaoAdminBundle:User:ajaxList }
 
+gao_admin_user_list_action:
+    path:     /user/list_update
+    defaults: { _controller: GaoAdminBundle:User:listUpdate }
+    requirements: { _method: POST }
+
 gao_admin_user_new:
     path:     /user/new
     defaults: { _controller: GaoAdminBundle:User:new }

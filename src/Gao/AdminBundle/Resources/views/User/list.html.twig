@@ -27,25 +27,28 @@
         <div class="box-body">
           {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
 
-          <table id="prg-adminTable" class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>#ID</th>
-                <th>Username</th>
-                <th>Full Name</th>
-                <th>Phone</th>
-                <th>Level</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-        <!-- /.box-body -->
+          <form id="prg-userListForm">
+            {% for filter in global_filters %}
+              <input class="global_filter" type="hidden" name="{{ filter.key }}" value="{{ filter.value }}">
+            {% endfor %}
+            <table id="prg-userTable" class="table table-bordered table-hover">
+            </table>
+          </form>
       </div>
-      <!-- /.box -->
+      <div class="box-footer with-border">
+        <div class="btn-toolbar pull-right" style="margin: 0;">
+          <div class="btn-group">
+            <button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">With action <span class="caret"></span></button>
+            <ul class="dropdown-menu">
+              <li><a href="{{ path('gao_admin_user_list_action') }}?token={{ csrf_token("user_list_action") }}&action=blocked&blocked=0" class="prg-action-menu">Non block</a></li>
+              <li><a href="{{ path('gao_admin_user_list_action') }}?token={{ csrf_token("user_list_action") }}&action=blocked&blocked=1" class="prg-action-menu">Soft block</a></li>
+              <li><a href="{{ path('gao_admin_user_list_action') }}?token={{ csrf_token("user_list_action") }}&action=blocked&blocked=2" class="prg-action-menu">Hard block</a></li>
+              <li class="divider"></li>
+              <li><a href="{{ path('gao_admin_user_list_action') }}?token={{ csrf_token("user_list_action") }}&action=delete" class="prg-action-menu">Delete</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock contents_main %}

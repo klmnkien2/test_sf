@@ -66,6 +66,33 @@ class UserController extends Controller
         }
     }
 
+    public function listUpdateAction()
+    {
+        try {
+            $request = $this->getRequest();
+            $token = $request->query->get('token');
+            $action = $request->query->get('action');
+            $ids = $request->request->get('user_ids');
+
+            if (!$this->get('form.csrf_provider')->isCsrfTokenValid('user_list_action', $token)) {
+                $this->get('session')->getFlashBag()->add('unsuccess', 'Woops! Token invalid!');
+            } else {
+                if ($action == 'delete') {
+                    $this->get('admin.user_service')->deleteUsers($ids);
+                } else if ($action == 'blocked') {
+                    $blocked = $request->query->get('blocked');
+                    $this->get('admin.user_service')->blockedUsers($ids, $blocked);
+                } 
+                $this->get('session')->getFlashBag()->add('success', 'Users have been updated.');
+            }
+    
+            $listPath = $this->container->get('router')->generate('gao_admin_user_list');
+            return $this->redirect($listPath);
+        } catch (BizException $ex) {
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
     public function blockStatusAction()
     {
         try {
@@ -93,7 +120,17 @@ class UserController extends Controller
     public function listAction()
     {
         try {
-            return $this->render('GaoAdminBundle:User:list.html.twig');
+            // Get request object.
+            $request = $this->getRequest();
+            $search_query = $request->query->get('q');
+            $search_conditions = explode(",", $search_query);
+            $global_filters = array();
+            foreach ($search_conditions as $condition) {
+                list($key, $value) = explode(':', $condition);
+                $global_filters[] = array('key' => $key, 'value' => $value);
+            }
+            $this->get('form.csrf_provider')->generateCsrfToken('user_list_action');
+            return $this->render('GaoAdminBundle:User:list.html.twig', array('global_filters' => $global_filters));
         } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }

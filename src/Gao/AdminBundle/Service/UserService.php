@@ -87,6 +87,24 @@ class UserService
         $this->em->flush();
     }
 
+    public function deleteUsers($ids)
+    {
+        $users = $this->em->getRepository('GaoC5Bundle:Users')->findBy( array( 'id' => $ids ) );
+        foreach ($users as $user) {
+            $this->em->remove($user);
+        }
+        $this->em->flush();
+    }
+
+    public function blockedUsers($ids, $blocked)
+    {
+        $users = $this->em->getRepository('GaoC5Bundle:Users')->findBy( array( 'id' => $ids ) );
+        foreach ($users as $user) {
+            $user->setBlocked($blocked);
+            $this->em->persist($user);
+        }
+        $this->em->flush();
+    }
 
     /**
      * get data table from user
@@ -149,7 +167,8 @@ SQL;
                 'formatter' => function( $d, $row ) use ($token) {
                     return $this->actionFormatter($d, $token);
                 }
-            )
+            ),
+            array( 'db' => 'id',        'dt' => 7 ),
         );
         return DataTableService::getCustomData( $_GET, $this->em->getConnection(), $sql, $count_sql, $columns );
     }
