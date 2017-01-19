@@ -42,3 +42,6 @@ services:
     admin_bundle.form_type.user:
         class: Gao\AdminBundle\Form\UserType
         arguments: [@doctrine.orm.entity_manager]
+    admin_bundle.form_type.profile:
+        class: Gao\AdminBundle\Form\ProfileType
+        arguments: [@doctrine.orm.entity_manager, @service_container]

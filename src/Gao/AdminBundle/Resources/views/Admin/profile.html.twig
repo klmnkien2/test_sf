@@ -1,0 +1,49 @@
+{% extends 'GaoAdminBundle::layout.html.twig' %}
+
+{% block datapage %}data-pageId="admin"{% endblock %}
+
+{% block content_header %}
+  Profile Edit
+{% endblock content_header %}
+
+{% block content_sidebar %}
+  {% include "GaoAdminBundle:mod:sidebar.html.twig" with { 'menus': [] } only %}
+{% endblock content_sidebar %}
+
+{% block contents_main %}
+  <div class="row">
+    <div class="col-md-6">
+      <!-- general form elements -->
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Profile form</h3>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        {{ form_start(form, { 'attr': {'class': 'form-group' }}) }}
+          <div class="box-body">
+            {% if form_errors(form) %}
+              <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ form_errors(form) }}
+              </div>
+            {% endif %}
+            {% include "GaoAdminBundle:mod:alert.html.twig" with { 'flashbag': app.session.flashbag } %}
+            {{ form_row(form.password, { 'attr': {'class': 'form-control' } }) }}
+            {{ form_row(form.newPassword, { 'attr': {'class': 'form-control' } }) }}
+            {{ form_row(form.retypePassword, { 'attr': {'class': 'form-control' } }) }}
+            {{ form_row(form.fullName, { 'attr': {'class': 'form-control' } }) }}
+            {{ form_row(form.email, { 'attr': {'class': 'form-control' } }) }}
+            {{ form_row(form.phone, { 'attr': {'class': 'form-control' } }) }}
+          </div>
+          <!-- /.box-body -->
+    
+          <div class="box-footer">
+            {{ form_row(form.submit, { 'label': 'Save','attr': {'class': 'btn btn-primary'} }) }}
+          </div>
+        {{ form_end(form) }}
+      </div>
+      <!-- /.box -->
+    </div>
+  </div>
+{% endblock contents_main %}

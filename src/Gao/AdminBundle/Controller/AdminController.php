@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Gao\AdminBundle\Biz\BizException;
 use Symfony\Component\Validator\Constraints;
+use Gao\AdminBundle\Form\ProfileType;
 
 class AdminController extends Controller
 {
@@ -41,6 +42,36 @@ class AdminController extends Controller
             if ($ex->redirect) {
                 return $this->redirect($ex->redirect);
             }
+            throw new NotFoundHttpException($ex->getMessage());
+        }
+    }
+
+    public function profileAction()
+    {
+        try {
+            // Get request object.
+            $request = $this->getRequest();
+            $admin = $this->container->get('security.context')->getToken()->getUser();
+
+            $form = $this->container->get('form.factory')->create($this->get('admin_bundle.form_type.profile'), $admin);
+            $form->handleRequest($request);
+
+            // process the form on POST
+            if ($request->isMethod('POST')) {
+                if ($form->isValid()) {
+                    $this->container->get('admin_service')->saveEntity($admin);
+
+                    $session = $request->getSession();
+                    $session->getFlashBag()->add('success', 'An admin have been saved!');
+                }
+            }
+
+            $params = array(
+                'form' => $form->createView()
+            );
+
+            return $this->render('GaoAdminBundle:Admin:profile.html.twig', $params);
+        } catch (BizException $ex) {
             throw new NotFoundHttpException($ex->getMessage());
         }
     }

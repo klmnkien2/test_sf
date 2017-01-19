@@ -74,15 +74,6 @@ class AdminService
 
     public function saveEntity($admin)
     {
-        if ($admin->getPassword()) {
-            $admin->setSalt(uniqid(mt_rand())); // Unique salt for user
-
-            // Set encrypted password
-            $encoder = $this->container->get('security.encoder_factory')->getEncoder($admin);
-            $password = $encoder->encodePassword($admin->getPassword(), $admin->getSalt());
-            $admin->setPassword($password);
-        }
-
         $this->em->persist($admin);
         $this->em->flush();
     }
